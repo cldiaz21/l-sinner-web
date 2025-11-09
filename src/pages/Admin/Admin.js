@@ -15,8 +15,15 @@ const Admin = () => {
   } = useContext(ProjectContext);
 
   const [showProjectModal, setShowProjectModal] = useState(false);
-  const [showCarouselModal, setShowCarouselModal] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteProjectId, setDeleteProjectId] = useState(null);
+  const [showDeleteCarouselConfirm, setShowDeleteCarouselConfirm] = useState(false);
+  const [deleteCarouselIndex, setDeleteCarouselIndex] = useState(null);
+  const [showImageInput, setShowImageInput] = useState(false);
+  const [imageInputUrl, setImageInputUrl] = useState('');
+  const [showVideoInput, setShowVideoInput] = useState(false);
+  const [videoInputUrl, setVideoInputUrl] = useState('');
   const [projectForm, setProjectForm] = useState({
     title: '',
     description: '',
@@ -69,21 +76,33 @@ const Admin = () => {
   };
 
   const handleDeleteProject = (id) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
-      deleteProject(id);
+    setDeleteProjectId(id);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDeleteProject = () => {
+    if (deleteProjectId) {
+      deleteProject(deleteProjectId);
       setAlert({ show: true, message: 'Proyecto eliminado correctamente', type: 'success' });
       setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
     }
+    setShowDeleteConfirm(false);
+    setDeleteProjectId(null);
   };
 
   const handleAddImage = () => {
-    const imageUrl = prompt('Ingresa la URL de la imagen:');
-    if (imageUrl) {
+    setShowImageInput(true);
+  };
+
+  const confirmAddImage = () => {
+    if (imageInputUrl.trim()) {
       setProjectForm({
         ...projectForm,
-        images: [...projectForm.images, imageUrl]
+        images: [...projectForm.images, imageInputUrl.trim()]
       });
+      setImageInputUrl('');
     }
+    setShowImageInput(false);
   };
 
   const handleRemoveImage = (index) => {
@@ -94,13 +113,18 @@ const Admin = () => {
   };
 
   const handleAddVideo = () => {
-    const videoUrl = prompt('Ingresa la URL del video (YouTube, Vimeo, etc.):');
-    if (videoUrl) {
+    setShowVideoInput(true);
+  };
+
+  const confirmAddVideo = () => {
+    if (videoInputUrl.trim()) {
       setProjectForm({
         ...projectForm,
-        videos: [...projectForm.videos, videoUrl]
+        videos: [...projectForm.videos, videoInputUrl.trim()]
       });
+      setVideoInputUrl('');
     }
+    setShowVideoInput(false);
   };
 
   const handleRemoveVideo = (index) => {
@@ -120,11 +144,18 @@ const Admin = () => {
   };
 
   const handleRemoveCarouselImage = (index) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar esta imagen del carrusel?')) {
-      removeCarouselImage(index);
+    setDeleteCarouselIndex(index);
+    setShowDeleteCarouselConfirm(true);
+  };
+
+  const confirmDeleteCarouselImage = () => {
+    if (deleteCarouselIndex !== null) {
+      removeCarouselImage(deleteCarouselIndex);
       setAlert({ show: true, message: 'Imagen eliminada del carrusel', type: 'success' });
       setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
     }
+    setShowDeleteCarouselConfirm(false);
+    setDeleteCarouselIndex(null);
   };
 
   return (
@@ -384,6 +415,94 @@ const Admin = () => {
             </Button>
           </Modal.Footer>
         </Form>
+      </Modal>
+
+      {/* Modal de confirmación para eliminar proyecto */}
+      <Modal show={showDeleteConfirm} onHide={() => setShowDeleteConfirm(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar eliminación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          ¿Estás seguro de que deseas eliminar este proyecto?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteProject}>
+            Eliminar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal de confirmación para eliminar imagen del carrusel */}
+      <Modal show={showDeleteCarouselConfirm} onHide={() => setShowDeleteCarouselConfirm(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar eliminación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          ¿Estás seguro de que deseas eliminar esta imagen del carrusel?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteCarouselConfirm(false)}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteCarouselImage}>
+            Eliminar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal para agregar imagen */}
+      <Modal show={showImageInput} onHide={() => setShowImageInput(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Agregar Imagen</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group>
+            <Form.Label>URL de la Imagen</Form.Label>
+            <Form.Control
+              type="text"
+              value={imageInputUrl}
+              onChange={(e) => setImageInputUrl(e.target.value)}
+              placeholder="https://ejemplo.com/imagen.jpg"
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowImageInput(false)}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={confirmAddImage}>
+            Agregar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal para agregar video */}
+      <Modal show={showVideoInput} onHide={() => setShowVideoInput(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Agregar Video</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group>
+            <Form.Label>URL del Video (YouTube, Vimeo, etc.)</Form.Label>
+            <Form.Control
+              type="text"
+              value={videoInputUrl}
+              onChange={(e) => setVideoInputUrl(e.target.value)}
+              placeholder="https://youtube.com/watch?v=..."
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowVideoInput(false)}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={confirmAddVideo}>
+            Agregar
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );

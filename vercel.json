@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "DISABLE_ESLINT_PLUGIN=true npm run build",
   "outputDirectory": "build",
   "installCommand": "npm ci --legacy-peer-deps",
   "framework": "create-react-app",

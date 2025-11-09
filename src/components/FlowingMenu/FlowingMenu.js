@@ -1,5 +1,4 @@
 import React from 'react';
-import { gsap } from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import './FlowingMenu.css';
 

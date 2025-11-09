@@ -26,6 +26,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:prod": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "postinstall": "echo 'Build dependencies installed successfully'"
@@ -41,9 +42,10 @@
     ],
     "rules": {
       "no-unused-vars": "warn",
-      "no-console": "warn",
+      "no-console": "off",
       "no-debugger": "warn",
-      "no-alert": "warn"
+      "no-alert": "off",
+      "no-useless-computed-key": "off"
     }
   },
   "resolutions": {

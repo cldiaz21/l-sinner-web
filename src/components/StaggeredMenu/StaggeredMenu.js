@@ -29,12 +29,7 @@ export const StaggeredMenu = ({
   const plusVRef = useRef(null);
   const iconRef = useRef(null);
 
-  const openTlRef = useRef(null);
-  const closeTweenRef = useRef(null);
-  const spinTweenRef = useRef(null);
-  const colorTweenRef = useRef(null);
   const toggleBtnRef = useRef(null);
-  const busyRef = useRef(false);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -52,11 +47,11 @@ export const StaggeredMenu = ({
   }, [menuButtonColor, position]);
 
   const playOpen = useCallback(() => {
-    busyRef.current = false;
+    // Menu opened
   }, []);
 
   const playClose = useCallback(() => {
-    busyRef.current = false;
+    // Menu closed
   }, []);
 
   const animateIcon = useCallback(opening => {
@@ -125,7 +120,7 @@ export const StaggeredMenu = ({
   return (
     <div
       className={(className ? className + ' ' : '') + 'staggered-menu-wrapper' + (isFixed ? ' fixed-wrapper' : '')}
-      style={accentColor ? { ['--sm-accent']: accentColor } : undefined}
+      style={accentColor ? { '--sm-accent': accentColor } : undefined}
       data-position={position}
       data-open={open || undefined}
     >

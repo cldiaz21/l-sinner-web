@@ -53,7 +53,7 @@ const ContactForm = () => {
       // Ocultar alerta después de 5 segundos
       setTimeout(() => setShowAlert(false), 5000);
     } catch (error) {
-      console.error('Error al enviar el formulario:', error);
+      // Error al enviar el formulario
       setAlertType('danger');
       setAlertMessage('Error al enviar el mensaje. Por favor, intenta de nuevo o contáctanos directamente.');
       setShowAlert(true);

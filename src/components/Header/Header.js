@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { ProjectContext } from '../../context/ProjectContext';
 import { LanguageContext } from '../../context/LanguageContext';
 import StaggeredMenu from '../StaggeredMenu/StaggeredMenu';
@@ -8,7 +8,6 @@ import './Header.css';
 const Header = () => {
   const { getFeaturedProjects } = useContext(ProjectContext);
   const { t, language, changeLanguage } = useContext(LanguageContext);
-  const [menuOpen, setMenuOpen] = useState(false);
   const menuItemsRef = useRef([]);
 
   // Obtener proyectos destacados para usar sus imágenes en el menú
@@ -61,12 +60,6 @@ const Header = () => {
       displaySocials={false}
       language={language}
       onChangeLanguage={changeLanguage}
-      onMenuOpen={() => {
-        setMenuOpen(true);
-      }}
-      onMenuClose={() => {
-        setMenuOpen(false);
-      }}
     >
       <FlowingMenu items={menuItemsRef.current} />
     </StaggeredMenu>

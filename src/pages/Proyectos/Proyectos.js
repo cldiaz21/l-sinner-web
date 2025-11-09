@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Container, Row, Col, Modal, Button, Carousel } from 'react-bootstrap';
+import { Container, Modal, Button, Carousel } from 'react-bootstrap';
 import { ProjectContext } from '../../context/ProjectContext';
 import { LanguageContext } from '../../context/LanguageContext';
 import HeroSection from '../../components/HeroSection/HeroSection';
