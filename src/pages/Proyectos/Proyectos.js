@@ -25,7 +25,11 @@ const Proyectos = () => {
 
   return (
     <div className="page-container">
-      <HeroSection title={t.proyectos || "Proyectos"} subtitle={t.proyectosSubtitle || "Nuestro Trabajo"} />
+      <HeroSection 
+        title={t.proyectos || "Proyectos"} 
+        subtitle={t.proyectosSubtitle || "Nuestro Trabajo"}
+        animationType="prism"
+      />
       <section className="proyectos-section">
         <Container>
           <p className="section-subtitle text-center mb-5">

@@ -8,7 +8,10 @@ const IdentidadSinners = () => {
   const { t } = useContext(LanguageContext);
   return (
     <div className="page-container">
-      <HeroSection title={t.identidad || "Identidad Sinners"} />
+      <HeroSection 
+        title={t.identidad || "Identidad Sinners"} 
+        animationType="lightning"
+      />
       <section className="identidad-section">
         <Container>
           <Row>

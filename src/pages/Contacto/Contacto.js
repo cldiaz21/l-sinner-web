@@ -8,7 +8,11 @@ const Contacto = () => {
   const { t } = useContext(LanguageContext);
   return (
     <div className="page-container">
-      <HeroSection title={t.contacto || "Contacto"} subtitle={t.contactoSubtitle || "Trabajemos Juntos"} />
+      <HeroSection 
+        title={t.contacto || "Contacto"} 
+        subtitle={t.contactoSubtitle || "Trabajemos Juntos"}
+        animationType="beams"
+      />
       <section className="contacto-section">
         <Container>
           <p className="text-center mb-5 contact-intro">

@@ -2,11 +2,14 @@ import React, { useMemo } from 'react';
 import { Particles } from 'react-tsparticles';
 import { loadSlim } from 'tsparticles-slim';
 import Slider from 'react-slick';
+import PrismBackground from '../BackgroundAnimations/PrismBackground';
+import LightningBackground from '../BackgroundAnimations/LightningBackground';
+import BeamsBackground from '../BackgroundAnimations/BeamsBackground';
 import './HeroSection.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const HeroSection = ({ title, subtitle, images = [] }) => {
+const HeroSection = ({ title, subtitle, images = [], animationType = 'particles' }) => {
   const particlesInit = async (main) => {
     await loadSlim(main);
   };
@@ -22,17 +25,17 @@ const HeroSection = ({ title, subtitle, images = [] }) => {
       zIndex: -1,
     },
     fpsLimit: 120,
-    particles: {
-      color: {
-        value: "#ffffff",
-      },
-      links: {
-        color: "#ffffff",
-        distance: 150,
-        enable: true,
-        opacity: 0.1,
-        width: 1,
-      },
+      particles: {
+        color: {
+          value: "#000000",
+        },
+        links: {
+          color: "#000000",
+          distance: 150,
+          enable: true,
+          opacity: 0.2,
+          width: 1,
+        },
       move: {
         direction: "none",
         enable: true,
@@ -50,9 +53,9 @@ const HeroSection = ({ title, subtitle, images = [] }) => {
         },
         value: 40,
       },
-      opacity: {
-        value: 0.2,
-      },
+        opacity: {
+          value: 0.3,
+        },
       shape: {
         type: "circle",
       },
@@ -80,8 +83,41 @@ const HeroSection = ({ title, subtitle, images = [] }) => {
   };
 
   const hasImages = images && images.length > 0;
-  const showParticles = !hasImages; // Solo mostrar partículas si no hay imágenes
   const showContent = !hasImages; // Solo mostrar texto si no hay imágenes
+
+  // Renderizar la animación de fondo según el tipo
+  const renderBackgroundAnimation = () => {
+    if (hasImages) return null;
+    
+    switch (animationType) {
+      case 'prism':
+        return <PrismBackground />;
+      case 'lightning':
+        return <LightningBackground />;
+      case 'beams':
+        return <BeamsBackground />;
+      case 'particles':
+      default:
+        return (
+          <div className="hero-particles-wrapper">
+            <Particles
+              id={`tsparticles-${title.replace(/\s+/g, '-')}-${Math.random().toString(36).substr(2, 9)}`}
+              init={particlesInit}
+              options={particlesConfig}
+              className="hero-particles"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                zIndex: 2,
+              }}
+            />
+          </div>
+        );
+    }
+  };
 
   return (
     <section className="hero-section">
@@ -103,25 +139,8 @@ const HeroSection = ({ title, subtitle, images = [] }) => {
         </div>
       )}
       
-      {/* Partículas animadas - solo si no hay imágenes */}
-      {showParticles && (
-        <div className="hero-particles-wrapper">
-          <Particles
-            id={`tsparticles-${title.replace(/\s+/g, '-')}-${Math.random().toString(36).substr(2, 9)}`}
-            init={particlesInit}
-            options={particlesConfig}
-            className="hero-particles"
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              zIndex: 2,
-            }}
-          />
-        </div>
-      )}
+      {/* Animaciones de fondo según el tipo */}
+      {!hasImages && renderBackgroundAnimation()}
       
       {/* Contenido del hero (título y subtítulo) - solo si no hay imágenes */}
       {showContent && (
