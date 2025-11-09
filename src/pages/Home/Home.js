@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { ProjectContext } from '../../context/ProjectContext';
 import { LanguageContext } from '../../context/LanguageContext';
 import HeroSection from '../../components/HeroSection/HeroSection';
-import ProjectGrid from '../../components/ProjectGrid/ProjectGrid';
+import ProjectsCarousel from '../../components/ProjectsCarousel/ProjectsCarousel';
 import SocialMedia from '../../components/SocialMedia/SocialMedia';
 import './Home.css';
 
@@ -46,11 +46,11 @@ const Home = () => {
         </Container>
       </section>
 
-      {/* Proyectos Destacados */}
+      {/* Proyectos Destacados - Carrusel */}
       <section className="projects-section">
         <Container>
           <h2 className="section-title">{t.featuredProjectsTitle || "Proyectos Destacados"}</h2>
-          <ProjectGrid projects={featuredProjects} limit={6} />
+          <ProjectsCarousel projects={featuredProjects} />
         </Container>
       </section>
 

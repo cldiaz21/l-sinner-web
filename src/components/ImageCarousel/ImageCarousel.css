@@ -15,13 +15,14 @@
   width: 100%;
   height: 70vh;
   min-height: 500px;
-  background-size: cover;
+  background-size: contain; /* Cambiado de cover a contain para ver la imagen completa */
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #000; /* Fondo negro para imágenes que no llenan todo el espacio */
 }
 
 .carousel-overlay {
@@ -82,10 +83,17 @@
   color: #fff;
 }
 
+@media (max-width: 1024px) {
+  .carousel-image {
+    height: 60vh;
+    min-height: 450px;
+  }
+}
+
 @media (max-width: 768px) {
   .carousel-image {
     height: 50vh;
-    min-height: 400px;
+    min-height: 350px;
   }
 
   .main-carousel .slick-prev,
@@ -105,6 +113,32 @@
 
   .main-carousel .slick-next {
     right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-image {
+    height: 40vh;
+    min-height: 300px;
+  }
+
+  .main-carousel .slick-prev,
+  .main-carousel .slick-next {
+    width: 25px;
+    height: 25px;
+  }
+
+  .main-carousel .slick-prev:before,
+  .main-carousel .slick-next:before {
+    font-size: 20px;
+  }
+
+  .main-carousel .slick-prev {
+    left: 5px;
+  }
+
+  .main-carousel .slick-next {
+    right: 5px;
   }
 }
 

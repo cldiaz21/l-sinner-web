@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { Row, Col, Card, Button, Modal, Form, Alert } from 'react-bootstrap';
 import { ProjectContext } from '../../context/ProjectContext';
 import AdminLayout from '../../components/AdminLayout/AdminLayout';
-import { Plus, Edit, Trash2, Image as ImageIcon, Video, Calendar, Tag, Star, Folder } from 'lucide-react';
+import { Plus, Edit, Trash2, Image as ImageIcon, Video, Calendar, Tag, Star, Folder, Upload, X as XIcon } from 'lucide-react';
+import { uploadService } from '../../services/uploadService';
 import './Admin.css';
 
 const Admin = () => {
@@ -27,6 +28,11 @@ const Admin = () => {
   const [deleteCarouselIndex, setDeleteCarouselIndex] = useState(null);
   const [showImageInput, setShowImageInput] = useState(false);
   const [imageInputUrl, setImageInputUrl] = useState('');
+  const [imageUploadMode, setImageUploadMode] = useState('upload'); // 'upload' or 'url'
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState('');
+  const fileInputRef = useRef(null);
+  const carouselFileInputRef = useRef(null);
   const [showVideoInput, setShowVideoInput] = useState(false);
   const [videoInputUrl, setVideoInputUrl] = useState('');
   const [projectForm, setProjectForm] = useState({
@@ -39,6 +45,8 @@ const Admin = () => {
     featured: false
   });
   const [carouselImageUrl, setCarouselImageUrl] = useState('');
+  const [carouselUploadMode, setCarouselUploadMode] = useState('upload');
+  const [uploadingCarousel, setUploadingCarousel] = useState(false);
   const [alert, setAlert] = useState({ show: false, message: '', type: 'success' });
   const [submitting, setSubmitting] = useState(false);
 
@@ -120,6 +128,53 @@ const Admin = () => {
 
   const handleAddImage = () => {
     setShowImageInput(true);
+    setImageUploadMode('upload');
+    setImageInputUrl('');
+  };
+
+  const handleImageFileSelect = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setUploadingImages(true);
+    setUploadProgress(`Subiendo ${files.length} imagen(es)...`);
+
+    try {
+      const result = await uploadService.uploadMultipleImages(files, 'projects');
+      
+      if (result.success && result.urls.length > 0) {
+        setProjectForm({
+          ...projectForm,
+          images: [...projectForm.images, ...result.urls]
+        });
+        setAlert({ 
+          show: true, 
+          message: `${result.urls.length} imagen(es) subida(s) correctamente`, 
+          type: 'success' 
+        });
+        setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
+        setShowImageInput(false);
+      } else {
+        const errorMsg = result.errors.length > 0 
+          ? `Error: ${result.errors.join(', ')}` 
+          : 'Error al subir las imágenes';
+        setAlert({ show: true, message: errorMsg, type: 'danger' });
+        setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 5000);
+      }
+    } catch (error) {
+      setAlert({ 
+        show: true, 
+        message: error.message || 'Error al subir las imágenes', 
+        type: 'danger' 
+      });
+      setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 5000);
+    } finally {
+      setUploadingImages(false);
+      setUploadProgress('');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const confirmAddImage = () => {
@@ -160,6 +215,59 @@ const Admin = () => {
       ...projectForm,
       videos: projectForm.videos.filter((_, i) => i !== index)
     });
+  };
+
+  const handleCarouselImageFileSelect = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setUploadingCarousel(true);
+    setUploadProgress(`Subiendo ${files.length} imagen(es) al carrusel...`);
+
+    try {
+      for (const file of files) {
+        const result = await uploadService.uploadImage(file, 'carousel');
+        if (result.url) {
+          const addResult = await addCarouselImage(result.url);
+          if (!addResult.success) {
+            setAlert({ 
+              show: true, 
+              message: `Error al agregar imagen: ${addResult.error}`, 
+              type: 'danger' 
+            });
+          }
+        } else {
+          setAlert({ 
+            show: true, 
+            message: `Error al subir imagen: ${result.error}`, 
+            type: 'danger' 
+          });
+        }
+      }
+      
+      if (files.length > 0) {
+        setAlert({ 
+          show: true, 
+          message: `${files.length} imagen(es) agregada(s) al carrusel`, 
+          type: 'success' 
+        });
+        setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
+        setCarouselImageUrl('');
+      }
+    } catch (error) {
+      setAlert({ 
+        show: true, 
+        message: error.message || 'Error al subir las imágenes', 
+        type: 'danger' 
+      });
+      setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 5000);
+    } finally {
+      setUploadingCarousel(false);
+      setUploadProgress('');
+      if (carouselFileInputRef.current) {
+        carouselFileInputRef.current.value = '';
+      }
+    }
   };
 
   const handleAddCarouselImage = async () => {
@@ -389,22 +497,73 @@ const Admin = () => {
             <h5 className="admin-card-title mb-0">Agregar Imagen al Carrusel</h5>
           </Card.Header>
           <Card.Body>
-            <Form.Group className="admin-form-group">
-              <Form.Label className="admin-form-label">URL de la Imagen</Form.Label>
-              <div className="d-flex gap-2">
-                <Form.Control
-                  type="text"
-                  value={carouselImageUrl}
-                  onChange={(e) => setCarouselImageUrl(e.target.value)}
-                  placeholder="https://ejemplo.com/imagen.jpg"
-                  className="admin-form-control"
-                />
-                <Button className="admin-btn admin-btn-primary" onClick={handleAddCarouselImage}>
-                  <Plus size={18} />
-                  Agregar
+            <div className="mb-3">
+              <div className="btn-group" role="group">
+                <Button
+                  variant={carouselUploadMode === 'upload' ? 'primary' : 'outline-primary'}
+                  onClick={() => setCarouselUploadMode('upload')}
+                  size="sm"
+                >
+                  <Upload size={16} className="me-1" />
+                  Subir Archivo
+                </Button>
+                <Button
+                  variant={carouselUploadMode === 'url' ? 'primary' : 'outline-primary'}
+                  onClick={() => setCarouselUploadMode('url')}
+                  size="sm"
+                >
+                  <ImageIcon size={16} className="me-1" />
+                  URL
                 </Button>
               </div>
-            </Form.Group>
+            </div>
+
+            {carouselUploadMode === 'upload' ? (
+              <Form.Group className="admin-form-group">
+                <Form.Label className="admin-form-label">Seleccionar Imagen(es)</Form.Label>
+                <Form.Control
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  ref={carouselFileInputRef}
+                  onChange={handleCarouselImageFileSelect}
+                  className="admin-form-control"
+                  disabled={uploadingCarousel}
+                />
+                <Form.Text className="text-muted">
+                  Puedes seleccionar múltiples imágenes. Formatos: JPG, PNG, WebP (máx. 10MB cada una)
+                </Form.Text>
+                {uploadingCarousel && (
+                  <div className="mt-2">
+                    <div className="spinner-border spinner-border-sm text-primary" role="status">
+                      <span className="visually-hidden">Subiendo...</span>
+                    </div>
+                    <span className="ms-2">{uploadProgress}</span>
+                  </div>
+                )}
+              </Form.Group>
+            ) : (
+              <Form.Group className="admin-form-group">
+                <Form.Label className="admin-form-label">URL de la Imagen</Form.Label>
+                <div className="d-flex gap-2">
+                  <Form.Control
+                    type="text"
+                    value={carouselImageUrl}
+                    onChange={(e) => setCarouselImageUrl(e.target.value)}
+                    placeholder="https://ejemplo.com/imagen.jpg"
+                    className="admin-form-control"
+                  />
+                  <Button 
+                    className="admin-btn admin-btn-primary" 
+                    onClick={handleAddCarouselImage}
+                    disabled={!carouselImageUrl.trim()}
+                  >
+                    <Plus size={18} />
+                    Agregar
+                  </Button>
+                </div>
+              </Form.Group>
+            )}
           </Card.Body>
         </Card>
 
@@ -562,7 +721,7 @@ const Admin = () => {
                 <ImageIcon size={16} className="me-1" />
                 Imágenes
               </Form.Label>
-              <div className="images-list mb-2">
+              <div className="images-list mb-3">
                 {projectForm.images.map((image, index) => (
                   <div key={index} className="image-item">
                     <img src={image} alt={`Imagen ${index + 1}`} className="thumb-image" />
@@ -570,22 +729,52 @@ const Admin = () => {
                       variant="outline-danger"
                       size="sm"
                       onClick={() => handleRemoveImage(index)}
-                      disabled={submitting}
+                      disabled={submitting || uploadingImages}
+                      title="Eliminar imagen"
                     >
-                      X
+                      <XIcon size={14} />
                     </Button>
                   </div>
                 ))}
               </div>
-              <Button 
-                variant="outline-secondary" 
-                onClick={handleAddImage}
-                type="button"
-                disabled={submitting}
-              >
-                <Plus size={16} className="me-1" />
-                Agregar Imagen
-              </Button>
+              <div className="mb-2">
+                <div className="btn-group" role="group">
+                  <Button
+                    variant={imageUploadMode === 'upload' ? 'primary' : 'outline-primary'}
+                    onClick={() => {
+                      setImageUploadMode('upload');
+                      setShowImageInput(true);
+                    }}
+                    type="button"
+                    disabled={submitting || uploadingImages}
+                    size="sm"
+                  >
+                    <Upload size={16} className="me-1" />
+                    Subir Archivo
+                  </Button>
+                  <Button
+                    variant={imageUploadMode === 'url' ? 'primary' : 'outline-primary'}
+                    onClick={() => {
+                      setImageUploadMode('url');
+                      setShowImageInput(true);
+                    }}
+                    type="button"
+                    disabled={submitting || uploadingImages}
+                    size="sm"
+                  >
+                    <ImageIcon size={16} className="me-1" />
+                    URL
+                  </Button>
+                </div>
+              </div>
+              {uploadingImages && (
+                <div className="mt-2">
+                  <div className="spinner-border spinner-border-sm text-primary" role="status">
+                    <span className="visually-hidden">Subiendo...</span>
+                  </div>
+                  <span className="ms-2">{uploadProgress}</span>
+                </div>
+              )}
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -686,28 +875,94 @@ const Admin = () => {
       </Modal>
 
       {/* Modal para agregar imagen */}
-      <Modal show={showImageInput} onHide={() => setShowImageInput(false)}>
+      <Modal show={showImageInput} onHide={() => {
+        setShowImageInput(false);
+        setImageInputUrl('');
+        setImageUploadMode('upload');
+      }}>
         <Modal.Header closeButton>
           <Modal.Title>Agregar Imagen</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group>
-            <Form.Label>URL de la Imagen</Form.Label>
-            <Form.Control
-              type="text"
-              value={imageInputUrl}
-              onChange={(e) => setImageInputUrl(e.target.value)}
-              placeholder="https://ejemplo.com/imagen.jpg"
-            />
-          </Form.Group>
+          <div className="mb-3">
+            <div className="btn-group" role="group">
+              <Button
+                variant={imageUploadMode === 'upload' ? 'primary' : 'outline-primary'}
+                onClick={() => setImageUploadMode('upload')}
+                size="sm"
+              >
+                <Upload size={16} className="me-1" />
+                Subir Archivo
+              </Button>
+              <Button
+                variant={imageUploadMode === 'url' ? 'primary' : 'outline-primary'}
+                onClick={() => setImageUploadMode('url')}
+                size="sm"
+              >
+                <ImageIcon size={16} className="me-1" />
+                URL
+              </Button>
+            </div>
+          </div>
+
+          {imageUploadMode === 'upload' ? (
+            <Form.Group>
+              <Form.Label>Seleccionar Imagen(es)</Form.Label>
+              <Form.Control
+                type="file"
+                accept="image/*"
+                multiple
+                ref={fileInputRef}
+                onChange={handleImageFileSelect}
+                disabled={uploadingImages}
+              />
+              <Form.Text className="text-muted">
+                Puedes seleccionar múltiples imágenes. Formatos: JPG, PNG, WebP (máx. 10MB cada una)
+              </Form.Text>
+              {uploadingImages && (
+                <div className="mt-2">
+                  <div className="spinner-border spinner-border-sm text-primary" role="status">
+                    <span className="visually-hidden">Subiendo...</span>
+                  </div>
+                  <span className="ms-2">{uploadProgress}</span>
+                </div>
+              )}
+            </Form.Group>
+          ) : (
+            <Form.Group>
+              <Form.Label>URL de la Imagen</Form.Label>
+              <Form.Control
+                type="text"
+                value={imageInputUrl}
+                onChange={(e) => setImageInputUrl(e.target.value)}
+                placeholder="https://ejemplo.com/imagen.jpg"
+              />
+              <Form.Text className="text-muted">
+                Ingresa la URL completa de la imagen
+              </Form.Text>
+            </Form.Group>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowImageInput(false)}>
+          <Button 
+            variant="secondary" 
+            onClick={() => {
+              setShowImageInput(false);
+              setImageInputUrl('');
+              setImageUploadMode('upload');
+            }}
+          >
             Cancelar
           </Button>
-          <Button variant="primary" onClick={confirmAddImage}>
-            Agregar
-          </Button>
+          {imageUploadMode === 'url' && (
+            <Button 
+              variant="primary" 
+              onClick={confirmAddImage}
+              disabled={!imageInputUrl.trim()}
+            >
+              Agregar
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
 

@@ -88,9 +88,10 @@
 .hero-carousel-image {
   width: 100%;
   height: 100%;
-  background-size: cover;
+  background-size: contain; /* Cambiado de cover a contain para ver la imagen completa */
   background-position: center;
   background-repeat: no-repeat;
+  background-color: #000; /* Fondo negro para imágenes que no llenan todo el espacio */
 }
 
 .hero-carousel-overlay {

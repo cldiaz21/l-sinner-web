@@ -1,0 +1,182 @@
+.projects-carousel-container {
+  padding: 2rem 0;
+}
+
+.project-carousel-slide {
+  padding: 0 15px;
+  outline: none;
+}
+
+.project-carousel-item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.project-carousel-image-wrapper {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Cambiado de cover a contain para ver la imagen completa */
+  transition: none; /* Eliminado el efecto de transición */
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Eliminado el efecto de zoom en hover */
+
+.project-carousel-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.project-carousel-title {
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.project-carousel-title h3 {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.4;
+}
+
+/* Slick Carousel Custom Styles */
+.projects-carousel-container .slick-dots {
+  bottom: -50px;
+}
+
+.projects-carousel-container .slick-dots li button:before {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+.projects-carousel-container .slick-dots li.slick-active button:before {
+  color: #fff;
+}
+
+.projects-carousel-container .slick-prev,
+.projects-carousel-container .slick-next {
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+}
+
+.projects-carousel-container .slick-prev {
+  left: -50px;
+}
+
+.projects-carousel-container .slick-next {
+  right: -50px;
+}
+
+.projects-carousel-container .slick-prev:before,
+.projects-carousel-container .slick-next:before {
+  font-size: 40px;
+  color: rgba(255, 255, 255, 0.8);
+  opacity: 1;
+}
+
+.projects-carousel-container .slick-prev:hover:before,
+.projects-carousel-container .slick-next:hover:before {
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .project-carousel-image-wrapper {
+    height: 350px;
+  }
+
+  .projects-carousel-container .slick-prev {
+    left: -35px;
+  }
+
+  .projects-carousel-container .slick-next {
+    right: -35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-carousel-container {
+    padding: 1.5rem 0;
+  }
+
+  .project-carousel-image-wrapper {
+    height: 250px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .project-carousel-title h3 {
+    font-size: 0.9rem;
+    padding: 0 0.5rem;
+  }
+
+  .projects-carousel-container .slick-prev {
+    left: -25px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .projects-carousel-container .slick-next {
+    right: -25px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .projects-carousel-container .slick-prev:before,
+  .projects-carousel-container .slick-next:before {
+    font-size: 30px;
+  }
+
+  .project-carousel-slide {
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-carousel-image-wrapper {
+    height: 200px;
+  }
+
+  .project-carousel-title h3 {
+    font-size: 0.8rem;
+  }
+
+  .projects-carousel-container .slick-prev {
+    left: -15px;
+    width: 25px;
+    height: 25px;
+  }
+
+  .projects-carousel-container .slick-next {
+    right: -15px;
+    width: 25px;
+    height: 25px;
+  }
+
+  .projects-carousel-container .slick-prev:before,
+  .projects-carousel-container .slick-next:before {
+    font-size: 25px;
+  }
+}
+
