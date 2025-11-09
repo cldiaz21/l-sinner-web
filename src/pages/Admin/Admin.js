@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { Container, Row, Col, Card, Button, Modal, Form, Alert, Tab, Tabs } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Row, Col, Card, Button, Modal, Form, Alert } from 'react-bootstrap';
 import { ProjectContext } from '../../context/ProjectContext';
-import { authService } from '../../services/authService';
+import AdminLayout from '../../components/AdminLayout/AdminLayout';
+import { Plus, Edit, Trash2, Image as ImageIcon, Video, Calendar, Tag, Star, Folder } from 'lucide-react';
 import './Admin.css';
 
 const Admin = () => {
@@ -18,7 +18,7 @@ const Admin = () => {
     removeCarouselImage 
   } = useContext(ProjectContext);
 
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -41,11 +41,6 @@ const Admin = () => {
   const [carouselImageUrl, setCarouselImageUrl] = useState('');
   const [alert, setAlert] = useState({ show: false, message: '', type: 'success' });
   const [submitting, setSubmitting] = useState(false);
-
-  const handleLogout = async () => {
-    await authService.signOut();
-    navigate('/login');
-  };
 
   const handleProjectSubmit = async (e) => {
     e.preventDefault();
@@ -199,166 +194,289 @@ const Admin = () => {
     setDeleteCarouselIndex(null);
   };
 
+  const renderDashboard = () => {
+    const featuredProjects = projects.filter(p => p.featured).length;
+    const totalProjects = projects.length;
+    const totalCarouselImages = carouselImages.length;
+
+    return (
+      <div>
+        <Row className="mb-4">
+          <Col md={4}>
+            <Card className="admin-card">
+              <Card.Body>
+                <div className="d-flex align-items-center">
+                  <div className="flex-grow-1">
+                    <div className="text-muted small mb-1">Total Proyectos</div>
+                    <div className="h4 mb-0">{totalProjects}</div>
+                  </div>
+                  <div className="text-primary">
+                    <Folder size={32} />
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={4}>
+            <Card className="admin-card">
+              <Card.Body>
+                <div className="d-flex align-items-center">
+                  <div className="flex-grow-1">
+                    <div className="text-muted small mb-1">Proyectos Destacados</div>
+                    <div className="h4 mb-0">{featuredProjects}</div>
+                  </div>
+                  <div className="text-warning">
+                    <Star size={32} />
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={4}>
+            <Card className="admin-card">
+              <Card.Body>
+                <div className="d-flex align-items-center">
+                  <div className="flex-grow-1">
+                    <div className="text-muted small mb-1">Imágenes en Carrusel</div>
+                    <div className="h4 mb-0">{totalCarouselImages}</div>
+                  </div>
+                  <div className="text-info">
+                    <ImageIcon size={32} />
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        <Card className="admin-card">
+          <Card.Header className="admin-card-header">
+            <h5 className="admin-card-title mb-0">Actividad Reciente</h5>
+          </Card.Header>
+          <Card.Body>
+            {projects.length === 0 ? (
+              <p className="text-muted mb-0">No hay proyectos aún. Crea uno nuevo para comenzar.</p>
+            ) : (
+              <div className="table-responsive">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Título</th>
+                      <th>Categoría</th>
+                      <th>Fecha</th>
+                      <th>Destacado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projects.slice(0, 5).map((project) => (
+                      <tr key={project.id}>
+                        <td>{project.title}</td>
+                        <td>{project.category || '-'}</td>
+                        <td>{project.date ? new Date(project.date).toLocaleDateString() : '-'}</td>
+                        <td>{project.featured ? '✓' : '-'}</td>
+                        <td>
+                          <Button
+                            variant="link"
+                            size="sm"
+                            className="text-primary p-0 me-2"
+                            onClick={() => handleEditProject(project)}
+                          >
+                            <Edit size={16} />
+                          </Button>
+                          <Button
+                            variant="link"
+                            size="sm"
+                            className="text-danger p-0"
+                            onClick={() => handleDeleteProject(project.id)}
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Card.Body>
+        </Card>
+      </div>
+    );
+  };
+
+  const renderProjects = () => {
+    return (
+      <div>
+        <Card className="admin-card mb-4">
+          <Card.Header className="admin-card-header d-flex justify-content-between align-items-center">
+            <h5 className="admin-card-title mb-0">Proyectos</h5>
+            <Button
+              className="admin-btn admin-btn-primary"
+              onClick={() => {
+                setEditingProject(null);
+                setProjectForm({
+                  title: '',
+                  description: '',
+                  category: '',
+                  images: [],
+                  videos: [],
+                  date: '',
+                  featured: false
+                });
+                setShowProjectModal(true);
+              }}
+            >
+              <Plus size={18} />
+              Nuevo Proyecto
+            </Button>
+          </Card.Header>
+          <Card.Body>
+            {projects.length === 0 ? (
+              <p className="text-muted">No hay proyectos aún. Crea uno nuevo para comenzar.</p>
+            ) : (
+              <Row>
+                {projects.map((project) => (
+                  <Col key={project.id} md={6} lg={4} className="mb-4">
+                    <Card className="admin-project-card h-100">
+                      {project.images && project.images.length > 0 ? (
+                        <Card.Img variant="top" src={project.images[0]} className="admin-project-image" />
+                      ) : (
+                        <div className="no-image-placeholder">
+                          <ImageIcon size={48} />
+                        </div>
+                      )}
+                      <Card.Body className="d-flex flex-column">
+                        <Card.Title className="admin-project-title">{project.title}</Card.Title>
+                        <Card.Text className="admin-project-text flex-grow-1">
+                          {project.description?.substring(0, 100)}...
+                        </Card.Text>
+                        <div className="d-flex gap-2 mt-auto">
+                          <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={() => handleEditProject(project)}
+                            className="flex-grow-1"
+                          >
+                            <Edit size={16} className="me-1" />
+                            Editar
+                          </Button>
+                          <Button
+                            variant="outline-danger"
+                            size="sm"
+                            onClick={() => handleDeleteProject(project.id)}
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            )}
+          </Card.Body>
+        </Card>
+      </div>
+    );
+  };
+
+  const renderCarousel = () => {
+    return (
+      <div>
+        <Card className="admin-card mb-4">
+          <Card.Header className="admin-card-header">
+            <h5 className="admin-card-title mb-0">Agregar Imagen al Carrusel</h5>
+          </Card.Header>
+          <Card.Body>
+            <Form.Group className="admin-form-group">
+              <Form.Label className="admin-form-label">URL de la Imagen</Form.Label>
+              <div className="d-flex gap-2">
+                <Form.Control
+                  type="text"
+                  value={carouselImageUrl}
+                  onChange={(e) => setCarouselImageUrl(e.target.value)}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                  className="admin-form-control"
+                />
+                <Button className="admin-btn admin-btn-primary" onClick={handleAddCarouselImage}>
+                  <Plus size={18} />
+                  Agregar
+                </Button>
+              </div>
+            </Form.Group>
+          </Card.Body>
+        </Card>
+
+        <Card className="admin-card">
+          <Card.Header className="admin-card-header">
+            <h5 className="admin-card-title mb-0">Imágenes del Carrusel</h5>
+          </Card.Header>
+          <Card.Body>
+            {carouselImages.length === 0 ? (
+              <p className="text-muted">No hay imágenes en el carrusel. Agrega una para comenzar.</p>
+            ) : (
+              <Row>
+                {carouselImages.map((image, index) => (
+                  <Col key={index} md={6} lg={4} className="mb-4">
+                    <Card className="carousel-image-card">
+                      <Card.Img variant="top" src={image} className="carousel-image-preview" />
+                      <Card.Body>
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          onClick={() => handleRemoveCarouselImage(index)}
+                          className="w-100"
+                        >
+                          <Trash2 size={16} className="me-1" />
+                          Eliminar
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            )}
+          </Card.Body>
+        </Card>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
-      <div className="page-container">
-        <section className="admin-section">
-          <Container>
-            <div className="text-center">
-              <p>Cargando...</p>
-            </div>
-          </Container>
-        </section>
-      </div>
+      <AdminLayout activeTab={activeTab} onTabChange={setActiveTab}>
+        <div className="text-center py-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      </AdminLayout>
     );
   }
 
   return (
-    <div className="page-container">
-      <section className="admin-section">
-        <Container>
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h1 className="section-title">Panel de Administración</h1>
-            <Button variant="outline-danger" onClick={handleLogout}>
-              Cerrar Sesión
-            </Button>
-          </div>
-          
-          {error && (
-            <Alert variant="danger" dismissible onClose={() => {}}>
-              Error: {error}
-            </Alert>
-          )}
+    <AdminLayout activeTab={activeTab} onTabChange={setActiveTab}>
+      {error && (
+        <Alert variant="danger" dismissible className="admin-alert admin-alert-danger">
+          Error: {error}
+        </Alert>
+      )}
 
-          {alert.show && (
-            <Alert variant={alert.type} dismissible onClose={() => setAlert({ show: false, message: '', type: 'success' })}>
-              {alert.message}
-            </Alert>
-          )}
+      {alert.show && (
+        <Alert 
+          variant={alert.type} 
+          dismissible 
+          onClose={() => setAlert({ show: false, message: '', type: 'success' })}
+          className={alert.type === 'success' ? 'admin-alert admin-alert-success' : 'admin-alert admin-alert-danger'}
+        >
+          {alert.message}
+        </Alert>
+      )}
 
-          <Tabs defaultActiveKey="projects" className="admin-tabs">
-            {/* Tab de Proyectos */}
-            <Tab eventKey="projects" title="Proyectos">
-              <Row className="mt-4">
-                <Col>
-                  <Button 
-                    variant="outline-light" 
-                    onClick={() => {
-                      setEditingProject(null);
-                      setProjectForm({
-                        title: '',
-                        description: '',
-                        category: '',
-                        images: [],
-                        videos: [],
-                        date: '',
-                        featured: false
-                      });
-                      setShowProjectModal(true);
-                    }}
-                    className="mb-4"
-                  >
-                    + Nuevo Proyecto
-                  </Button>
-
-                  <Row>
-                    {projects.length === 0 ? (
-                      <Col>
-                        <p>No hay proyectos aún. Crea uno nuevo para comenzar.</p>
-                      </Col>
-                    ) : (
-                      projects.map((project) => (
-                        <Col key={project.id} md={6} lg={4} className="mb-4">
-                          <Card className="admin-project-card">
-                            {project.images && project.images.length > 0 ? (
-                              <Card.Img variant="top" src={project.images[0]} />
-                            ) : (
-                              <div className="no-image-placeholder">Sin imagen</div>
-                            )}
-                            <Card.Body>
-                              <Card.Title>{project.title}</Card.Title>
-                              <Card.Text>
-                                {project.description?.substring(0, 100)}...
-                              </Card.Text>
-                              <div className="d-flex gap-2">
-                                <Button 
-                                  variant="outline-primary" 
-                                  size="sm"
-                                  onClick={() => handleEditProject(project)}
-                                >
-                                  Editar
-                                </Button>
-                                <Button 
-                                  variant="outline-danger" 
-                                  size="sm"
-                                  onClick={() => handleDeleteProject(project.id)}
-                                >
-                                  Eliminar
-                                </Button>
-                              </div>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      ))
-                    )}
-                  </Row>
-                </Col>
-              </Row>
-            </Tab>
-
-            {/* Tab de Carrusel */}
-            <Tab eventKey="carousel" title="Carrusel">
-              <Row className="mt-4">
-                <Col>
-                  <Card className="mb-4">
-                    <Card.Body>
-                      <h3>Agregar Imagen al Carrusel</h3>
-                      <Form.Group className="mb-3">
-                        <Form.Label>URL de la Imagen</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={carouselImageUrl}
-                          onChange={(e) => setCarouselImageUrl(e.target.value)}
-                          placeholder="https://ejemplo.com/imagen.jpg"
-                        />
-                      </Form.Group>
-                      <Button variant="outline-light" onClick={handleAddCarouselImage}>
-                        Agregar Imagen
-                      </Button>
-                    </Card.Body>
-                  </Card>
-
-                  <Row>
-                    {carouselImages.length === 0 ? (
-                      <Col>
-                        <p>No hay imágenes en el carrusel. Agrega una para comenzar.</p>
-                      </Col>
-                    ) : (
-                      carouselImages.map((image, index) => (
-                        <Col key={index} md={6} lg={4} className="mb-4">
-                          <Card className="carousel-image-card">
-                            <Card.Img variant="top" src={image} />
-                            <Card.Body>
-                              <Button 
-                                variant="outline-danger" 
-                                size="sm"
-                                onClick={() => handleRemoveCarouselImage(index)}
-                                className="w-100"
-                              >
-                                Eliminar
-                              </Button>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      ))
-                    )}
-                  </Row>
-                </Col>
-              </Row>
-            </Tab>
-          </Tabs>
-        </Container>
-      </section>
+      {activeTab === 'dashboard' && renderDashboard()}
+      {activeTab === 'projects' && renderProjects()}
+      {activeTab === 'carousel' && renderCarousel()}
 
       {/* Modal para crear/editar proyecto */}
       <Modal 
@@ -407,29 +525,43 @@ const Admin = () => {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Fecha</Form.Label>
-              <Form.Control
-                type="date"
-                value={projectForm.date}
-                onChange={(e) => setProjectForm({ ...projectForm, date: e.target.value })}
-                disabled={submitting}
-              />
-            </Form.Group>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>
+                    <Calendar size={16} className="me-1" />
+                    Fecha
+                  </Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={projectForm.date}
+                    onChange={(e) => setProjectForm({ ...projectForm, date: e.target.value })}
+                    disabled={submitting}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>
+                    <Tag size={16} className="me-1" />
+                    Categoría
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={projectForm.category}
+                    onChange={(e) => setProjectForm({ ...projectForm, category: e.target.value })}
+                    placeholder="Ej: Fotografía, Retrato, Comercial..."
+                    disabled={submitting}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
 
             <Form.Group className="mb-3">
-              <Form.Label>Categoría</Form.Label>
-              <Form.Control
-                type="text"
-                value={projectForm.category}
-                onChange={(e) => setProjectForm({ ...projectForm, category: e.target.value })}
-                placeholder="Ej: Fotografía, Retrato, Comercial..."
-                disabled={submitting}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Imágenes</Form.Label>
+              <Form.Label>
+                <ImageIcon size={16} className="me-1" />
+                Imágenes
+              </Form.Label>
               <div className="images-list mb-2">
                 {projectForm.images.map((image, index) => (
                   <div key={index} className="image-item">
@@ -449,15 +581,18 @@ const Admin = () => {
                 variant="outline-secondary" 
                 onClick={handleAddImage}
                 type="button"
-                className="me-2"
                 disabled={submitting}
               >
-                + Agregar Imagen
+                <Plus size={16} className="me-1" />
+                Agregar Imagen
               </Button>
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Videos</Form.Label>
+              <Form.Label>
+                <Video size={16} className="me-1" />
+                Videos
+              </Form.Label>
               <div className="videos-list mb-2">
                 {projectForm.videos.map((video, index) => (
                   <div key={index} className="video-item">
@@ -479,14 +614,20 @@ const Admin = () => {
                 type="button"
                 disabled={submitting}
               >
-                + Agregar Video
+                <Plus size={16} className="me-1" />
+                Agregar Video
               </Button>
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Check
                 type="checkbox"
-                label="Proyecto destacado (aparecerá en el home)"
+                label={
+                  <>
+                    <Star size={16} className="me-1" />
+                    Proyecto destacado (aparecerá en el home)
+                  </>
+                }
                 checked={projectForm.featured}
                 onChange={(e) => setProjectForm({ ...projectForm, featured: e.target.checked })}
                 disabled={submitting}
@@ -595,7 +736,7 @@ const Admin = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </AdminLayout>
   );
 };
 

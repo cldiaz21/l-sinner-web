@@ -1,6 +1,6 @@
-# L SINNER - Portfolio Website
+# L SINN3R - Portfolio Website
 
-Portfolio website for L SINNER, a professional photographer. Built with React and Bootstrap.
+Portfolio website for L SINN3R, a professional photographer. Built with React and Bootstrap.
 
 ## 🚀 Features
 
@@ -144,7 +144,7 @@ This project is private and proprietary.
 
 ## 👤 Author
 
-**Álvaro Meza** - Founder of L SINNER
+**Álvaro Meza** - Founder of L SINN3R
 
 ## 🙏 Acknowledgments
 

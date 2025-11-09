@@ -24,19 +24,19 @@ const Home = () => {
     <div className="page-container">
       {/* Hero Section con carrusel de imágenes */}
       <HeroSection 
-        title="L SINNER" 
+        title="L SINN3R" 
         subtitle={t.heroSubtitleHome || "Fotografía Profesional"}
         images={heroImages}
       />
 
-      {/* Descripción de L SINNER */}
+      {/* Descripción de L SINN3R */}
       <section className="description-section">
         <Container>
           <Row>
             <Col lg={8} className="mx-auto text-center">
-              <h2 className="section-title">{t.descriptionTitle || "L SINNER"}</h2>
+              <h2 className="section-title">{t.descriptionTitle || "L SINN3R"}</h2>
               <p className="description-text">
-                {t.descriptionText1 || "L SINNER es un fotógrafo profesional especializado en capturar momentos únicos y transformarlos en arte visual. Con una visión creativa y un estilo distintivo, cada proyecto es una oportunidad para contar una historia a través de la lente."}
+                {t.descriptionText1 || "L SINN3R es un fotógrafo profesional especializado en capturar momentos únicos y transformarlos en arte visual. Con una visión creativa y un estilo distintivo, cada proyecto es una oportunidad para contar una historia a través de la lente."}
               </p>
               <p className="description-text">
                 {t.descriptionText2 || "Nuestro trabajo abarca desde sesiones de retrato hasta proyectos comerciales, siempre manteniendo la calidad y la autenticidad que nos caracteriza."}

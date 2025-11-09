@@ -136,7 +136,7 @@ export const StaggeredMenu = ({
               height={24}
             />
           ) : (
-            <span className="sm-logo-text">L SINNER</span>
+            <span className="sm-logo-text">L SINN3R</span>
           )}
         </div>
         <div className="sm-header-right">

@@ -18,7 +18,7 @@ const IdentidadSinners = () => {
             <Col lg={10} className="mx-auto">
               <div className="identidad-content">
                 <p className="lead-text">
-                  L SINNER representa más que un nombre: es una identidad, una filosofía 
+                  L SINN3R representa más que un nombre: es una identidad, una filosofía 
                   visual que busca capturar la esencia única de cada momento.
                 </p>
 

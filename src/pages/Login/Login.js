@@ -58,9 +58,9 @@ const Login = () => {
         {/* Logo */}
         <div className="login-logo">
           <div className="logo-circle">
-            <img src="/images/hero/logo.png" alt="L SINNER" className="logo-image" />
+            <img src="/images/hero/logo.png" alt="L SINN3R" className="logo-image" />
           </div>
-          <h1 className="company-name">L SINNER</h1>
+          <h1 className="company-name">L SINN3R</h1>
           <p className="company-subtitle">Panel de Administración</p>
         </div>
 
@@ -121,10 +121,6 @@ const Login = () => {
             )}
           </button>
         </form>
-
-        <div className="login-footer">
-          <p>© 2025 L SINNER. Todos los derechos reservados.</p>
-        </div>
       </div>
     </div>
   );

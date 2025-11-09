@@ -1,5 +1,5 @@
 /* ============================================
-   LOGIN STYLES - L SINNER
+   LOGIN STYLES - L SINN3R
    ============================================ */
 
 .login-container {
@@ -13,6 +13,7 @@
   justify-content: center;
   background: #0a0a0a;
   overflow: hidden;
+  z-index: 9999;
 }
 
 /* Simple Background - Optimizado para carga rápida */
@@ -223,20 +224,6 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-/* Footer */
-.login-footer {
-  text-align: center;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.login-footer p {
-  color: #999999;
-  font-size: 0.85rem;
-  margin: 0;
 }
 
 /* Responsive */

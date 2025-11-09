@@ -23,7 +23,7 @@ const Footer = () => {
             <div className="footer-logo-wrapper">
               <img 
                 src="/images/hero/logo.png" 
-                alt="L SINNER" 
+                alt="L SINN3R" 
                 className="footer-logo"
               />
             </div>
@@ -69,7 +69,7 @@ const Footer = () => {
         </Row>
         <Row>
           <Col className="text-center footer-copyright" style={{ position: 'relative', zIndex: 10000, pointerEvents: 'auto' }}>
-            <p>&copy; {currentYear} L SINNER. Todos los derechos reservados.</p>
+            <p>&copy; {currentYear} L SINN3R. Todos los derechos reservados.</p>
             <button
               onClick={handleAdminClick}
               className="admin-link-footer"
