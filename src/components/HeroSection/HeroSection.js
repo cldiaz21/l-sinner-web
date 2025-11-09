@@ -6,6 +6,7 @@ import Prism from '../BackgroundAnimations/Prism';
 import Lightning from '../BackgroundAnimations/Lightning';
 import ParticlesOGL from '../BackgroundAnimations/Particles';
 import Beams from '../BackgroundAnimations/Beams';
+import Silk from '../BackgroundAnimations/Silk';
 import './HeroSection.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -93,7 +94,7 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
     switch (animationType) {
       case 'prism':
         return (
-          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'auto' }}>
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'none' }}>
             <Prism
               animationType="hover"
               timeScale={0.8}
@@ -123,7 +124,7 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
         );
       case 'beams':
         return (
-          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'auto' }}>
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'none' }}>
             <Beams
               beamWidth={4}
               beamHeight={25}
@@ -136,17 +137,29 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
             />
           </div>
         );
+      case 'silk':
+        return (
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'none' }}>
+            <Silk
+              speed={5}
+              scale={1}
+              color="#ffffff"
+              noiseIntensity={1.5}
+              rotation={0}
+            />
+          </div>
+        );
       case 'particles':
       default:
         return (
-          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'auto' }}>
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'none' }}>
             <ParticlesOGL
               particleColors={['#ffffff', '#ffffff', '#cccccc']}
               particleCount={150}
               particleSpread={12}
               speed={0.15}
               particleBaseSize={120}
-              moveParticlesOnHover={true}
+              moveParticlesOnHover={false}
               particleHoverFactor={2}
               alphaParticles={true}
               disableRotation={false}

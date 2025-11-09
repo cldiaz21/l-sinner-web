@@ -5,6 +5,7 @@ import { LanguageContext } from '../../context/LanguageContext';
 import HeroSection from '../../components/HeroSection/HeroSection';
 import ProjectsCarousel from '../../components/ProjectsCarousel/ProjectsCarousel';
 import SocialMedia from '../../components/SocialMedia/SocialMedia';
+import ContactForm from '../../components/ContactForm/ContactForm';
 import './Home.css';
 
 const Home = () => {
@@ -32,15 +33,27 @@ const Home = () => {
       {/* Descripción de L SINN3R */}
       <section className="description-section">
         <Container>
-          <Row>
-            <Col lg={8} className="mx-auto text-center">
-              <h2 className="section-title">{t.descriptionTitle || "L SINN3R"}</h2>
-              <p className="description-text">
-                {t.descriptionText1 || "L SINN3R es un fotógrafo profesional especializado en capturar momentos únicos y transformarlos en arte visual. Con una visión creativa y un estilo distintivo, cada proyecto es una oportunidad para contar una historia a través de la lente."}
-              </p>
-              <p className="description-text">
-                {t.descriptionText2 || "Nuestro trabajo abarca desde sesiones de retrato hasta proyectos comerciales, siempre manteniendo la calidad y la autenticidad que nos caracteriza."}
-              </p>
+          <Row className="description-row">
+            <Col lg={6} md={6} className="description-image-col">
+              <img 
+                src="/images/hero/logo.png" 
+                alt="L SINN3R" 
+                className="description-image"
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/600x800/1a1a1a/ffffff?text=L+SINN3R';
+                }}
+              />
+            </Col>
+            <Col lg={6} md={6} className="description-content-col">
+              <div className="description-content">
+                <h2 className="section-title">{t.descriptionTitle || "L SINN3R"}</h2>
+                <p className="description-text">
+                  {t.descriptionText1 || "L SINN3R es un fotógrafo profesional especializado en capturar momentos únicos y transformarlos en arte visual. Con una visión creativa y un estilo distintivo, cada proyecto es una oportunidad para contar una historia a través de la lente."}
+                </p>
+                <p className="description-text">
+                  {t.descriptionText2 || "Nuestro trabajo abarca desde sesiones de retrato hasta proyectos comerciales, siempre manteniendo la calidad y la autenticidad que nos caracteriza."}
+                </p>
+              </div>
             </Col>
           </Row>
         </Container>
@@ -58,6 +71,13 @@ const Home = () => {
       <section className="social-section">
         <Container>
           <SocialMedia />
+        </Container>
+      </section>
+
+      {/* Formulario de Contacto */}
+      <section className="contact-section">
+        <Container>
+          <ContactForm />
         </Container>
       </section>
     </div>

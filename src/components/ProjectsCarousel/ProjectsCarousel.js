@@ -1,35 +1,28 @@
-import React from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import React, { useState } from 'react';
+import ProjectModal from '../ProjectModal/ProjectModal';
 import './ProjectsCarousel.css';
 
 const ProjectsCarousel = ({ projects }) => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 4000,
-    pauseOnHover: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        }
-      }
-    ]
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
+  const handleProjectClick = (project, index) => {
+    setSelectedProject(project);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedProject(null);
+  };
+
+  const handleMouseEnter = (index) => {
+    setExpandedIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setExpandedIndex(null);
   };
 
   if (!projects || projects.length === 0) {
@@ -41,34 +34,65 @@ const ProjectsCarousel = ({ projects }) => {
   }
 
   return (
-    <div className="projects-carousel-container">
-      <Slider {...settings}>
-        {projects.map((project) => (
-          <div key={project.id} className="project-carousel-slide">
-            <div className="project-carousel-item">
-              <div className="project-carousel-image-wrapper">
+    <>
+      <div className="expandable-grid-container">
+        {projects.map((project, index) => (
+          <div
+            key={project.id}
+            className="expandable-card-item"
+            style={{ opacity: expandedIndex === index ? 1 : expandedIndex === null ? 1 : 0.7 }}
+            onMouseEnter={() => handleMouseEnter(index)}
+            onMouseLeave={handleMouseLeave}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleProjectClick(project, index);
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleProjectClick(project, index);
+              }
+            }}
+          >
+            <div className="expandable-card-inner">
+              <div>
                 {project.images && project.images.length > 0 ? (
-                  <img 
-                    src={project.images[0]} 
+                  <img
+                    src={project.images[0]}
                     alt={project.title}
-                    className="project-carousel-image"
+                    className="expandable-card-image"
                   />
                 ) : (
-                  <div className="project-carousel-placeholder">
+                  <div className="expandable-card-placeholder">
                     <span>Sin imagen</span>
                   </div>
                 )}
               </div>
-              <div className="project-carousel-title">
-                <h3>{project.title}</h3>
+              <div className="expandable-card-text-wrapper">
+                <h3 className="expandable-card-title">
+                  {project.title}
+                </h3>
+                {project.date && (
+                  <p className="expandable-card-subtitle">
+                    {new Date(project.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long' })}
+                  </p>
+                )}
               </div>
             </div>
           </div>
         ))}
-      </Slider>
-    </div>
+      </div>
+      
+      <ProjectModal
+        project={selectedProject}
+        show={showModal}
+        onHide={handleCloseModal}
+      />
+    </>
   );
 };
 
 export default ProjectsCarousel;
-

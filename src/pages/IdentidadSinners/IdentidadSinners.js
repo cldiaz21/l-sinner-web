@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { LanguageContext } from '../../context/LanguageContext';
 import HeroSection from '../../components/HeroSection/HeroSection';
+import ContactForm from '../../components/ContactForm/ContactForm';
 import './IdentidadSinners.css';
 
 const IdentidadSinners = () => {
@@ -82,6 +83,13 @@ const IdentidadSinners = () => {
               </div>
             </Col>
           </Row>
+        </Container>
+      </section>
+
+      {/* Formulario de Contacto */}
+      <section className="contact-section">
+        <Container>
+          <ContactForm />
         </Container>
       </section>
     </div>

@@ -119,7 +119,7 @@ export const StaggeredMenu = ({
 
   return (
     <div
-      className={(className ? className + ' ' : '') + 'staggered-menu-wrapper' + (isFixed ? ' fixed-wrapper' : '')}
+      className={(className ? className + ' ' : '') + 'staggered-menu-wrapper'}
       style={accentColor ? { '--sm-accent': accentColor } : undefined}
       data-position={position}
       data-open={open || undefined}
@@ -180,17 +180,30 @@ export const StaggeredMenu = ({
         </div>
       </header>
 
-      <aside 
-        id="staggered-menu-panel" 
-        ref={panelRef} 
-        className="staggered-menu-panel" 
-        aria-hidden={!open}
-        style={{ display: open ? 'flex' : 'none' }}
-      >
-        <div className="sm-panel-inner">
-          {children}
-        </div>
-      </aside>
+      {open ? (
+        <aside 
+          id="staggered-menu-panel" 
+          ref={panelRef} 
+          className="staggered-menu-panel" 
+          aria-hidden={false}
+          style={{ display: 'flex' }}
+        >
+          <button
+            className="sm-close-button"
+            onClick={toggleMenu}
+            aria-label="Cerrar menú"
+            type="button"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <div className="sm-panel-inner">
+            {children}
+          </div>
+        </aside>
+      )}
     </div>
   );
 };

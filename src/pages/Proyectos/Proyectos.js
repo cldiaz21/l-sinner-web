@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { Container, Row, Col, Modal, Button, Carousel } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { ProjectContext } from '../../context/ProjectContext';
 import { LanguageContext } from '../../context/LanguageContext';
-import { getEmbedUrl } from '../../utils/videoUtils';
 import { Search } from 'lucide-react';
+import ContactForm from '../../components/ContactForm/ContactForm';
+import ProjectModal from '../../components/ProjectModal/ProjectModal';
 import './Proyectos.css';
 
 const Proyectos = () => {
@@ -199,87 +200,20 @@ const Proyectos = () => {
       </section>
 
       {/* Modal para ver detalles del proyecto */}
-      <Modal
-        show={showModal}
-        onHide={handleCloseModal}
-        size="lg"
-        centered
-        className="project-modal"
-      >
-        <Modal.Header closeButton className="modal-header-custom">
-          <Modal.Title>{selectedProject?.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="modal-body-custom">
-          {selectedProject && (
-            <>
-              {/* Imágenes */}
-              {selectedProject.images && selectedProject.images.length > 0 && (
-                <div className="mb-4">
-                  <h5>Imágenes</h5>
-                  <Carousel className="project-carousel-modal">
-                    {selectedProject.images.map((image, index) => (
-                      <Carousel.Item key={index}>
-                        <img
-                          className="d-block w-100"
-                          src={image}
-                          alt={`${selectedProject.title} - ${index + 1}`}
-                        />
-                      </Carousel.Item>
-                    ))}
-                  </Carousel>
-                </div>
-              )}
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          show={showModal}
+          onHide={handleCloseModal}
+        />
+      )}
 
-              {/* Videos */}
-              {selectedProject.videos && selectedProject.videos.length > 0 && (
-                <div className="mb-4">
-                  <h5>Videos</h5>
-                  <div className="videos-list-modal">
-                    {selectedProject.videos.map((video, index) => {
-                      const embedUrl = getEmbedUrl(video);
-                      return (
-                        <div key={index} className="video-item-modal">
-                          <iframe
-                            src={embedUrl}
-                            title={`${selectedProject.title} - Video ${index + 1}`}
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="video-iframe"
-                          ></iframe>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {(!selectedProject.images || selectedProject.images.length === 0) &&
-                (!selectedProject.videos || selectedProject.videos.length === 0) && (
-                  <div className="no-image-placeholder">
-                    <p>No hay contenido multimedia disponible</p>
-                  </div>
-                )}
-
-              <div className="project-details mt-4">
-                <p><strong>Descripción:</strong></p>
-                <p>{selectedProject.description || 'Sin descripción disponible'}</p>
-                {selectedProject.category && (
-                  <p><strong>Categoría:</strong> {selectedProject.category}</p>
-                )}
-                {selectedProject.date && (
-                  <p><strong>Fecha:</strong> {formatDate(selectedProject.date)}</p>
-                )}
-              </div>
-            </>
-          )}
-        </Modal.Body>
-        <Modal.Footer className="modal-footer-custom">
-          <Button variant="outline-light" onClick={handleCloseModal}>
-            Cerrar
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {/* Formulario de Contacto */}
+      <section className="contact-section">
+        <Container>
+          <ContactForm />
+        </Container>
+      </section>
     </div>
   );
 };

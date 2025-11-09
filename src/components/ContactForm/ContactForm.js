@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import emailjs from '@emailjs/browser';
+import { Mail, Clock } from 'lucide-react';
 import './ContactForm.css';
 
 const ContactForm = () => {
@@ -8,7 +8,7 @@ const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
+    subject: '',
     message: ''
   });
   const [showAlert, setShowAlert] = useState(false);
@@ -27,15 +27,15 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Configuración de EmailJS - El usuario necesitará reemplazar estos valores
-    const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
-    const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
-    const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
+    // Configuración de EmailJS
+    const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+    const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+    const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
 
     try {
       // Verificar si EmailJS está configurado
-      if (serviceId === 'YOUR_SERVICE_ID' || templateId === 'YOUR_TEMPLATE_ID' || publicKey === 'YOUR_PUBLIC_KEY') {
-        throw new Error('EmailJS no está configurado. Por favor, crea un archivo .env con las variables REACT_APP_EMAILJS_SERVICE_ID, REACT_APP_EMAILJS_TEMPLATE_ID y REACT_APP_EMAILJS_PUBLIC_KEY. Ver README.md para más información.');
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS no está configurado. Por favor, configura las variables de entorno REACT_APP_EMAILJS_SERVICE_ID, REACT_APP_EMAILJS_TEMPLATE_ID y REACT_APP_EMAILJS_PUBLIC_KEY en Vercel.');
       }
 
       await emailjs.sendForm(serviceId, templateId, form.current, publicKey);
@@ -46,108 +46,139 @@ const ContactForm = () => {
       setFormData({
         name: '',
         email: '',
-        phone: '',
+        subject: '',
         message: ''
       });
-
+      // Resetear el formulario
+      if (form.current) {
+        form.current.reset();
+      }
       // Ocultar alerta después de 5 segundos
       setTimeout(() => setShowAlert(false), 5000);
     } catch (error) {
-      // Error al enviar el formulario
+      console.error('Error sending email:', error);
       setAlertType('danger');
-      setAlertMessage('Error al enviar el mensaje. Por favor, intenta de nuevo o contáctanos directamente.');
+      setAlertMessage(error.message || 'Error al enviar el mensaje. Por favor, intenta de nuevo o contáctanos directamente.');
       setShowAlert(true);
+      // Ocultar alerta después de 5 segundos
+      setTimeout(() => setShowAlert(false), 5000);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section className="contact-form-section" id="contacto">
-      <div className="contact-form-wrapper">
-        <h2 className="section-title">Contacto</h2>
-        <p className="text-center mb-4 contact-form-intro">
-          ¿Tienes un proyecto en mente? ¡Contáctanos y trabajemos juntos!
-        </p>
-        
-        {showAlert && (
-          <Alert 
-            variant={alertType} 
-            onClose={() => setShowAlert(false)} 
-            dismissible
-            className="mb-4"
-          >
-            {alertMessage}
-          </Alert>
-        )}
+    <section className="contact-section" id="contact">
+      <div className="container">
+        <div className="contact-grid">
+          {/* Información de Contacto */}
+          <div className="contact-info">
+            <span className="section-label">CONTACTO</span>
+            <h2 className="section-title">Hablemos de tu proyecto</h2>
+            <p className="contact-description">
+              ¿Tienes preguntas? ¿Necesitas una demo? ¿Quieres integrar L SINN3R en tu proyecto? Estamos aquí para ayudarte.
+            </p>
+            <div className="contact-methods">
+              <div className="contact-method">
+                <div className="method-icon">
+                  <Mail size={28} />
+                </div>
+                <div className="method-info">
+                  <div className="method-label">Email</div>
+                  <a href="mailto:contacto@lsinn3r.cl" className="method-value">contacto@lsinn3r.cl</a>
+                </div>
+              </div>
+              <div className="contact-method">
+                <div className="method-icon">
+                  <Clock size={28} />
+                </div>
+                <div className="method-info">
+                  <div className="method-label">Horario</div>
+                  <div className="method-value">24/7 Soporte</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <Form ref={form} onSubmit={handleSubmit} className="contact-form">
-              <Row>
-                <Col md={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Nombre *</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      placeholder="Tu nombre"
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Email *</Form.Label>
-                    <Form.Control
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      placeholder="tu@email.com"
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Form.Group className="mb-3">
-                <Form.Label>Teléfono</Form.Label>
-                <Form.Control
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
+          {/* Formulario */}
+          <div className="contact-form-container">
+            {showAlert && (
+              <div className={`alert alert-${alertType}`}>
+                {alertMessage}
+              </div>
+            )}
+            <form ref={form} className="contact-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="name">Nombre completo</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Tu nombre"
+                  required
+                  value={formData.name}
                   onChange={handleChange}
-                  placeholder="+34 123 456 789"
                 />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Mensaje *</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={5}
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="tu@email.com"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="subject">Asunto</label>
+                <select
+                  id="subject"
+                  name="subject"
+                  required
+                  value={formData.subject}
+                  onChange={handleChange}
+                >
+                  <option value="">Tema de consulta</option>
+                  <option value="demo">Demo</option>
+                  <option value="sales">Ventas</option>
+                  <option value="support">Soporte</option>
+                  <option value="partnership">Colaboración</option>
+                  <option value="other">Otro</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="message">Mensaje</label>
+                <textarea
+                  id="message"
                   name="message"
+                  placeholder="Cuéntanos sobre tu proyecto..."
+                  rows="5"
+                  required
                   value={formData.message}
                   onChange={handleChange}
-                  required
-                  placeholder="Cuéntanos sobre tu proyecto..."
-                />
-              </Form.Group>
-              <div className="text-center">
-                <Button 
-                  type="submit" 
-                  variant="outline-light" 
-                  size="lg"
-                  disabled={isSubmitting}
-                  className="submit-button"
-                >
-                  {isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
-                </Button>
+                ></textarea>
               </div>
-            </Form>
+              <button
+                className="star-border-container"
+                style={{ width: '100%', marginTop: '8px' }}
+                type="submit"
+                disabled={isSubmitting}
+              >
+                <div className="border-gradient-bottom" style={{ background: 'radial-gradient(circle, white, transparent 10%)', animationDuration: '6s' }}></div>
+                <div className="border-gradient-top" style={{ background: 'radial-gradient(circle, white, transparent 10%)', animationDuration: '6s' }}></div>
+                <div className="inner-content">
+                  {isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
+                </div>
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </section>
   );
 };
 
 export default ContactForm;
-

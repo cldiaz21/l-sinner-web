@@ -16,6 +16,30 @@
 section:not(.hero-section) {
   position: relative;
   z-index: 10;
+  pointer-events: auto;
+}
+
+/* Asegurar que los botones y elementos interactivos funcionen */
+button:not(:disabled),
+a[href],
+input:not(:disabled),
+select:not(:disabled),
+textarea:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+[onclick] {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 1000 !important;
+  cursor: pointer;
+}
+
+/* Asegurar que los overlays no bloqueen */
+.hero-carousel-overlay,
+.carousel-overlay,
+.beams-overlay,
+.hero-particles-wrapper,
+.hero-carousel-wrapper {
+  pointer-events: none !important;
 }
 
 .section-title {

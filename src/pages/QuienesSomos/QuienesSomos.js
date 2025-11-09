@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { LanguageContext } from '../../context/LanguageContext';
 import HeroSection from '../../components/HeroSection/HeroSection';
+import ContactForm from '../../components/ContactForm/ContactForm';
 import './QuienesSomos.css';
 
 const QuienesSomos = () => {
@@ -129,6 +130,13 @@ const QuienesSomos = () => {
               </div>
             </Col>
           </Row>
+        </Container>
+      </section>
+
+      {/* Formulario de Contacto */}
+      <section className="contact-section">
+        <Container>
+          <ContactForm />
         </Container>
       </section>
     </div>
