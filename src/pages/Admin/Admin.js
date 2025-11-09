@@ -1,12 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { Container, Row, Col, Card, Button, Modal, Form, Alert, Tab, Tabs } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { ProjectContext } from '../../context/ProjectContext';
+import { authService } from '../../services/authService';
 import './Admin.css';
 
 const Admin = () => {
   const { 
     projects, 
     carouselImages, 
+    loading,
+    error,
     addProject, 
     updateProject, 
     deleteProject, 
@@ -14,6 +18,7 @@ const Admin = () => {
     removeCarouselImage 
   } = useContext(ProjectContext);
 
+  const navigate = useNavigate();
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -35,30 +40,54 @@ const Admin = () => {
   });
   const [carouselImageUrl, setCarouselImageUrl] = useState('');
   const [alert, setAlert] = useState({ show: false, message: '', type: 'success' });
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleProjectSubmit = (e) => {
+  const handleLogout = async () => {
+    await authService.signOut();
+    navigate('/login');
+  };
+
+  const handleProjectSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
     
-    if (editingProject) {
-      updateProject(editingProject.id, projectForm);
-      setAlert({ show: true, message: 'Proyecto actualizado correctamente', type: 'success' });
-    } else {
-      addProject(projectForm);
-      setAlert({ show: true, message: 'Proyecto creado correctamente', type: 'success' });
-    }
+    try {
+      let result;
+      if (editingProject) {
+        result = await updateProject(editingProject.id, projectForm);
+        if (result.success) {
+          setAlert({ show: true, message: 'Proyecto actualizado correctamente', type: 'success' });
+        } else {
+          setAlert({ show: true, message: result.error || 'Error al actualizar proyecto', type: 'danger' });
+        }
+      } else {
+        result = await addProject(projectForm);
+        if (result.success) {
+          setAlert({ show: true, message: 'Proyecto creado correctamente', type: 'success' });
+        } else {
+          setAlert({ show: true, message: result.error || 'Error al crear proyecto', type: 'danger' });
+        }
+      }
 
-    setProjectForm({
-      title: '',
-      description: '',
-      category: '',
-      images: [],
-      videos: [],
-      date: '',
-      featured: false
-    });
-    setEditingProject(null);
-    setShowProjectModal(false);
-    setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
+      if (result.success) {
+        setProjectForm({
+          title: '',
+          description: '',
+          category: '',
+          images: [],
+          videos: [],
+          date: '',
+          featured: false
+        });
+        setEditingProject(null);
+        setShowProjectModal(false);
+      }
+    } catch (err) {
+      setAlert({ show: true, message: err.message || 'Error al guardar proyecto', type: 'danger' });
+    } finally {
+      setSubmitting(false);
+      setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
+    }
   };
 
   const handleEditProject = (project) => {
@@ -80,10 +109,14 @@ const Admin = () => {
     setShowDeleteConfirm(true);
   };
 
-  const confirmDeleteProject = () => {
+  const confirmDeleteProject = async () => {
     if (deleteProjectId) {
-      deleteProject(deleteProjectId);
-      setAlert({ show: true, message: 'Proyecto eliminado correctamente', type: 'success' });
+      const result = await deleteProject(deleteProjectId);
+      if (result.success) {
+        setAlert({ show: true, message: 'Proyecto eliminado correctamente', type: 'success' });
+      } else {
+        setAlert({ show: true, message: result.error || 'Error al eliminar proyecto', type: 'danger' });
+      }
       setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
     }
     setShowDeleteConfirm(false);
@@ -134,11 +167,15 @@ const Admin = () => {
     });
   };
 
-  const handleAddCarouselImage = () => {
+  const handleAddCarouselImage = async () => {
     if (carouselImageUrl.trim()) {
-      addCarouselImage(carouselImageUrl);
-      setCarouselImageUrl('');
-      setAlert({ show: true, message: 'Imagen agregada al carrusel', type: 'success' });
+      const result = await addCarouselImage(carouselImageUrl.trim());
+      if (result.success) {
+        setCarouselImageUrl('');
+        setAlert({ show: true, message: 'Imagen agregada al carrusel', type: 'success' });
+      } else {
+        setAlert({ show: true, message: result.error || 'Error al agregar imagen', type: 'danger' });
+      }
       setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
     }
   };
@@ -148,22 +185,51 @@ const Admin = () => {
     setShowDeleteCarouselConfirm(true);
   };
 
-  const confirmDeleteCarouselImage = () => {
+  const confirmDeleteCarouselImage = async () => {
     if (deleteCarouselIndex !== null) {
-      removeCarouselImage(deleteCarouselIndex);
-      setAlert({ show: true, message: 'Imagen eliminada del carrusel', type: 'success' });
+      const result = await removeCarouselImage(deleteCarouselIndex);
+      if (result.success) {
+        setAlert({ show: true, message: 'Imagen eliminada del carrusel', type: 'success' });
+      } else {
+        setAlert({ show: true, message: result.error || 'Error al eliminar imagen', type: 'danger' });
+      }
       setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
     }
     setShowDeleteCarouselConfirm(false);
     setDeleteCarouselIndex(null);
   };
 
+  if (loading) {
+    return (
+      <div className="page-container">
+        <section className="admin-section">
+          <Container>
+            <div className="text-center">
+              <p>Cargando...</p>
+            </div>
+          </Container>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="page-container">
       <section className="admin-section">
         <Container>
-          <h1 className="section-title">Panel de Administración</h1>
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h1 className="section-title">Panel de Administración</h1>
+            <Button variant="outline-danger" onClick={handleLogout}>
+              Cerrar Sesión
+            </Button>
+          </div>
           
+          {error && (
+            <Alert variant="danger" dismissible onClose={() => {}}>
+              Error: {error}
+            </Alert>
+          )}
+
           {alert.show && (
             <Alert variant={alert.type} dismissible onClose={() => setAlert({ show: false, message: '', type: 'success' })}>
               {alert.message}
@@ -196,39 +262,45 @@ const Admin = () => {
                   </Button>
 
                   <Row>
-                    {projects.map((project) => (
-                      <Col key={project.id} md={6} lg={4} className="mb-4">
-                        <Card className="admin-project-card">
-                          {project.images && project.images.length > 0 ? (
-                            <Card.Img variant="top" src={project.images[0]} />
-                          ) : (
-                            <div className="no-image-placeholder">Sin imagen</div>
-                          )}
-                          <Card.Body>
-                            <Card.Title>{project.title}</Card.Title>
-                            <Card.Text>
-                              {project.description?.substring(0, 100)}...
-                            </Card.Text>
-                            <div className="d-flex gap-2">
-                              <Button 
-                                variant="outline-primary" 
-                                size="sm"
-                                onClick={() => handleEditProject(project)}
-                              >
-                                Editar
-                              </Button>
-                              <Button 
-                                variant="outline-danger" 
-                                size="sm"
-                                onClick={() => handleDeleteProject(project.id)}
-                              >
-                                Eliminar
-                              </Button>
-                            </div>
-                          </Card.Body>
-                        </Card>
+                    {projects.length === 0 ? (
+                      <Col>
+                        <p>No hay proyectos aún. Crea uno nuevo para comenzar.</p>
                       </Col>
-                    ))}
+                    ) : (
+                      projects.map((project) => (
+                        <Col key={project.id} md={6} lg={4} className="mb-4">
+                          <Card className="admin-project-card">
+                            {project.images && project.images.length > 0 ? (
+                              <Card.Img variant="top" src={project.images[0]} />
+                            ) : (
+                              <div className="no-image-placeholder">Sin imagen</div>
+                            )}
+                            <Card.Body>
+                              <Card.Title>{project.title}</Card.Title>
+                              <Card.Text>
+                                {project.description?.substring(0, 100)}...
+                              </Card.Text>
+                              <div className="d-flex gap-2">
+                                <Button 
+                                  variant="outline-primary" 
+                                  size="sm"
+                                  onClick={() => handleEditProject(project)}
+                                >
+                                  Editar
+                                </Button>
+                                <Button 
+                                  variant="outline-danger" 
+                                  size="sm"
+                                  onClick={() => handleDeleteProject(project.id)}
+                                >
+                                  Eliminar
+                                </Button>
+                              </div>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      ))
+                    )}
                   </Row>
                 </Col>
               </Row>
@@ -257,23 +329,29 @@ const Admin = () => {
                   </Card>
 
                   <Row>
-                    {carouselImages.map((image, index) => (
-                      <Col key={index} md={6} lg={4} className="mb-4">
-                        <Card className="carousel-image-card">
-                          <Card.Img variant="top" src={image} />
-                          <Card.Body>
-                            <Button 
-                              variant="outline-danger" 
-                              size="sm"
-                              onClick={() => handleRemoveCarouselImage(index)}
-                              className="w-100"
-                            >
-                              Eliminar
-                            </Button>
-                          </Card.Body>
-                        </Card>
+                    {carouselImages.length === 0 ? (
+                      <Col>
+                        <p>No hay imágenes en el carrusel. Agrega una para comenzar.</p>
                       </Col>
-                    ))}
+                    ) : (
+                      carouselImages.map((image, index) => (
+                        <Col key={index} md={6} lg={4} className="mb-4">
+                          <Card className="carousel-image-card">
+                            <Card.Img variant="top" src={image} />
+                            <Card.Body>
+                              <Button 
+                                variant="outline-danger" 
+                                size="sm"
+                                onClick={() => handleRemoveCarouselImage(index)}
+                                className="w-100"
+                              >
+                                Eliminar
+                              </Button>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      ))
+                    )}
                   </Row>
                 </Col>
               </Row>
@@ -314,6 +392,7 @@ const Admin = () => {
                 value={projectForm.title}
                 onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })}
                 required
+                disabled={submitting}
               />
             </Form.Group>
 
@@ -324,6 +403,7 @@ const Admin = () => {
                 rows={3}
                 value={projectForm.description}
                 onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })}
+                disabled={submitting}
               />
             </Form.Group>
 
@@ -333,6 +413,7 @@ const Admin = () => {
                 type="date"
                 value={projectForm.date}
                 onChange={(e) => setProjectForm({ ...projectForm, date: e.target.value })}
+                disabled={submitting}
               />
             </Form.Group>
 
@@ -343,6 +424,7 @@ const Admin = () => {
                 value={projectForm.category}
                 onChange={(e) => setProjectForm({ ...projectForm, category: e.target.value })}
                 placeholder="Ej: Fotografía, Retrato, Comercial..."
+                disabled={submitting}
               />
             </Form.Group>
 
@@ -356,6 +438,7 @@ const Admin = () => {
                       variant="outline-danger"
                       size="sm"
                       onClick={() => handleRemoveImage(index)}
+                      disabled={submitting}
                     >
                       X
                     </Button>
@@ -367,6 +450,7 @@ const Admin = () => {
                 onClick={handleAddImage}
                 type="button"
                 className="me-2"
+                disabled={submitting}
               >
                 + Agregar Imagen
               </Button>
@@ -382,6 +466,7 @@ const Admin = () => {
                       variant="outline-danger"
                       size="sm"
                       onClick={() => handleRemoveVideo(index)}
+                      disabled={submitting}
                     >
                       X
                     </Button>
@@ -392,6 +477,7 @@ const Admin = () => {
                 variant="outline-secondary" 
                 onClick={handleAddVideo}
                 type="button"
+                disabled={submitting}
               >
                 + Agregar Video
               </Button>
@@ -403,15 +489,20 @@ const Admin = () => {
                 label="Proyecto destacado (aparecerá en el home)"
                 checked={projectForm.featured}
                 onChange={(e) => setProjectForm({ ...projectForm, featured: e.target.checked })}
+                disabled={submitting}
               />
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowProjectModal(false)}>
+            <Button 
+              variant="secondary" 
+              onClick={() => setShowProjectModal(false)}
+              disabled={submitting}
+            >
               Cancelar
             </Button>
-            <Button variant="primary" type="submit">
-              {editingProject ? 'Actualizar' : 'Crear'}
+            <Button variant="primary" type="submit" disabled={submitting}>
+              {submitting ? 'Guardando...' : (editingProject ? 'Actualizar' : 'Crear')}
             </Button>
           </Modal.Footer>
         </Form>
@@ -509,4 +600,3 @@ const Admin = () => {
 };
 
 export default Admin;
-

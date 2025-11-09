@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { FaInstagram, FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import ContactForm from '../ContactForm/ContactForm';
 import './Footer.css';
@@ -8,13 +7,26 @@ import './Footer.css';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const handleAdminClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Abrir login en nueva pestaña
+    const loginUrl = window.location.origin + '/login';
+    window.open(loginUrl, '_blank');
+  };
+
   return (
     <footer className="footer">
-      <ContactForm />
       <Container>
         <Row className="footer-content">
           <Col md={6} className="footer-info">
-            <h5>L SINNER</h5>
+            <div className="footer-logo-wrapper">
+              <img 
+                src="/images/hero/logo.png" 
+                alt="L SINNER" 
+                className="footer-logo"
+              />
+            </div>
             <p>Fotografía profesional que captura momentos únicos</p>
           </Col>
           <Col md={6} className="footer-social">
@@ -56,11 +68,20 @@ const Footer = () => {
           </Col>
         </Row>
         <Row>
-          <Col className="text-center footer-copyright">
+          <Col className="text-center footer-copyright" style={{ position: 'relative', zIndex: 10000, pointerEvents: 'auto' }}>
             <p>&copy; {currentYear} L SINNER. Todos los derechos reservados.</p>
-            <Link to="/login" className="admin-link-footer">
+            <button
+              onClick={handleAdminClick}
+              className="admin-link-footer"
+              type="button"
+              style={{ 
+                position: 'relative',
+                zIndex: 99999,
+                pointerEvents: 'auto'
+              }}
+            >
               Admin
-            </Link>
+            </button>
           </Col>
         </Row>
       </Container>

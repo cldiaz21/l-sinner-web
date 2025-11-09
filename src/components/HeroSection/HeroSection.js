@@ -2,9 +2,10 @@ import React, { useMemo } from 'react';
 import { Particles } from 'react-tsparticles';
 import { loadSlim } from 'tsparticles-slim';
 import Slider from 'react-slick';
-import PrismBackground from '../BackgroundAnimations/PrismBackground';
-import LightningBackground from '../BackgroundAnimations/LightningBackground';
-import BeamsBackground from '../BackgroundAnimations/BeamsBackground';
+import Prism from '../BackgroundAnimations/Prism';
+import Lightning from '../BackgroundAnimations/Lightning';
+import ParticlesOGL from '../BackgroundAnimations/Particles';
+import Beams from '../BackgroundAnimations/Beams';
 import './HeroSection.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -91,28 +92,64 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
     
     switch (animationType) {
       case 'prism':
-        return <PrismBackground />;
+        return (
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'auto' }}>
+            <Prism
+              animationType="hover"
+              timeScale={0.8}
+              height={3.5}
+              baseWidth={5.5}
+              scale={2.8}
+              hueShift={0}
+              colorFrequency={0.8}
+              noise={0.3}
+              glow={1.5}
+              hoverStrength={3}
+              inertia={0.08}
+            />
+          </div>
+        );
       case 'lightning':
-        return <LightningBackground />;
+        return (
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
+            <Lightning
+              hue={210}
+              xOffset={0}
+              speed={1.5}
+              intensity={1.2}
+              size={1.5}
+            />
+          </div>
+        );
       case 'beams':
-        return <BeamsBackground />;
+        return (
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'auto' }}>
+            <Beams
+              beamWidth={4}
+              beamHeight={25}
+              beamNumber={10}
+              lightColor="#ffffff"
+              speed={1.5}
+              noiseIntensity={1.5}
+              scale={0.3}
+              rotation={0}
+            />
+          </div>
+        );
       case 'particles':
       default:
         return (
-          <div className="hero-particles-wrapper">
-            <Particles
-              id={`tsparticles-${title.replace(/\s+/g, '-')}-${Math.random().toString(36).substr(2, 9)}`}
-              init={particlesInit}
-              options={particlesConfig}
-              className="hero-particles"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: 2,
-              }}
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 0, pointerEvents: 'auto' }}>
+            <ParticlesOGL
+              particleColors={['#ffffff', '#ffffff', '#cccccc']}
+              particleCount={150}
+              particleSpread={12}
+              speed={0.15}
+              particleBaseSize={120}
+              moveParticlesOnHover={true}
+              particleHoverFactor={2}
+              alphaParticles={true}
+              disableRotation={false}
             />
           </div>
         );

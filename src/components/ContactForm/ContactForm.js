@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import emailjs from '@emailjs/browser';
 import './ContactForm.css';
 
@@ -64,26 +64,24 @@ const ContactForm = () => {
 
   return (
     <section className="contact-form-section" id="contacto">
-      <Container>
-        <Row>
-          <Col lg={8} className="mx-auto">
-            <h2 className="section-title">Contacto</h2>
-            <p className="text-center mb-4">
-              ¿Tienes un proyecto en mente? ¡Contáctanos y trabajemos juntos!
-            </p>
-            
-            {showAlert && (
-              <Alert 
-                variant={alertType} 
-                onClose={() => setShowAlert(false)} 
-                dismissible
-                className="mb-4"
-              >
-                {alertMessage}
-              </Alert>
-            )}
+      <div className="contact-form-wrapper">
+        <h2 className="section-title">Contacto</h2>
+        <p className="text-center mb-4 contact-form-intro">
+          ¿Tienes un proyecto en mente? ¡Contáctanos y trabajemos juntos!
+        </p>
+        
+        {showAlert && (
+          <Alert 
+            variant={alertType} 
+            onClose={() => setShowAlert(false)} 
+            dismissible
+            className="mb-4"
+          >
+            {alertMessage}
+          </Alert>
+        )}
 
-            <Form ref={form} onSubmit={handleSubmit} className="contact-form">
+        <Form ref={form} onSubmit={handleSubmit} className="contact-form">
               <Row>
                 <Col md={6}>
                   <Form.Group className="mb-3">
@@ -146,9 +144,7 @@ const ContactForm = () => {
                 </Button>
               </div>
             </Form>
-          </Col>
-        </Row>
-      </Container>
+      </div>
     </section>
   );
 };

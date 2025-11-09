@@ -60,6 +60,7 @@ const Header = () => {
       displaySocials={false}
       language={language}
       onChangeLanguage={changeLanguage}
+      logoUrl="/images/hero/logo.png"
     >
       <FlowingMenu items={menuItemsRef.current} />
     </StaggeredMenu>

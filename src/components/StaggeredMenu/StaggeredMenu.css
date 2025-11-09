@@ -85,9 +85,10 @@
 
 .sm-logo-img {
   display: block;
-  height: 32px;
+  height: 40px;
   width: auto;
   object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 .sm-logo-text {

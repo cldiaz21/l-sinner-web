@@ -1,81 +1,153 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { projectService } from '../services/projectService';
+import { carouselService } from '../services/carouselService';
 
 export const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   const [carouselImages, setCarouselImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Cargar proyectos desde localStorage al iniciar
-  useEffect(() => {
-    const savedProjects = localStorage.getItem('lSinnerProjects');
-    const savedCarousel = localStorage.getItem('lSinnerCarousel');
-    
-    if (savedProjects) {
-      setProjects(JSON.parse(savedProjects));
-    } else {
-      // Proyectos de ejemplo
-      const defaultProjects = [
-        {
-          id: 1,
-          title: 'Proyecto Ejemplo 1',
-          description: 'Descripción del proyecto ejemplo',
-          images: [],
-          videos: [],
-          category: 'Fotografía',
-          date: new Date().toISOString(),
-          featured: true
-        }
-      ];
-      setProjects(defaultProjects);
-      localStorage.setItem('lSinnerProjects', JSON.stringify(defaultProjects));
-    }
+  // Cargar proyectos desde Supabase
+  const loadProjects = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data, error: projectError } = await projectService.getProjects();
+      
+      if (projectError) {
+        setError(projectError.message);
+        return;
+      }
 
-    if (savedCarousel) {
-      setCarouselImages(JSON.parse(savedCarousel));
-    } else {
-      // Imágenes de carrusel de ejemplo
-      const defaultCarousel = [];
-      setCarouselImages(defaultCarousel);
-      localStorage.setItem('lSinnerCarousel', JSON.stringify(defaultCarousel));
+      setProjects(data || []);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
-  // Guardar proyectos en localStorage cuando cambien
-  useEffect(() => {
-    if (projects.length > 0) {
-      localStorage.setItem('lSinnerProjects', JSON.stringify(projects));
+  // Cargar imágenes del carrusel desde Supabase
+  const loadCarouselImages = useCallback(async () => {
+    try {
+      const { data, error: carouselError } = await carouselService.getCarouselImages();
+      
+      if (carouselError) {
+        setError(carouselError.message);
+        return;
+      }
+
+      // Extraer las URLs de las imágenes
+      const imageUrls = (data || []).map(item => item.image_url);
+      setCarouselImages(imageUrls);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
     }
-  }, [projects]);
+  }, []);
 
-  // Guardar carrusel en localStorage cuando cambie
+  // Cargar datos al iniciar
   useEffect(() => {
-    localStorage.setItem('lSinnerCarousel', JSON.stringify(carouselImages));
-  }, [carouselImages]);
+    loadProjects();
+    loadCarouselImages();
+  }, [loadProjects, loadCarouselImages]);
 
-  const addProject = (project) => {
-    const newProject = {
-      ...project,
-      id: Date.now(),
-      date: new Date().toISOString()
-    };
-    setProjects([...projects, newProject]);
+  const addProject = async (project) => {
+    try {
+      const { data, error: projectError } = await projectService.createProject(project);
+      
+      if (projectError) {
+        throw new Error(projectError.message);
+      }
+
+      if (data) {
+        setProjects([data, ...projects]);
+      }
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
   };
 
-  const updateProject = (id, updatedProject) => {
-    setProjects(projects.map(p => p.id === id ? { ...p, ...updatedProject } : p));
+  const updateProject = async (id, updatedProject) => {
+    try {
+      const { data, error: projectError } = await projectService.updateProject(id, updatedProject);
+      
+      if (projectError) {
+        throw new Error(projectError.message);
+      }
+
+      if (data) {
+        setProjects(projects.map(p => p.id === id ? data : p));
+      }
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
   };
 
-  const deleteProject = (id) => {
-    setProjects(projects.filter(p => p.id !== id));
+  const deleteProject = async (id) => {
+    try {
+      const { error: projectError } = await projectService.deleteProject(id);
+      
+      if (projectError) {
+        throw new Error(projectError.message);
+      }
+
+      setProjects(projects.filter(p => p.id !== id));
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
   };
 
-  const addCarouselImage = (imageUrl) => {
-    setCarouselImages([...carouselImages, imageUrl]);
+  const addCarouselImage = async (imageUrl) => {
+    try {
+      const { data, error: carouselError } = await carouselService.addCarouselImage(imageUrl);
+      
+      if (carouselError) {
+        throw new Error(carouselError.message);
+      }
+
+      if (data) {
+        setCarouselImages([...carouselImages, data.image_url]);
+      }
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
   };
 
-  const removeCarouselImage = (index) => {
-    setCarouselImages(carouselImages.filter((_, i) => i !== index));
+  const removeCarouselImage = async (index) => {
+    try {
+      // Obtener todas las imágenes con sus IDs desde Supabase
+      const { data: carouselData, error: fetchError } = await carouselService.getCarouselImages();
+      
+      if (fetchError) {
+        throw new Error(fetchError.message);
+      }
+
+      const imageToDelete = carouselData[index];
+      
+      if (!imageToDelete) {
+        throw new Error('Imagen no encontrada');
+      }
+
+      const { error: carouselError } = await carouselService.deleteCarouselImage(imageToDelete.id);
+      
+      if (carouselError) {
+        throw new Error(carouselError.message);
+      }
+
+      // Recargar las imágenes del carrusel después de eliminar
+      await loadCarouselImages();
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
   };
 
   const getFeaturedProjects = () => {
@@ -86,15 +158,18 @@ export const ProjectProvider = ({ children }) => {
     <ProjectContext.Provider value={{
       projects,
       carouselImages,
+      loading,
+      error,
       addProject,
       updateProject,
       deleteProject,
       addCarouselImage,
       removeCarouselImage,
-      getFeaturedProjects
+      getFeaturedProjects,
+      refreshProjects: loadProjects,
+      refreshCarousel: loadCarouselImages,
     }}>
       {children}
     </ProjectContext.Provider>
   );
 };
-

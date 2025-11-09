@@ -1,0 +1,120 @@
+.beams-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.beams-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.beams-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.beam-line {
+  position: absolute;
+  top: 0;
+  width: 220px;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 10%,
+    rgba(255, 255, 255, 0.15) 45%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.15) 55%,
+    rgba(255, 255, 255, 0.06) 90%,
+    transparent 100%
+  );
+  animation: beamSweep 8s ease-in-out infinite;
+  filter: blur(80px);
+  transform-origin: center bottom;
+  mix-blend-mode: screen;
+  will-change: transform, opacity, left;
+  pointer-events: none;
+}
+
+@keyframes beamSweep {
+  0% {
+    transform: translateX(-50%) scaleY(0.2) scaleX(0.5);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translateX(-50%) scaleY(0.6) scaleX(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(-50%) scaleY(1) scaleX(1);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateX(-50%) scaleY(0.6) scaleX(0.8);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(-50%) scaleY(0.2) scaleX(0.5);
+    opacity: 0.4;
+  }
+}
+
+/* Glow effect on beams */
+.beam-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  filter: blur(2px);
+}
+
+/* Additional animated background effect */
+.beams-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.015),
+    transparent
+  );
+  animation: beamMove 12s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes beamMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(50%);
+  }
+}

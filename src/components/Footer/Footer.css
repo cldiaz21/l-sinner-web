@@ -1,15 +1,27 @@
 .footer {
   position: relative;
-  z-index: 10;
+  z-index: 100;
   background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
   color: #fff;
   padding-top: 2rem;
+  pointer-events: auto;
 }
 
 .footer-content {
   padding: 2rem 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin-top: 2rem;
+}
+
+.footer-logo-wrapper {
+  margin-bottom: 1rem;
+}
+
+.footer-logo {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 .footer-info h5,
@@ -55,6 +67,9 @@
   padding: 1.5rem 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin-top: 2rem;
+  position: relative;
+  z-index: 10000;
+  pointer-events: auto;
 }
 
 .footer-copyright p {
@@ -63,21 +78,48 @@
 }
 
 .admin-link-footer {
-  display: inline-block;
+  display: inline-block !important;
   margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  color: rgba(255, 255, 255, 0.3);
-  text-decoration: none;
-  font-size: 0.8rem;
+  padding: 0.6rem 2rem;
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-decoration: none !important;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  transition: color 0.3s ease;
-  opacity: 0.5;
+  transition: all 0.3s ease;
+  cursor: pointer !important;
+  position: relative;
+  z-index: 99999 !important;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: auto !important;
+  user-select: none;
+  font-weight: 400;
+  isolation: isolate;
+  font-family: inherit;
+  outline: none;
 }
 
-.admin-link-footer:hover {
-  color: rgba(255, 255, 255, 0.6);
-  opacity: 0.8;
+.admin-link-footer:hover,
+.admin-link-footer:focus {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.75);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+}
+
+.admin-link-footer:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.25);
+}
+
+.admin-link-footer:visited {
+  color: rgba(255, 255, 255, 0.75);
 }
 
 @media (max-width: 768px) {

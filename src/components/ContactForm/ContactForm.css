@@ -1,12 +1,29 @@
 .contact-form-section {
-  padding: 4rem 0;
-  background: linear-gradient(180deg, #000000 0%, #1a1a1a 100%);
-  margin-top: 4rem;
+  padding: 0;
+  background: transparent;
+  margin-top: 0;
+  width: 100%;
+}
+
+.contact-form-wrapper {
+  width: 100%;
 }
 
 .contact-form-section .section-title {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  text-align: left;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.contact-form-intro {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  text-align: left;
 }
 
 .contact-form {

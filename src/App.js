@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home/Home';
@@ -9,15 +9,10 @@ import QuienesSomos from './pages/QuienesSomos/QuienesSomos';
 import Contacto from './pages/Contacto/Contacto';
 import Login from './pages/Login/Login';
 import Admin from './pages/Admin/Admin';
+import AuthGuard from './components/AuthGuard/AuthGuard';
 import { ProjectProvider } from './context/ProjectContext';
 import { LanguageProvider } from './context/LanguageContext';
 import './App.css';
-
-// Componente para proteger la ruta de Admin
-const ProtectedAdmin = () => {
-  const isAuthenticated = localStorage.getItem('lSinnerAdmin') === 'authenticated';
-  return isAuthenticated ? <Admin /> : <Navigate to="/login" replace />;
-};
 
 function App() {
   return (
@@ -33,7 +28,14 @@ function App() {
               <Route path="/quienes-somos" element={<QuienesSomos />} />
               <Route path="/contacto" element={<Contacto />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/admin" element={<ProtectedAdmin />} />
+              <Route 
+                path="/admin" 
+                element={
+                  <AuthGuard>
+                    <Admin />
+                  </AuthGuard>
+                } 
+              />
             </Routes>
             <Footer />
           </div>
