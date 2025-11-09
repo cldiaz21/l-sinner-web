@@ -180,7 +180,7 @@ export const StaggeredMenu = ({
         </div>
       </header>
 
-      {open ? (
+      {open && (
         <aside 
           id="staggered-menu-panel" 
           ref={panelRef} 
