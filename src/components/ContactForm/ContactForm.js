@@ -34,34 +34,76 @@ const ContactForm = () => {
 
     try {
       // Verificar si EmailJS está configurado
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error('EmailJS no está configurado. Por favor, configura las variables de entorno REACT_APP_EMAILJS_SERVICE_ID, REACT_APP_EMAILJS_TEMPLATE_ID y REACT_APP_EMAILJS_PUBLIC_KEY en Vercel.');
+      const missingVars = [];
+      if (!serviceId) missingVars.push('REACT_APP_EMAILJS_SERVICE_ID');
+      if (!templateId) missingVars.push('REACT_APP_EMAILJS_TEMPLATE_ID');
+      if (!publicKey) missingVars.push('REACT_APP_EMAILJS_PUBLIC_KEY');
+
+      if (missingVars.length > 0) {
+        throw new Error(`EmailJS no está configurado. Faltan las siguientes variables de entorno: ${missingVars.join(', ')}. Por favor, configura estas variables en Vercel y realiza un redeploy.`);
       }
 
-      await emailjs.sendForm(serviceId, templateId, form.current, publicKey);
-      
-      setAlertType('success');
-      setAlertMessage('¡Mensaje enviado correctamente! Nos pondremos en contacto contigo pronto.');
-      setShowAlert(true);
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
-      // Resetear el formulario
-      if (form.current) {
-        form.current.reset();
+      // Validar formato de los IDs
+      if (!serviceId.startsWith('service_')) {
+        throw new Error(`El Service ID tiene un formato incorrecto. Debe empezar con "service_". Valor actual: ${serviceId.substring(0, 20)}...`);
       }
-      // Ocultar alerta después de 5 segundos
-      setTimeout(() => setShowAlert(false), 5000);
+
+      if (!templateId.startsWith('template_')) {
+        throw new Error(`El Template ID tiene un formato incorrecto. Debe empezar con "template_". Valor actual: ${templateId.substring(0, 20)}...`);
+      }
+
+      // Inicializar EmailJS
+      emailjs.init(publicKey);
+
+      // Enviar el formulario
+      const response = await emailjs.sendForm(serviceId, templateId, form.current, {
+        publicKey: publicKey
+      });
+
+      console.log('EmailJS response:', response);
+
+      if (response.status === 200) {
+        setAlertType('success');
+        setAlertMessage('¡Mensaje enviado correctamente! Nos pondremos en contacto contigo pronto.');
+        setShowAlert(true);
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+        // Resetear el formulario
+        if (form.current) {
+          form.current.reset();
+        }
+        // Ocultar alerta después de 5 segundos
+        setTimeout(() => setShowAlert(false), 5000);
+      } else {
+        throw new Error(`Error al enviar el mensaje. Código de estado: ${response.status}`);
+      }
     } catch (error) {
       console.error('Error sending email:', error);
+      
+      let errorMessage = 'Error al enviar el mensaje. Por favor, intenta de nuevo o contáctanos directamente.';
+      
+      if (error.text) {
+        // Error de EmailJS
+        if (error.text.includes('service ID not found')) {
+          errorMessage = `El Service ID "${serviceId}" no fue encontrado en tu cuenta de EmailJS. Por favor, verifica que el Service ID sea correcto en el dashboard de EmailJS (https://dashboard.emailjs.com/admin) y que esté configurado correctamente en las variables de entorno de Vercel.`;
+        } else if (error.text.includes('template ID not found')) {
+          errorMessage = `El Template ID "${templateId}" no fue encontrado en tu cuenta de EmailJS. Por favor, verifica que el Template ID sea correcto en el dashboard de EmailJS y que esté configurado correctamente en las variables de entorno de Vercel.`;
+        } else {
+          errorMessage = `Error de EmailJS: ${error.text}. Por favor, verifica la configuración en el dashboard de EmailJS (https://dashboard.emailjs.com/admin).`;
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       setAlertType('danger');
-      setAlertMessage(error.message || 'Error al enviar el mensaje. Por favor, intenta de nuevo o contáctanos directamente.');
+      setAlertMessage(errorMessage);
       setShowAlert(true);
-      // Ocultar alerta después de 5 segundos
-      setTimeout(() => setShowAlert(false), 5000);
+      // Ocultar alerta después de 8 segundos (más tiempo para leer el error)
+      setTimeout(() => setShowAlert(false), 8000);
     } finally {
       setIsSubmitting(false);
     }

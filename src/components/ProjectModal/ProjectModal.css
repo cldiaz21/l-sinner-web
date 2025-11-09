@@ -38,13 +38,16 @@
 }
 
 .project-modal-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 2.5rem 2.5rem 2rem;
-  background: rgba(0, 0, 0, 0.2);
+  border-bottom: none;
+  padding: 1.5rem 2rem;
+  background: transparent;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  position: relative;
+  justify-content: flex-end;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1000;
   gap: 1.5rem;
 }
 
@@ -120,117 +123,149 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-.project-modal-carousel {
-  width: 100%;
-  margin-bottom: 0;
-  position: relative;
-  background: #000;
+/* Item Section Custom1 - Layout horizontal */
+.item-section-custom1 {
+  display: flex;
+  align-items: stretch;
+  min-height: 600px;
+  gap: 0;
 }
 
-.project-modal-image-wrapper {
-  width: 100%;
-  height: 65vh;
-  min-height: 400px;
-  max-height: 600px;
+.item-section-custom1-invert {
+  flex-direction: row-reverse;
+}
+
+.item-section-custom1-img {
+  flex: 1;
+  min-width: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #000;
-  overflow: hidden;
+  padding: 3rem;
   position: relative;
+  overflow: hidden;
 }
 
-.project-modal-image {
+.item-section-custom1-text {
+  flex: 1;
+  min-width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 3rem;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.project-modal-carousel {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center;
-  transition: transform 0.3s ease;
+  position: relative;
+  background: transparent;
 }
 
-.project-modal-content {
-  padding: 2.5rem;
-  background: rgba(0, 0, 0, 0.4);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.project-modal-date,
-.project-modal-category {
-  margin-bottom: 1.25rem;
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.75);
+.box-content-img-custom1 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
   display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  line-height: 1.6;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.project-modal-date:last-of-type,
-.project-modal-category:last-of-type {
-  margin-bottom: 0;
+.box-shadown-custom-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.8) 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
-.project-modal-date strong,
-.project-modal-category strong {
+.box-content-img-custom1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  position: relative;
+  z-index: 2;
+  filter: brightness(0.95);
+}
+
+.title2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 300;
   color: #fff;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-size: 0.75rem;
-  min-width: 90px;
-  opacity: 0.9;
+  margin-bottom: 2rem;
+  line-height: 1.3;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-.project-modal-description {
-  margin-top: 2.5rem;
-  margin-bottom: 0;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+.box-text1 {
+  margin-bottom: 2rem;
+  flex: 1;
 }
 
-.project-modal-description p {
+.box-text1 p {
+  color: rgba(255, 255, 255, 0.85);
   font-size: 1.1rem;
   line-height: 1.9;
-  color: rgba(255, 255, 255, 0.85);
   margin: 0;
   font-weight: 300;
 }
 
-.project-modal-videos {
-  margin-top: 2.5rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.project-modal-videos h5 {
-  font-size: 1rem;
-  font-weight: 500;
+.box-text1 p b {
   color: #fff;
-  margin-bottom: 1.5rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  opacity: 0.9;
+  letter-spacing: 1px;
 }
 
-.project-modal-video {
-  margin-bottom: 1rem;
-}
-
-.project-modal-video-link {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid transparent;
-}
-
-.project-modal-video-link:hover {
+.btn-design1 {
+  display: inline-block;
   color: #fff;
-  border-bottom-color: rgba(255, 255, 255, 0.3);
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 1rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  transition: color 0.3s ease, opacity 0.3s ease;
+  position: relative;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.btn-design1:hover {
+  color: rgba(255, 255, 255, 0.8);
+  opacity: 0.8;
+}
+
+.btn-design1::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+.btn-design1:hover::after {
+  width: 100%;
+}
+
+.project-modal-videos {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .project-modal-video-embed {
@@ -257,32 +292,32 @@
 /* Carousel custom styles */
 .project-modal-carousel .carousel-control-prev,
 .project-modal-carousel .carousel-control-next {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  opacity: 0.7;
+  opacity: 0.8;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
 .project-modal-carousel .carousel-control-prev {
-  left: 24px;
+  left: 2rem;
 }
 
 .project-modal-carousel .carousel-control-next {
-  right: 24px;
+  right: 2rem;
 }
 
 .project-modal-carousel .carousel-control-prev:hover,
 .project-modal-carousel .carousel-control-next:hover {
   opacity: 1;
-  background: rgba(0, 0, 0, 0.8);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
   transform: translateY(-50%) scale(1.1);
 }
 
@@ -294,7 +329,7 @@
 }
 
 .project-modal-carousel .carousel-indicators {
-  bottom: 24px;
+  bottom: 2rem;
   margin: 0;
   gap: 8px;
 }
@@ -320,6 +355,32 @@
 .project-modal-carousel .carousel-indicators button:hover {
   opacity: 0.8;
   transform: scale(1.1);
+}
+
+@media (max-width: 992px) {
+  .item-section-custom1 {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .item-section-custom1-invert {
+    flex-direction: column;
+  }
+
+  .item-section-custom1-img {
+    min-width: 100%;
+    padding: 2rem;
+    min-height: 400px;
+  }
+
+  .item-section-custom1-text {
+    min-width: 100%;
+    padding: 2.5rem 2rem;
+  }
+
+  .box-content-img-custom1 {
+    min-height: 400px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -364,34 +425,25 @@
     height: 18px;
   }
 
-  .project-modal-image-wrapper {
-    height: 40vh;
-    min-height: 300px;
-    max-height: 400px;
-  }
-
-  .project-modal-content {
+  .item-section-custom1-img {
     padding: 1.5rem;
+    min-height: 350px;
   }
 
-  .project-modal-date,
-  .project-modal-category {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+  .item-section-custom1-text {
+    padding: 2rem 1.5rem;
   }
 
-  .project-modal-date strong,
-  .project-modal-category strong {
-    font-size: 0.7rem;
-    min-width: 70px;
+  .box-content-img-custom1 {
+    min-height: 350px;
   }
 
-  .project-modal-description {
-    margin-top: 2rem;
-    padding-top: 2rem;
+  .title2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
   }
 
-  .project-modal-description p {
+  .box-text1 p {
     font-size: 1rem;
     line-height: 1.8;
   }
@@ -403,11 +455,11 @@
   }
 
   .project-modal-carousel .carousel-control-prev {
-    left: 12px;
+    left: 1rem;
   }
 
   .project-modal-carousel .carousel-control-next {
-    right: 12px;
+    right: 1rem;
   }
 
   .project-modal-carousel .carousel-control-prev-icon,
@@ -417,7 +469,7 @@
   }
 
   .project-modal-carousel .carousel-indicators {
-    bottom: 16px;
+    bottom: 1rem;
   }
 
   .project-modal-carousel .carousel-indicators button {
@@ -436,13 +488,26 @@
     letter-spacing: 1.5px;
   }
 
-  .project-modal-content {
-    padding: 1.25rem;
+  .item-section-custom1-img {
+    padding: 1rem;
+    min-height: 300px;
   }
 
-  .project-modal-image-wrapper {
-    height: 35vh;
-    min-height: 250px;
+  .item-section-custom1-text {
+    padding: 1.5rem 1rem;
+  }
+
+  .box-content-img-custom1 {
+    min-height: 300px;
+  }
+
+  .title2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .box-text1 p {
+    font-size: 0.95rem;
   }
 }
 

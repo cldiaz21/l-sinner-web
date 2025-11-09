@@ -20,7 +20,6 @@ const ProjectModal = ({ project, show, onHide }) => {
       style={{ zIndex: 10000 }}
     >
       <Modal.Header className="project-modal-header" closeButton={false}>
-        <Modal.Title className="project-modal-title">{project.title}</Modal.Title>
         <button 
           type="button" 
           className="project-modal-close" 
@@ -31,81 +30,91 @@ const ProjectModal = ({ project, show, onHide }) => {
         </button>
       </Modal.Header>
       <Modal.Body className="project-modal-body">
-        {project.images && project.images.length > 0 && (
-          <div className="project-modal-carousel">
-            <Carousel fade>
-              {project.images.map((image, index) => (
-                <Carousel.Item key={index}>
-                  <div className="project-modal-image-wrapper">
-                    <img
-                      className="project-modal-image"
-                      src={image}
-                      alt={`${project.title} - Imagen ${index + 1}`}
-                    />
-                  </div>
-                </Carousel.Item>
-              ))}
-            </Carousel>
-          </div>
-        )}
-        
-        <div className="project-modal-content">
-          {project.date && (
-            <div className="project-modal-date">
-              <strong>Fecha:</strong> {new Date(project.date).toLocaleDateString('es-ES', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+        <div className="item-section-custom1 item-section-custom1-invert">
+          {project.images && project.images.length > 0 && (
+            <div className="item-section-custom1-img">
+              <div className="project-modal-carousel">
+                <Carousel fade>
+                  {project.images.map((image, index) => (
+                    <Carousel.Item key={index}>
+                      <div className="box-content-img-custom1">
+                        <div className="box-shadown-custom-img"></div>
+                        <img
+                          src={image}
+                          alt={`${project.title} - Imagen ${index + 1}`}
+                        />
+                      </div>
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              </div>
             </div>
           )}
           
-          {project.category && (
-            <div className="project-modal-category">
-              <strong>Categoría:</strong> {project.category}
+          <div className="item-section-custom1-text">
+            <h3 className="title2">{project.title}</h3>
+            
+            <div className="box-text1">
+              {project.category && (
+                <p>
+                  <b>{project.category.toUpperCase()}</b>
+                  {project.description && (
+                    <>
+                      <br />
+                      {project.description}
+                    </>
+                  )}
+                  {project.date && (
+                    <>
+                      <br />
+                      <br />
+                      <b>Fecha:</b> {new Date(project.date).toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </>
+                  )}
+                </p>
+              )}
+              {!project.category && project.description && (
+                <p>{project.description}</p>
+              )}
             </div>
-          )}
-          
-          {project.description && (
-            <div className="project-modal-description">
-              <p>{project.description}</p>
-            </div>
-          )}
-          
-          {project.videos && project.videos.length > 0 && (
-            <div className="project-modal-videos">
-              <h5>Videos</h5>
-              {project.videos.map((video, index) => {
-                const embedUrl = getEmbedUrl(video);
-                if (embedUrl) {
+            
+            {project.videos && project.videos.length > 0 && (
+              <div className="project-modal-videos">
+                {project.videos.map((video, index) => {
+                  const embedUrl = getEmbedUrl(video);
+                  if (embedUrl) {
+                    return (
+                      <div key={index} className="project-modal-video-embed">
+                        <iframe
+                          src={embedUrl}
+                          title={`${project.title} - Video ${index + 1}`}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="project-modal-video-iframe"
+                        ></iframe>
+                      </div>
+                    );
+                  }
                   return (
-                    <div key={index} className="project-modal-video-embed">
-                      <iframe
-                        src={embedUrl}
-                        title={`${project.title} - Video ${index + 1}`}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        className="project-modal-video-iframe"
-                      ></iframe>
-                    </div>
-                  );
-                }
-                return (
-                  <div key={index} className="project-modal-video">
                     <a 
+                      key={index}
                       href={video} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="project-modal-video-link"
+                      className="btn-design1"
                     >
                       Ver video {index + 1}
                     </a>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </Modal.Body>
     </Modal>
