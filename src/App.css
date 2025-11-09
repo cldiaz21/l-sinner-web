@@ -1,0 +1,35 @@
+.App {
+  min-height: 100vh;
+  background: #000000;
+  color: #fff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.page-container {
+  min-height: calc(100vh - 200px);
+  padding-top: 0;
+  position: relative;
+}
+
+/* Asegurar que las partículas no se vean fuera del hero */
+section:not(.hero-section) {
+  position: relative;
+  z-index: 10;
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+}
+

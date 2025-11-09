@@ -1,0 +1,32 @@
+.contacto-section {
+  position: relative;
+  z-index: 10;
+  padding: 5rem 0;
+  min-height: auto;
+  background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+}
+
+.contact-intro {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+
+.contact-note {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .contacto-section {
+    padding: 3rem 0;
+  }
+
+  .contact-intro {
+    font-size: 1.1rem;
+  }
+}
+
