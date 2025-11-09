@@ -93,10 +93,14 @@ export const StaggeredMenu = ({
     const target = !openRef.current;
     openRef.current = target;
     setOpen(target);
+    
+    // Prevenir scroll del body cuando el menú está abierto
     if (target) {
+      document.body.style.overflow = 'hidden';
       onMenuOpen?.();
       playOpen();
     } else {
+      document.body.style.overflow = '';
       onMenuClose?.();
       playClose();
     }
@@ -116,6 +120,13 @@ export const StaggeredMenu = ({
       window.removeEventListener('closeMenu', handleCloseMenuEvent);
     };
   }, [toggleMenu]);
+
+  // Limpiar el overflow del body cuando el componente se desmonta
+  React.useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   return (
     <div

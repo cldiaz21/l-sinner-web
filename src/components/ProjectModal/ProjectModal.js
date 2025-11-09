@@ -19,7 +19,7 @@ const ProjectModal = ({ project, show, onHide }) => {
       dialogClassName="project-modal-dialog"
       style={{ zIndex: 10000 }}
     >
-      <Modal.Header className="project-modal-header">
+      <Modal.Header className="project-modal-header" closeButton={false}>
         <Modal.Title className="project-modal-title">{project.title}</Modal.Title>
         <button 
           type="button" 
@@ -27,7 +27,7 @@ const ProjectModal = ({ project, show, onHide }) => {
           onClick={onHide}
           aria-label="Cerrar"
         >
-          <X size={24} />
+          <X size={20} strokeWidth={2.5} />
         </button>
       </Modal.Header>
       <Modal.Body className="project-modal-body">
