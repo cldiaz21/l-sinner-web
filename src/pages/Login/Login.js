@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
+import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react';
 import { authService } from '../../services/authService';
 import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   // Verificar si ya está autenticado
@@ -22,7 +22,7 @@ const Login = () => {
     checkSession();
   }, [navigate]);
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -37,7 +37,6 @@ const Login = () => {
       }
 
       if (data?.session) {
-        // Guardar sesión y navegar al admin
         navigate('/admin');
       } else {
         setError('No se pudo iniciar sesión. Por favor, intenta de nuevo.');
@@ -50,62 +49,83 @@ const Login = () => {
   };
 
   return (
-    <div className="login-page">
-      <Container className="login-container">
-        <Card className="login-card">
-          <Card.Body>
-            <h2 className="login-title">L SINNER</h2>
-            <p className="login-subtitle">Panel de Administración</p>
-            <Form onSubmit={handleSubmit}>
-              {error && <Alert variant="danger">{error}</Alert>}
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="tu@email.com"
-                  disabled={loading}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Contraseña</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Ingresa tu contraseña"
-                  disabled={loading}
-                />
-              </Form.Group>
-              <Button 
-                variant="dark" 
-                type="submit" 
-                className="w-100 login-button"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                      className="me-2"
-                    />
-                    Iniciando sesión...
-                  </>
-                ) : (
-                  'Iniciar Sesión'
-                )}
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Container>
+    <div className="login-container">
+      {/* Background */}
+      <div className="login-background"></div>
+
+      {/* Login Card */}
+      <div className="login-card">
+        {/* Logo */}
+        <div className="login-logo">
+          <div className="logo-circle">
+            <img src="/images/hero/logo.png" alt="L SINNER" className="logo-image" />
+          </div>
+          <h1 className="company-name">L SINNER</h1>
+          <p className="company-subtitle">Panel de Administración</p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleLogin} className="login-form">
+          {error && (
+            <div className="alert-error">
+              <AlertCircle size={18} />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <div className="form-group">
+            <label htmlFor="email">
+              <Mail size={18} />
+              Correo Electrónico
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="tu@email.com"
+              required
+              disabled={loading}
+              autoComplete="email"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">
+              <Lock size={18} />
+              Contraseña
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              disabled={loading}
+              autoComplete="current-password"
+            />
+          </div>
+
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? (
+              <>
+                <span className="spinner"></span>
+                Iniciando sesión...
+              </>
+            ) : (
+              <>
+                <LogIn size={20} />
+                Iniciar Sesión
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="login-footer">
+          <p>© 2025 L SINNER. Todos los derechos reservados.</p>
+        </div>
+      </div>
     </div>
   );
 };
