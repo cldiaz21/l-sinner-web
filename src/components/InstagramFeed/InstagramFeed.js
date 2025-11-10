@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { LanguageContext } from '../../context/LanguageContext';
 import './InstagramFeed.css';
 
 const InstagramFeed = ({ username = 'art_sinn3r' }) => {
+  const { t } = useContext(LanguageContext);
   // Usar el embed oficial de Instagram
   const embedUrl = `https://www.instagram.com/${username}/embed/`;
 
   return (
     <div className="instagram-feed-container">
       <div className="instagram-feed-header">
-        <h3 className="instagram-feed-title">Síguenos en Instagram</h3>
+        <h3 className="instagram-feed-title">{t.instagramTitle || 'Síguenos en Instagram'}</h3>
         <a 
           href={`https://instagram.com/${username}`} 
           target="_blank" 
@@ -36,7 +38,7 @@ const InstagramFeed = ({ username = 'art_sinn3r' }) => {
           rel="noopener noreferrer"
           className="instagram-view-all"
         >
-          Ver más en Instagram →
+          {t.instagramViewMore || 'Ver más en Instagram →'}
         </a>
       </div>
     </div>
@@ -44,4 +46,3 @@ const InstagramFeed = ({ username = 'art_sinn3r' }) => {
 };
 
 export default InstagramFeed;
-

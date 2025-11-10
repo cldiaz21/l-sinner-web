@@ -26,9 +26,24 @@ const Home = () => {
       {/* Hero Section con carrusel de imágenes */}
       <HeroSection 
         title="L SINN3R" 
-        subtitle={t.heroSubtitleHome || "Fotografía Profesional"}
+        subtitle={t.heroSubtitleHome || "Solo quien ha caído en la sombras puede retratar la luz"}
         images={heroImages}
       />
+
+      {/* Cita Principal */}
+      <section className="quote-hero-section">
+        <Container>
+          <Row>
+            <Col lg={10} className="mx-auto">
+              <div className="quote-hero-block">
+                <p className="quote-hero-text">
+                  "{t.quoteText || 'El mundo no me hará una mala persona'}"
+                </p>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
 
       {/* Descripción de L SINN3R */}
       <section className="description-section">
@@ -48,10 +63,13 @@ const Home = () => {
               <div className="description-content">
                 <h2 className="section-title">{t.descriptionTitle || "L SINN3R"}</h2>
                 <p className="description-text">
-                  {t.descriptionText1 || "L SINN3R es un fotógrafo profesional especializado en capturar momentos únicos y transformarlos en arte visual. Con una visión creativa y un estilo distintivo, cada proyecto es una oportunidad para contar una historia a través de la lente."}
+                  {t.descriptionText1 || "L-SINN3R representa la dualidad entre la perfección y lo imperfecto, entre las luces y las sombras que habitan en cada proceso creativo."}
                 </p>
                 <p className="description-text">
-                  {t.descriptionText2 || "Nuestro trabajo abarca desde sesiones de retrato hasta proyectos comerciales, siempre manteniendo la calidad y la autenticidad que nos caracteriza."}
+                  {t.descriptionText2 || "Nace desde la idea de que el arte no busca ser correcto, sino real, humano y emocional. Creemos en la creación visual como medio de expresión y conexión emocional, capaz de transformar ideas en experiencias estéticas con propósito."}
+                </p>
+                <p className="description-text">
+                  {t.descriptionText3 || "En L-SINN3R construimos un lenguaje donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto, identidad y emoción. Detrás de cada proyecto hay una historia que no se cuenta, pero que se transmite a través de la obra final."}
                 </p>
               </div>
             </Col>
@@ -85,4 +103,3 @@ const Home = () => {
 };
 
 export default Home;
-

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaInstagram, FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { LanguageContext } from '../../context/LanguageContext';
 import ContactForm from '../ContactForm/ContactForm';
 import './Footer.css';
 
 const Footer = () => {
+  const { t } = useContext(LanguageContext);
   const currentYear = new Date().getFullYear();
 
   const handleAdminClick = (e) => {
@@ -27,10 +29,10 @@ const Footer = () => {
                 className="footer-logo"
               />
             </div>
-            <p>Fotografía profesional que captura momentos únicos</p>
+            <p>{t.footerDescription || 'Fotografía profesional que captura momentos únicos'}</p>
           </Col>
           <Col md={6} className="footer-social">
-            <h5>Síguenos</h5>
+            <h5>{t.footerFollow || 'Síguenos'}</h5>
             <div className="social-icons">
               <a 
                 href="https://instagram.com" 
@@ -69,7 +71,7 @@ const Footer = () => {
         </Row>
         <Row>
           <Col className="text-center footer-copyright" style={{ position: 'relative', zIndex: 10000, pointerEvents: 'auto' }}>
-            <p>&copy; {currentYear} L SINN3R. Todos los derechos reservados.</p>
+            <p>&copy; {currentYear} {t.footerCopyright || 'L SINN3R. Todos los derechos reservados.'}</p>
             <button
               onClick={handleAdminClick}
               className="admin-link-footer"
@@ -80,7 +82,7 @@ const Footer = () => {
                 pointerEvents: 'auto'
               }}
             >
-              Admin
+              {t.footerAdmin || 'Admin'}
             </button>
           </Col>
         </Row>
@@ -90,4 +92,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import emailjs from '@emailjs/browser';
 import { Mail, Clock } from 'lucide-react';
+import { LanguageContext } from '../../context/LanguageContext';
 import './ContactForm.css';
 
 const ContactForm = () => {
+  const { t } = useContext(LanguageContext);
   const form = useRef();
   const [formData, setFormData] = useState({
     name: '',
@@ -64,7 +66,7 @@ const ContactForm = () => {
 
       if (response.status === 200) {
         setAlertType('success');
-        setAlertMessage('¡Mensaje enviado correctamente! Nos pondremos en contacto contigo pronto.');
+        setAlertMessage(t.contactSuccessMessage || '¡Mensaje enviado correctamente! Nos pondremos en contacto contigo pronto.');
         setShowAlert(true);
         setFormData({
           name: '',
@@ -84,7 +86,7 @@ const ContactForm = () => {
     } catch (error) {
       console.error('Error sending email:', error);
       
-      let errorMessage = 'Error al enviar el mensaje. Por favor, intenta de nuevo o contáctanos directamente.';
+      let errorMessage = t.contactErrorMessage || 'Error al enviar el mensaje. Por favor, intenta de nuevo o contáctanos directamente.';
       
       if (error.text) {
         // Error de EmailJS
@@ -102,7 +104,7 @@ const ContactForm = () => {
       setAlertType('danger');
       setAlertMessage(errorMessage);
       setShowAlert(true);
-      // Ocultar alerta después de 8 segundos (más tiempo para leer el error)
+      // Ocultar alerta después de 8 segundos para errores
       setTimeout(() => setShowAlert(false), 8000);
     } finally {
       setIsSubmitting(false);
@@ -113,12 +115,11 @@ const ContactForm = () => {
     <section className="contact-section" id="contact">
       <div className="container">
         <div className="contact-grid">
-          {/* Información de Contacto */}
           <div className="contact-info">
-            <span className="section-label">CONTACTO</span>
-            <h2 className="section-title">Hablemos de tu proyecto</h2>
+            <span className="section-label">{t.contactSectionLabel || 'CONTACTO'}</span>
+            <h2 className="section-title">{t.contactTitle || 'Hablemos de tu proyecto'}</h2>
             <p className="contact-description">
-              ¿Tienes preguntas? ¿Necesitas una demo? ¿Quieres integrar L SINN3R en tu proyecto? Estamos aquí para ayudarte.
+              {t.contactDescription || '¿Tienes preguntas? ¿Necesitas una demo? ¿Quieres integrar L-SINN3R en tu organización? Estamos aquí para ayudarte.'}
             </p>
             <div className="contact-methods">
               <div className="contact-method">
@@ -126,8 +127,10 @@ const ContactForm = () => {
                   <Mail size={28} />
                 </div>
                 <div className="method-info">
-                  <div className="method-label">Email</div>
-                  <a href="mailto:contacto@lsinn3r.cl" className="method-value">contacto@lsinn3r.cl</a>
+                  <div className="method-label">{t.contactEmail || 'Email'}</div>
+                  <a href={`mailto:${t.contactEmailValue || 'contact@l-sinn3r.com'}`} className="method-value">
+                    {t.contactEmailValue || 'contact@l-sinn3r.com'}
+                  </a>
                 </div>
               </div>
               <div className="contact-method">
@@ -135,47 +138,40 @@ const ContactForm = () => {
                   <Clock size={28} />
                 </div>
                 <div className="method-info">
-                  <div className="method-label">Horario</div>
-                  <div className="method-value">24/7 Soporte</div>
+                  <div className="method-label">{t.contactSchedule || 'Horario'}</div>
+                  <div className="method-value">{t.contactScheduleValue || '24/7 Soporte'}</div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Formulario */}
           <div className="contact-form-container">
-            {showAlert && (
-              <div className={`alert alert-${alertType}`}>
-                {alertMessage}
-              </div>
-            )}
             <form ref={form} className="contact-form" onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="name">Nombre completo</label>
+                <label htmlFor="name">{t.contactNameLabel || 'Nombre completo'}</label>
                 <input
                   type="text"
                   id="name"
                   name="name"
-                  placeholder="Tu nombre"
+                  placeholder={t.contactNamePlaceholder || 'Tu nombre'}
                   required
                   value={formData.name}
                   onChange={handleChange}
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">{t.contactEmailLabel || 'Email'}</label>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  placeholder="tu@email.com"
+                  placeholder={t.contactEmailPlaceholder || 'tu@email.com'}
                   required
                   value={formData.email}
                   onChange={handleChange}
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="subject">Asunto</label>
+                <label htmlFor="subject">{t.contactSubjectLabel || 'Asunto'}</label>
                 <select
                   id="subject"
                   name="subject"
@@ -183,26 +179,31 @@ const ContactForm = () => {
                   value={formData.subject}
                   onChange={handleChange}
                 >
-                  <option value="">Tema de consulta</option>
-                  <option value="demo">Demo</option>
-                  <option value="sales">Ventas</option>
-                  <option value="support">Soporte</option>
-                  <option value="partnership">Colaboración</option>
-                  <option value="other">Otro</option>
+                  <option value="">{t.contactSubjectPlaceholder || 'Tema de consulta'}</option>
+                  <option value="demo">{t.contactSubjectOptions?.demo || 'Demo'}</option>
+                  <option value="sales">{t.contactSubjectOptions?.sales || 'Sales'}</option>
+                  <option value="support">{t.contactSubjectOptions?.support || 'Support'}</option>
+                  <option value="partnership">{t.contactSubjectOptions?.partnership || 'Partnership'}</option>
+                  <option value="other">{t.contactSubjectOptions?.other || 'Other'}</option>
                 </select>
               </div>
               <div className="form-group">
-                <label htmlFor="message">Mensaje</label>
+                <label htmlFor="message">{t.contactMessageLabel || 'Mensaje'}</label>
                 <textarea
                   id="message"
                   name="message"
-                  placeholder="Cuéntanos sobre tu proyecto..."
+                  placeholder={t.contactMessagePlaceholder || 'Cuéntanos sobre tu proyecto...'}
                   rows="5"
                   required
                   value={formData.message}
                   onChange={handleChange}
-                ></textarea>
+                />
               </div>
+              {showAlert && (
+                <div className={`alert alert-${alertType}`}>
+                  {alertMessage}
+                </div>
+              )}
               <button
                 className="star-border-container"
                 style={{ width: '100%', marginTop: '8px' }}
@@ -212,7 +213,7 @@ const ContactForm = () => {
                 <div className="border-gradient-bottom" style={{ background: 'radial-gradient(circle, white, transparent 10%)', animationDuration: '6s' }}></div>
                 <div className="border-gradient-top" style={{ background: 'radial-gradient(circle, white, transparent 10%)', animationDuration: '6s' }}></div>
                 <div className="inner-content">
-                  {isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
+                  {isSubmitting ? (t.contactSending || 'Enviando...') : (t.contactSendButton || 'Enviar Mensaje')}
                 </div>
               </button>
             </form>

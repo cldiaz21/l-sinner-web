@@ -1,5 +1,6 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useState, useContext } from 'react';
 import { gsap } from 'gsap';
+import { LanguageContext } from '../../context/LanguageContext';
 import './StaggeredMenu.css';
 
 export const StaggeredMenu = ({
@@ -18,10 +19,14 @@ export const StaggeredMenu = ({
   isFixed = true,
   onMenuOpen,
   onMenuClose,
-  language = 'es',
+  language: propLanguage,
   onChangeLanguage,
   children
 }) => {
+  const languageContext = useContext(LanguageContext);
+  const currentLanguage = propLanguage || languageContext?.language || 'es';
+  const t = languageContext?.t || {};
+  
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
   const panelRef = useRef(null);
@@ -128,6 +133,14 @@ export const StaggeredMenu = ({
     };
   }, []);
 
+  const handleLanguageChange = (lang) => {
+    if (onChangeLanguage) {
+      onChangeLanguage(lang);
+    } else if (languageContext?.changeLanguage) {
+      languageContext.changeLanguage(lang);
+    }
+  };
+
   return (
     <div
       className={(className ? className + ' ' : '') + 'staggered-menu-wrapper'}
@@ -151,12 +164,12 @@ export const StaggeredMenu = ({
           )}
         </div>
         <div className="sm-header-right">
-          {onChangeLanguage && (
+          {(onChangeLanguage || languageContext?.changeLanguage) && (
             <ul className="links-language">
               <li>
                 <button
-                  className={`link-language ${language === 'en' ? 'active' : ''}`}
-                  onClick={() => onChangeLanguage('en')}
+                  className={`link-language ${currentLanguage === 'en' ? 'active' : ''}`}
+                  onClick={() => handleLanguageChange('en')}
                   type="button"
                 >
                   ENG
@@ -165,8 +178,8 @@ export const StaggeredMenu = ({
               <li><span className="separate-item-menu">/</span></li>
               <li>
                 <button
-                  className={`link-language ${language === 'es' ? 'active' : ''}`}
-                  onClick={() => onChangeLanguage('es')}
+                  className={`link-language ${currentLanguage === 'es' ? 'active' : ''}`}
+                  onClick={() => handleLanguageChange('es')}
                   type="button"
                 >
                   ESP
@@ -177,7 +190,7 @@ export const StaggeredMenu = ({
           <button
             ref={toggleBtnRef}
             className="sm-toggle"
-            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-label={open ? (t.menuClose || 'Cerrar menú') : (t.menuOpen || 'Abrir menú')}
             aria-expanded={open}
             aria-controls="staggered-menu-panel"
             onClick={toggleMenu}
@@ -202,7 +215,7 @@ export const StaggeredMenu = ({
           <button
             className="sm-close-button"
             onClick={toggleMenu}
-            aria-label="Cerrar menú"
+            aria-label={t.menuClose || 'Cerrar menú'}
             type="button"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -220,4 +233,3 @@ export const StaggeredMenu = ({
 };
 
 export default StaggeredMenu;
-

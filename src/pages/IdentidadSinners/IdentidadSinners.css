@@ -4,84 +4,124 @@
   padding: 5rem 0;
   min-height: auto;
   background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+  overflow-x: hidden;
 }
 
 .identidad-content {
   margin-top: 3rem;
 }
 
-.lead-text {
-  font-size: 1.3rem;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 3rem;
-  text-align: center;
-  font-style: italic;
-}
-
+/* Section Blocks (Visión, Estilo, Misión) */
 .identidad-block {
+  padding: 3rem;
   margin-bottom: 3rem;
-  padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-left: 4px solid rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 }
 
-.identidad-block h2 {
+.identidad-block:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.section-title {
   color: #fff;
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.identidad-block p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin: 0;
-}
-
-.identidad-values {
-  margin-top: 4rem;
-  padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
-}
-
-.identidad-values h2 {
-  color: #fff;
-  font-size: 2rem;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 600;
   margin-bottom: 2rem;
-  text-align: center;
   text-transform: uppercase;
   letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+.section-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  line-height: 1.9;
+  margin-bottom: 1.5rem;
+}
+
+.section-quote {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
+  line-height: 1.8;
+  font-style: italic;
+  padding-left: 2rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.3);
+  margin-top: 1.5rem;
+}
+
+/* Values Section */
+.values-block {
+  padding: 3rem;
+  margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
 }
 
 .value-item {
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  transition: transform 0.3s ease;
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  height: 100%;
+  min-height: 200px;
 }
 
 .value-item:hover {
-  transform: translateX(5px);
+  transform: translateY(-5px);
+  border-left-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.value-item h3 {
+.value-title {
   color: #fff;
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: clamp(1.2rem, 2vw, 1.4rem);
+  font-weight: 600;
+  margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-.value-item p {
-  color: rgba(255, 255, 255, 0.8);
+.value-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  line-height: 1.7;
   margin: 0;
-  font-size: 1rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .identidad-section {
+    padding: 4rem 0;
+  }
+
+  .identidad-block,
+  .values-block {
+    padding: 2rem 1.5rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .value-item {
+    min-height: 180px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -89,24 +129,59 @@
     padding: 3rem 0;
   }
 
-  .lead-text {
-    font-size: 1.1rem;
+  .identidad-content {
+    margin-top: 2rem;
   }
 
-  .identidad-block {
-    padding: 1.5rem;
+  .identidad-block,
+  .values-block {
+    padding: 1.5rem 1rem;
+    margin-bottom: 2rem;
   }
 
-  .identidad-block h2 {
+  .section-title {
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .title-icon {
     font-size: 1.5rem;
   }
 
-  .identidad-block p {
-    font-size: 1rem;
+  .section-text {
+    font-size: clamp(1rem, 3vw, 1.1rem);
   }
 
-  .value-item h3 {
-    font-size: 1.3rem;
+  .section-quote {
+    font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+    padding-left: 1rem;
+    margin-top: 1rem;
+  }
+
+  .value-item {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    min-height: auto;
+  }
+
+  .value-title {
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+  }
+
+  .value-text {
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.2rem;
+  }
+
+  .value-item {
+    padding: 1.2rem;
   }
 }
 

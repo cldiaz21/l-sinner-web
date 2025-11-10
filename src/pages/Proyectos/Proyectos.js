@@ -9,7 +9,7 @@ import './Proyectos.css';
 
 const Proyectos = () => {
   const { projects } = useContext(ProjectContext);
-  const { t } = useContext(LanguageContext);
+  const { t, language } = useContext(LanguageContext);
   const [selectedProject, setSelectedProject] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,7 +43,7 @@ const Proyectos = () => {
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return date.toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
   };
 
   const truncateText = (text, maxLength = 150) => {
@@ -61,7 +61,7 @@ const Proyectos = () => {
             <button 
               className="btn-search-article"
               onClick={() => setShowSearch(!showSearch)}
-              aria-label="Buscar proyectos"
+              aria-label={t.searchProjects || 'Buscar proyectos'}
             >
               <Search size={24} />
             </button>
@@ -73,7 +73,7 @@ const Proyectos = () => {
                     <input
                       type="search"
                       name="buscar"
-                      placeholder="INTRODUCE TU BÚSQUEDA"
+                      placeholder={t.searchPlaceholder || 'INTRODUCE TU BÚSQUEDA'}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       autoFocus
@@ -86,7 +86,7 @@ const Proyectos = () => {
                       setSearchQuery('');
                     }}
                     type="button"
-                    aria-label="Cerrar búsqueda"
+                    aria-label={t.closeSearch || 'Cerrar búsqueda'}
                   >
                     <span></span>
                     <span></span>
@@ -133,7 +133,7 @@ const Proyectos = () => {
                     handleProjectClick(featuredProject);
                   }}
                 >
-                  Ver proyecto
+                  {t.viewProject || 'Ver proyecto'}
                 </a>
               </div>
             </div>
@@ -182,7 +182,7 @@ const Proyectos = () => {
                           handleProjectClick(project);
                         }}
                       >
-                        Ver proyecto
+                        {t.viewProject || 'Ver proyecto'}
                       </a>
                     </div>
                   </div>
@@ -191,7 +191,7 @@ const Proyectos = () => {
             ) : (
               <Col lg={12}>
                 <div className="no-projects">
-                  <p>{searchQuery ? 'No se encontraron proyectos que coincidan con tu búsqueda.' : 'No hay proyectos disponibles en este momento.'}</p>
+                  <p>{searchQuery ? (t.noProjectsFound || 'No se encontraron proyectos que coincidan con tu búsqueda.') : (t.noProjectsAvailable || 'No hay proyectos disponibles en este momento.')}</p>
                 </div>
               </Col>
             )}
