@@ -5,11 +5,14 @@ Portfolio website for L SINN3R, a professional photographer. Built with React an
 ## 🚀 Features
 
 - **Modern Design**: Minimalist, black and white design with glass-like effects
-- **Image Carousel**: Hero section with image carousel
+- **Image Carousel**: Hero section with image carousel and background animations
 - **Multi-language**: Support for Spanish and English
 - **Project Management**: Admin panel to manage projects and carousel images
 - **Contact Form**: Integrated with EmailJS
+- **Image Upload**: Supabase Storage integration for image uploads
 - **Responsive**: Fully responsive design for all devices
+- **Project Modal**: Beautiful modal with horizontal layout for project details
+- **Instagram Feed**: Instagram integration for social media display
 
 ## 📋 Pages
 
@@ -29,6 +32,9 @@ Portfolio website for L SINN3R, a professional photographer. Built with React an
 - React TSParticles 2.12.2 (for particle animations)
 - React Slick 0.29.0 (for carousels)
 - EmailJS 4.4.1 (for contact form)
+- Supabase 2.80.0 (for database and storage)
+- Three.js & @react-three/fiber (for 3D animations)
+- Lucide React (for icons)
 
 ## 📦 Installation
 
@@ -40,11 +46,13 @@ cd l-sinner-web
 
 2. Install dependencies:
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
-3. Create a `.env` file in the root directory (optional):
+3. Create a `.env` file in the root directory:
 ```env
+REACT_APP_SUPABASE_URL=your_supabase_url
+REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
 REACT_APP_EMAILJS_SERVICE_ID=your_service_id
 REACT_APP_EMAILJS_TEMPLATE_ID=your_template_id
 REACT_APP_EMAILJS_PUBLIC_KEY=your_public_key
@@ -63,7 +71,8 @@ npm start
 l-sinner-web/
 ├── public/
 │   ├── images/
-│   │   └── hero/          # Hero section images
+│   │   ├── hero/          # Hero section images
+│   │   └── alvaromeza.jpg
 │   └── index.html
 ├── src/
 │   ├── components/        # Reusable components
@@ -71,18 +80,30 @@ l-sinner-web/
 │   │   ├── Footer/
 │   │   ├── HeroSection/
 │   │   ├── ContactForm/
+│   │   ├── ProjectModal/
+│   │   ├── ProjectsCarousel/
+│   │   ├── StaggeredMenu/
+│   │   ├── FlowingMenu/
+│   │   ├── BackgroundAnimations/
 │   │   └── ...
 │   ├── pages/            # Page components
-│   │   ├── Home/
-│   │   ├── Proyectos/
-│   │   ├── Admin/
-│   │   └── ...
-│   ├── context/          # React Context providers
-│   │   ├── ProjectContext.js
-│   │   └── LanguageContext.js
-│   └── App.js
-└── package.json
+│   ├── services/         # API services
+│   ├── context/          # React context
+│   ├── utils/            # Utility functions
+│   └── lib/              # Libraries configuration
+├── CREATE_TABLES.sql     # SQL script for database setup
+└── README.md
 ```
+
+## 📚 Documentation
+
+- `INSTRUCCIONES_EMAILJS.md` - EmailJS configuration guide
+- `SOLUCION_EMAILJS.md` - EmailJS troubleshooting guide
+- `SUPABASE_STORAGE_SETUP.md` - Supabase Storage setup guide
+- `INSTRUCCIONES_SUPABASE.md` - Supabase database setup guide
+- `VERCEL_DEPLOY.md` - Vercel deployment guide
+- `VERCEL_ENV_SETUP.md` - Environment variables setup
+- `DOMAIN_SETUP.md` - Domain configuration guide
 
 ## 🖼️ Adding Hero Images
 
@@ -96,12 +117,13 @@ Or update the array in `src/pages/Home/Home.js` to use your own image names.
 
 ## 🔐 Admin Panel
 
-Access the admin panel at `/login`:
-- Username: `admin`
-- Password: `lsinner2024` (or as configured in your `.env`)
+Access the admin panel at `/admin` (requires login at `/login`):
+- Username: Configured in environment variables
+- Password: Configured in environment variables
 
 The admin panel allows you to:
 - Add, edit, and delete projects
+- Upload images to Supabase Storage
 - Add images and videos to projects
 - Manage carousel images
 - Mark projects as featured
@@ -113,20 +135,22 @@ The admin panel allows you to:
 npm run build
 ```
 
-### Deploy to Netlify/Vercel:
-1. Connect your GitHub repository
-2. Set build command: `npm run build`
-3. Set publish directory: `build`
-4. Add environment variables if using EmailJS
+### Deploy to Vercel:
+1. Connect your GitHub repository to Vercel
+2. Configure environment variables in Vercel dashboard
+3. Deploy automatically on push to main branch
+
+See `VERCEL_DEPLOY.md` for detailed deployment instructions.
 
 ## 📝 Configuration
 
 ### EmailJS Setup
 
-1. Create an account at [EmailJS](https://www.emailjs.com/)
-2. Create an email service
-3. Create an email template
-4. Add your credentials to `.env` file
+See `INSTRUCCIONES_EMAILJS.md` for detailed EmailJS configuration instructions.
+
+### Supabase Setup
+
+See `INSTRUCCIONES_SUPABASE.md` and `SUPABASE_STORAGE_SETUP.md` for Supabase configuration.
 
 ### Language Configuration
 
@@ -136,7 +160,7 @@ The website supports Spanish and English. Translations are managed in `src/conte
 
 - **Colors**: Modify the gradient colors in `src/App.css` and component CSS files
 - **Fonts**: Update font families in `src/index.css`
-- **Animations**: Adjust particle settings in `src/components/HeroSection/HeroSection.js`
+- **Animations**: Adjust animation settings in `src/components/HeroSection/HeroSection.js` and background animations
 
 ## 📄 License
 
