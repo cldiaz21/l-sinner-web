@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { LanguageContext } from '../../context/LanguageContext';
 import './InstagramFeed.css';
 
-const InstagramFeed = ({ username = 'art_sinn3r' }) => {
+const InstagramFeed = ({ username = 'l_sinn3r' }) => {
   const { t } = useContext(LanguageContext);
   // Usar el embed oficial de Instagram
   const embedUrl = `https://www.instagram.com/${username}/embed/`;

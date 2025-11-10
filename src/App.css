@@ -42,6 +42,16 @@ textarea:not(:disabled),
   pointer-events: none !important;
 }
 
+/* Asegurar que el menú cerrado no bloquee */
+.staggered-menu-panel[aria-hidden="true"],
+.staggered-menu-panel:not([aria-hidden="false"]) {
+  pointer-events: none !important;
+}
+
+.staggered-menu-wrapper:not([data-open]) .staggered-menu-panel {
+  pointer-events: none !important;
+}
+
 .section-title {
   font-size: 3rem;
   font-weight: bold;

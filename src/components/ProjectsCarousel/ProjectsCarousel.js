@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ProjectModal from '../ProjectModal/ProjectModal';
+import GlareHover from '../GlareHover/GlareHover';
 import './ProjectsCarousel.css';
 
 const ProjectsCarousel = ({ projects }) => {
@@ -37,52 +38,67 @@ const ProjectsCarousel = ({ projects }) => {
     <>
       <div className="expandable-grid-container">
         {projects.map((project, index) => (
-          <div
+          <GlareHover
             key={project.id}
-            className="expandable-card-item"
+            width="100%"
+            height="100%"
+            background="transparent"
+            borderRadius="0"
+            borderColor="transparent"
+            glareColor="#ffffff"
+            glareOpacity={0.3}
+            glareAngle={-30}
+            glareSize={300}
+            transitionDuration={800}
+            playOnce={false}
+            className="expandable-card-glare-wrapper"
             style={{ opacity: expandedIndex === index ? 1 : expandedIndex === null ? 1 : 0.7 }}
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleProjectClick(project, index);
-            }}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handleProjectClick(project, index);
-              }
-            }}
           >
-            <div className="expandable-card-inner">
-              <div>
-                {project.images && project.images.length > 0 ? (
-                  <img
-                    src={project.images[0]}
-                    alt={project.title}
-                    className="expandable-card-image"
-                  />
-                ) : (
-                  <div className="expandable-card-placeholder">
-                    <span>Sin imagen</span>
-                  </div>
-                )}
-              </div>
-              <div className="expandable-card-text-wrapper">
-                <h3 className="expandable-card-title">
-                  {project.title}
-                </h3>
-                {project.date && (
-                  <p className="expandable-card-subtitle">
-                    {new Date(project.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long' })}
-                  </p>
-                )}
+            <div
+              className="expandable-card-item"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleProjectClick(project, index);
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleProjectClick(project, index);
+                }
+              }}
+            >
+              <div className="expandable-card-inner">
+                <div>
+                  {project.images && project.images.length > 0 ? (
+                    <img
+                      src={project.images[0]}
+                      alt={project.title}
+                      className="expandable-card-image"
+                    />
+                  ) : (
+                    <div className="expandable-card-placeholder">
+                      <span>Sin imagen</span>
+                    </div>
+                  )}
+                </div>
+                <div className="expandable-card-text-wrapper">
+                  <h3 className="expandable-card-title">
+                    {project.title}
+                  </h3>
+                  {project.date && (
+                    <p className="expandable-card-subtitle">
+                      {new Date(project.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long' })}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          </GlareHover>
         ))}
       </div>
       

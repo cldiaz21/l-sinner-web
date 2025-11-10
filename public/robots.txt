@@ -1,0 +1,29 @@
+# robots.txt para L SINN3R
+User-agent: *
+Allow: /
+
+# Permitir todos los buscadores
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Sitemap
+Sitemap: https://l-sinn3r.com/sitemap.xml
+
+# No indexar el admin
+Disallow: /admin
+Disallow: /login
+
+# Permitir recursos estáticos
+Allow: /images/
+Allow: /favicon.ico
+Allow: /static/
+
+# Crawl-delay (opcional, en segundos)
+Crawl-delay: 1
+

@@ -2,12 +2,23 @@
   position: relative;
   width: 100%;
   height: 0;
-  z-index: 100;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.staggered-menu-wrapper.fixed-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 0;
+  z-index: 40;
+  overflow: visible;
   pointer-events: none;
 }
 
 .staggered-menu-header {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -17,7 +28,7 @@
   padding: 2em;
   background: transparent;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 20;
 }
 
 .staggered-menu-header > * {
@@ -95,24 +106,16 @@
 
 .sm-toggle {
   position: relative;
-  display: inline-flex; /* Visible siempre en páginas principales */
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
+  gap: 0.3rem;
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #fff;
+  color: #e9e9ef;
   font-weight: 500;
   line-height: 1;
   overflow: visible;
-  z-index: 100;
-  padding: 0;
-}
-
-.sm-toggle:hover {
-  opacity: 0.8;
 }
 
 .sm-toggle:focus-visible {
@@ -173,142 +176,228 @@
   width: 100vw;
   height: 100vh;
   background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
-  display: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex !important;
   flex-direction: column;
   padding: 0;
-  overflow: hidden;
+  overflow-y: auto;
   z-index: 1000;
-  pointer-events: auto;
-  border: none;
-  animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 .staggered-menu-panel[aria-hidden="false"] {
-  display: flex;
+  pointer-events: auto !important;
 }
 
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+/* Asegurar que cuando el menú está cerrado, no bloquee nada */
+.staggered-menu-panel[aria-hidden="true"] {
+  pointer-events: none !important;
 }
-
-.sm-close-button {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  width: 48px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1001;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: auto;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.sm-close-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: rotate(90deg) scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.sm-close-button:active {
-  transform: rotate(90deg) scale(0.95);
-}
-
-.sm-close-button svg {
-  width: 20px;
-  height: 20px;
-  stroke-width: 2.5;
-}
-
 
 [data-position='left'] .staggered-menu-panel {
   right: auto;
   left: 0;
-  animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.sm-prelayers {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  will-change: transform, opacity;
 }
 
+[data-position='left'] .sm-prelayers {
+  right: auto;
+  left: 0;
+}
+
+.sm-prelayer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  will-change: transform, opacity;
+}
 
 .sm-panel-inner {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  width: 100%;
-  height: 100%;
-  padding: 0;
+  gap: 1.25rem;
+}
+
+.sm-socials {
+  margin-top: auto;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sm-socials-title {
   margin: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--sm-accent, #ff0000);
 }
 
-.sm-panel-inner::-webkit-scrollbar {
-  width: 6px;
+.sm-socials-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.sm-panel-inner::-webkit-scrollbar-track {
-  background: transparent;
+.sm-socials-list .sm-socials-link {
+  opacity: 1;
 }
 
-.sm-panel-inner::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
+.sm-socials-list:hover .sm-socials-link {
+  opacity: 0.35;
 }
 
-.sm-panel-inner::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+.sm-socials-list:hover .sm-socials-link:hover {
+  opacity: 1;
 }
 
-@media (max-width: 768px) {
-  .staggered-menu-header {
-    padding: 1.5em;
-  }
+.sm-socials-link:focus-visible {
+  outline: 2px solid var(--sm-accent, #ff0000);
+  outline-offset: 3px;
+}
 
-  .sm-header-right {
-    gap: 1rem;
-  }
+.sm-socials-list:focus-within .sm-socials-link {
+  opacity: 0.35;
+}
 
+.sm-socials-list:focus-within .sm-socials-link:focus-visible {
+  opacity: 1;
+}
+
+.sm-socials-link {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  position: relative;
+  padding: 2px 0;
+  display: inline-block;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.sm-socials-link:hover {
+  color: var(--sm-accent, #ff0000);
+}
+
+.sm-panel-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+}
+
+.sm-panel-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sm-panel-item {
+  position: relative;
+  color: #fff;
+  font-weight: 600;
+  font-size: 3.5rem;
+  cursor: pointer;
+  line-height: 1;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  transition: background 0.25s, color 0.25s;
+  display: inline-block;
+  text-decoration: none;
+  padding-right: 1.4em;
+}
+
+.staggered-menu-panel .sm-socials-list .sm-socials-link {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.staggered-menu-panel .sm-socials-list:hover .sm-socials-link:not(:hover) {
+  opacity: 0.35;
+}
+
+.staggered-menu-panel .sm-socials-list:focus-within .sm-socials-link:not(:focus-visible) {
+  opacity: 0.35;
+}
+
+.staggered-menu-panel .sm-socials-list .sm-socials-link:hover,
+.staggered-menu-panel .sm-socials-list .sm-socials-link:focus-visible {
+  opacity: 1;
+}
+
+.sm-panel-itemLabel {
+  display: inline-block;
+  will-change: transform;
+  transform-origin: 50% 100%;
+}
+
+.sm-panel-item:hover {
+  color: var(--sm-accent, #fff);
+}
+
+.sm-panel-list[data-numbering] {
+  counter-reset: smItem;
+}
+
+.sm-panel-list[data-numbering] .sm-panel-item::after {
+  counter-increment: smItem;
+  content: counter(smItem, decimal-leading-zero);
+  position: absolute;
+  top: 0.1em;
+  right: 2.8em;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--sm-accent, #5227ff);
+  letter-spacing: 0;
+  pointer-events: none;
+  user-select: none;
+  opacity: var(--sm-num-opacity, 0);
+}
+
+.sm-panel-itemWrap {
+  position: relative;
+  overflow: hidden;
+  line-height: 1;
+}
+
+@media (max-width: 1024px) {
   .staggered-menu-panel {
-    width: 100vw;
+    width: 100%;
     left: 0;
     right: 0;
   }
-
-  .sm-close-button {
-    top: 1.5rem;
-    right: 1.5rem;
-    width: 44px;
-    height: 44px;
+  
+  .sm-prelayers {
+    width: 100%;
+    left: 0;
+    right: 0;
   }
 
   .staggered-menu-wrapper[data-open] .sm-logo-img {
@@ -318,38 +407,18 @@
 
 @media (max-width: 640px) {
   .staggered-menu-panel {
-    width: 100vw;
+    width: 100%;
     left: 0;
     right: 0;
   }
-
-  .sm-close-button {
-    top: 1rem;
-    right: 1rem;
-    width: 40px;
-    height: 40px;
-  }
-
-  .sm-close-button svg {
-    width: 18px;
-    height: 18px;
+  
+  .sm-prelayers {
+    width: 100%;
+    left: 0;
+    right: 0;
   }
 
   .staggered-menu-wrapper[data-open] .sm-logo-img {
     filter: invert(100%);
   }
-
-  .staggered-menu-header {
-    padding: 1.5em;
-  }
-
-  .links-language {
-    gap: 0.25rem;
-  }
-
-  .link-language {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.4rem;
-  }
 }
-

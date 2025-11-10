@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import SEO from './components/SEO/SEO';
 import Home from './pages/Home/Home';
 import IdentidadSinners from './pages/IdentidadSinners/IdentidadSinners';
 import Proyectos from './pages/Proyectos/Proyectos';
@@ -20,6 +21,7 @@ function AppContent() {
 
   return (
     <div className="App">
+      <SEO />
       {!hideFooter && <Header />}
       <Routes>
         <Route path="/" element={<Home />} />

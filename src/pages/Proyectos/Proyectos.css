@@ -123,9 +123,10 @@
 .item-blog-destaqued .item-blog-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
+  margin: 0 auto;
 }
 
 /* Eliminado el efecto de zoom en hover */
@@ -214,20 +215,31 @@
   flex-direction: column;
 }
 
-.item-blog .item-blog-img {
+.item-blog-glare-wrapper {
+  width: 100%;
+  height: 100%;
   display: block;
+}
+
+.item-blog .item-blog-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1.5rem;
   overflow: hidden;
   width: 100%;
-  height: 300px;
-  background: rgba(0, 0, 0, 0.3);
+  min-height: 300px;
+  max-height: 500px;
+  background: rgba(0, 0, 0, 0.2);
   position: relative;
 }
 
 .item-blog .item-blog-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   object-position: center;
   display: block;
 }

@@ -5,6 +5,7 @@ import { LanguageContext } from '../../context/LanguageContext';
 import { Search } from 'lucide-react';
 import ContactForm from '../../components/ContactForm/ContactForm';
 import ProjectModal from '../../components/ProjectModal/ProjectModal';
+import GlareHover from '../../components/GlareHover/GlareHover';
 import './Proyectos.css';
 
 const Proyectos = () => {
@@ -148,44 +149,60 @@ const Proyectos = () => {
             {filteredProjects.length > 0 ? (
               filteredProjects.map((project) => (
                 <Col key={project.id} lg={6} className="mb-4">
-                  <div className="item-blog">
-                    <h6 className="item-blog-date">{formatDate(project.date)}</h6>
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleProjectClick(project);
-                      }}
-                    >
-                      {project.images && project.images.length > 0 ? (
-                        <img
-                          src={project.images[0]}
-                          alt={project.title}
-                          className="item-blog-img"
-                        />
-                      ) : (
-                        <div className="project-placeholder">
-                          <span>Sin imagen</span>
-                        </div>
-                      )}
-                    </a>
-                    <div className="item-blog-content">
-                      <h3 className="title4">{project.title}</h3>
-                      <div className="box-text1">
-                        <p>{truncateText(project.description)}</p>
-                      </div>
+                  <GlareHover
+                    width="100%"
+                    height="auto"
+                    background="transparent"
+                    borderRadius="0"
+                    borderColor="transparent"
+                    glareColor="#ffffff"
+                    glareOpacity={0.2}
+                    glareAngle={-30}
+                    glareSize={300}
+                    transitionDuration={800}
+                    playOnce={false}
+                    className="item-blog-glare-wrapper"
+                  >
+                    <div className="item-blog">
+                      <h6 className="item-blog-date">{formatDate(project.date)}</h6>
                       <a
                         href="#"
-                        className="link-design1"
                         onClick={(e) => {
                           e.preventDefault();
                           handleProjectClick(project);
                         }}
                       >
-                        {t.viewProject || 'Ver proyecto'}
+                        {project.images && project.images.length > 0 ? (
+                          <div className="item-blog-img">
+                            <img
+                              src={project.images[0]}
+                              alt={project.title}
+                            />
+                          </div>
+                        ) : (
+                          <div className="project-placeholder">
+                            <span>Sin imagen</span>
+                          </div>
+                        )}
                       </a>
+                      <div className="item-blog-content">
+                        <h3 className="title4">{project.title}</h3>
+                        <div className="box-text1">
+                          <p>{truncateText(project.description)}</p>
+                        </div>
+                        <a
+                          href="#"
+                          className="link-design1"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleProjectClick(project);
+                          }}
+                        >
+                          {t.viewProject || 'Ver proyecto'}
+                        </a>
+                      </div>
                     </div>
-                  </div>
+                  </GlareHover>
                 </Col>
               ))
             ) : (

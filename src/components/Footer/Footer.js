@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { FaInstagram, FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaInstagram, FaTiktok } from 'react-icons/fa';
 import { LanguageContext } from '../../context/LanguageContext';
 import ContactForm from '../ContactForm/ContactForm';
 import './Footer.css';
@@ -35,7 +35,7 @@ const Footer = () => {
             <h5>{t.footerFollow || 'Síguenos'}</h5>
             <div className="social-icons">
               <a 
-                href="https://instagram.com" 
+                href="https://instagram.com/l_sinn3r" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -43,28 +43,12 @@ const Footer = () => {
                 <FaInstagram />
               </a>
               <a 
-                href="https://facebook.com" 
+                href="https://tiktok.com/@art_sinn3er" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                aria-label="Facebook"
+                aria-label="TikTok"
               >
-                <FaFacebook />
-              </a>
-              <a 
-                href="https://twitter.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-              >
-                <FaTwitter />
-              </a>
-              <a 
-                href="https://linkedin.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-              >
-                <FaLinkedin />
+                <FaTiktok />
               </a>
             </div>
           </Col>
