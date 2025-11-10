@@ -57,7 +57,12 @@ const ProjectModal = ({ project, show, onHide }) => {
           )}
           
           <div className="item-section-custom1-text">
-            <div className="text-background-logo"></div>
+            <div 
+              className="text-background-logo"
+              style={{
+                backgroundImage: `url(${process.env.PUBLIC_URL || ''}/images/hero/logo.png)`
+              }}
+            ></div>
             <div className="text-content-wrapper">
               <h3 className="title2">{project.title}</h3>
               
