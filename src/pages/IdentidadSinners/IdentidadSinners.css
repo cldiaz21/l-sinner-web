@@ -11,21 +11,13 @@
   margin-top: 3rem;
 }
 
-/* Section Blocks (Visión, Estilo, Misión) */
-.identidad-block {
-  padding: 3rem;
+/* Section Blocks (Visión, Estilo, Misión) - Direct content */
+.magic-bento-content {
+  padding: 0;
   margin-bottom: 3rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-}
-
-.identidad-block:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .section-title {
@@ -35,14 +27,6 @@
   margin-bottom: 2rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.title-icon {
-  font-size: 2rem;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
 }
 
 .section-text {
@@ -67,34 +51,91 @@
   padding: 3rem;
   margin-top: 2rem;
   background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-.value-item {
-  padding: 2rem;
+/* Flip Card Styles */
+.value-flip-card-wrapper {
+  width: 100%;
+  height: 200px;
   margin-bottom: 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  border-left: 3px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  height: 100%;
-  min-height: 200px;
+  cursor: pointer;
 }
 
-.value-item:hover {
-  transform: translateY(-5px);
-  border-left-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.08);
+.value-flip-card {
+  perspective: 1000px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.value-flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.value-flip-card.flipped .value-flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.value-flip-card-front,
+.value-flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transform-style: preserve-3d;
+}
+
+.value-flip-card-front {
+  transform: rotateY(0deg);
+}
+
+.value-flip-card-back {
+  transform: rotateY(180deg);
+}
+
+.flip-indicator {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.75rem;
+  color: rgba(128, 128, 128, 0.6);
+  opacity: 0.7;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .value-title {
   color: #fff;
   font-size: clamp(1.2rem, 2vw, 1.4rem);
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin: 0;
   text-transform: uppercase;
   letter-spacing: 1px;
+  text-align: center;
 }
 
 .value-text {
@@ -102,6 +143,7 @@
   font-size: clamp(0.95rem, 1.5vw, 1.05rem);
   line-height: 1.7;
   margin: 0;
+  text-align: center;
 }
 
 /* Responsive Styles */
@@ -119,8 +161,8 @@
     font-size: clamp(1.5rem, 4vw, 2rem);
   }
 
-  .value-item {
-    min-height: 180px;
+  .value-flip-card-wrapper {
+    height: 180px;
   }
 }
 
@@ -141,13 +183,6 @@
 
   .section-title {
     font-size: clamp(1.3rem, 5vw, 1.8rem);
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .title-icon {
-    font-size: 1.5rem;
   }
 
   .section-text {
@@ -160,10 +195,14 @@
     margin-top: 1rem;
   }
 
-  .value-item {
-    padding: 1.5rem;
+  .value-flip-card-wrapper {
+    height: 160px;
     margin-bottom: 1.5rem;
-    min-height: auto;
+  }
+
+  .value-flip-card-front,
+  .value-flip-card-back {
+    padding: 1.5rem;
   }
 
   .value-title {
@@ -180,7 +219,12 @@
     font-size: 1.2rem;
   }
 
-  .value-item {
+  .value-flip-card-wrapper {
+    height: 140px;
+  }
+
+  .value-flip-card-front,
+  .value-flip-card-back {
     padding: 1.2rem;
   }
 }

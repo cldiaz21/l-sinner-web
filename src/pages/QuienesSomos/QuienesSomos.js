@@ -12,7 +12,7 @@ const QuienesSomos = () => {
     <div className="page-container">
       <HeroSection 
         title={t.quienesSomos || "Quienes Somos"} 
-        subtitle={t.quienesSomosSubtitle || "Sobre mí — Álvaro Meza / L SINN3R"}
+        subtitle={t.quienesSomosSubtitle || "Sobre L sinn3r"}
         animationType="particles"
       />
       <section className="quienes-somos-section">

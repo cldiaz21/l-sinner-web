@@ -128,8 +128,8 @@ const ContactForm = () => {
                 </div>
                 <div className="method-info">
                   <div className="method-label">{t.contactEmail || 'Email'}</div>
-                  <a href={`mailto:${t.contactEmailValue || 'contact@l-sinn3r.com'}`} className="method-value">
-                    {t.contactEmailValue || 'contact@l-sinn3r.com'}
+                  <a href={`mailto:${t.contactEmailValue || 'artsinn3r@gmail.com'}`} className="method-value">
+                    {t.contactEmailValue || 'artsinn3r@gmail.com'}
                   </a>
                 </div>
               </div>

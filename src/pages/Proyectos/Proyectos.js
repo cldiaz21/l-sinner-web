@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ProjectContext } from '../../context/ProjectContext';
 import { LanguageContext } from '../../context/LanguageContext';
@@ -15,6 +15,7 @@ const Proyectos = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const imageRefs = useRef({});
 
   // Obtener proyecto destacado (el primero o el que tenga featured: true)
   const featuredProject = projects.find(p => p.featured) || projects[0];
@@ -52,6 +53,42 @@ const Proyectos = () => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
   };
+
+  // Efecto de scroll parallax para las imágenes
+  useEffect(() => {
+    const handleScroll = () => {
+      Object.keys(imageRefs.current).forEach((key) => {
+        const container = imageRefs.current[key]?.container;
+        const image = imageRefs.current[key]?.image;
+        
+        if (!container || !image) return;
+
+        const rect = container.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const elementTop = rect.top;
+        const elementHeight = rect.height;
+        
+        // Calcular el porcentaje de scroll dentro del elemento
+        const scrollProgress = Math.max(0, Math.min(1, (windowHeight - elementTop) / (elementHeight + windowHeight)));
+        
+        // Calcular el desplazamiento de la imagen
+        // La imagen es 150% de altura, así que puede moverse un 50% adicional
+        const imageHeight = image.offsetHeight;
+        const containerHeight = container.offsetHeight;
+        const maxTranslate = imageHeight - containerHeight;
+        const translateY = -scrollProgress * maxTranslate * 1.2; // Factor de velocidad aumentado para que se note más
+        
+        image.style.transform = `translateY(${translateY}px)`;
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Llamar una vez para establecer el estado inicial
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [projects, filteredProjects, featuredProject]);
 
   return (
     <div className="page-container proyectos-page">
@@ -104,6 +141,11 @@ const Proyectos = () => {
               <a
                 href="#"
                 className="item-blog-img"
+                ref={(el) => {
+                  if (el && featuredProject) {
+                    imageRefs.current[`featured-${featuredProject.id}`] = { container: el };
+                  }
+                }}
                 onClick={(e) => {
                   e.preventDefault();
                   handleProjectClick(featuredProject);
@@ -111,13 +153,18 @@ const Proyectos = () => {
               >
                 {featuredProject.images && featuredProject.images.length > 0 ? (
                   <img
+                    ref={(el) => {
+                      if (el && featuredProject && imageRefs.current[`featured-${featuredProject.id}`]) {
+                        imageRefs.current[`featured-${featuredProject.id}`].image = el;
+                      }
+                    }}
                     src={featuredProject.images[0]}
                     alt={featuredProject.title}
                     className="img-fluid"
                   />
                 ) : (
                   <div className="project-placeholder-large">
-                    <span>Sin imagen</span>
+                    <span>{t.noImage || 'Sin imagen'}</span>
                   </div>
                 )}
               </a>
@@ -173,17 +220,29 @@ const Proyectos = () => {
                         }}
                       >
                         {project.images && project.images.length > 0 ? (
-                          <div className="item-blog-img">
+                          <div 
+                            className="item-blog-img"
+                            ref={(el) => {
+                              if (el) {
+                                imageRefs.current[project.id] = { container: el };
+                              }
+                            }}
+                          >
                             <img
+                              ref={(el) => {
+                                if (el && imageRefs.current[project.id]) {
+                                  imageRefs.current[project.id].image = el;
+                                }
+                              }}
                               src={project.images[0]}
                               alt={project.title}
                             />
                           </div>
-                        ) : (
-                          <div className="project-placeholder">
-                            <span>Sin imagen</span>
-                          </div>
-                        )}
+                                    ) : (
+                                      <div className="project-placeholder">
+                                        <span>{t.noImage || 'Sin imagen'}</span>
+                                      </div>
+                                    )}
                       </a>
                       <div className="item-blog-content">
                         <h3 className="title4">{project.title}</h3>

@@ -10,18 +10,14 @@ import VariableProximity from '../../components/VariableProximity/VariableProxim
 import './Home.css';
 
 const Home = () => {
-  const { getFeaturedProjects } = useContext(ProjectContext);
+  const { getFeaturedProjects, carouselImages } = useContext(ProjectContext);
   const { t } = useContext(LanguageContext);
   const featuredProjects = getFeaturedProjects();
   const quoteContainerRef = useRef(null);
 
-  // Imágenes del hero (coloca tus imágenes JPG en public/images/hero/)
-  const heroImages = [
-    '/images/hero/hero-1.JPG',
-    '/images/hero/hero-2.jpg',
-    '/images/hero/hero-3.JPG',
-    '/images/hero/hero-4.JPG',
-  ].filter(img => img); // Filtrar imágenes que no existan
+  // Imágenes del hero desde el contexto (gestionadas desde el admin)
+  // Solo usar imágenes del contexto, sin fallback a imágenes por defecto
+  const heroImages = carouselImages && carouselImages.length > 0 ? carouselImages : [];
 
   return (
     <div className="page-container">

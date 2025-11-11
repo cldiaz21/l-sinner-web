@@ -107,12 +107,6 @@
 
 .item-blog-destaqued .item-blog-img {
   display: block;
-  margin-bottom: 2rem;
-  overflow: hidden;
-}
-
-.item-blog-destaqued .item-blog-img {
-  display: block;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.3);
   min-height: 400px;
@@ -122,11 +116,14 @@
 
 .item-blog-destaqued .item-blog-img img {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: 150%;
+  min-height: 150%;
+  object-fit: cover;
   object-position: center;
   display: block;
   margin: 0 auto;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
 }
 
 /* Eliminado el efecto de zoom en hover */
@@ -236,12 +233,14 @@
 
 .item-blog .item-blog-img img {
   width: 100%;
-  height: 100%;
+  height: 150%;
+  min-height: 150%;
   max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   display: block;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
 }
 
 /* Eliminado el efecto de zoom en hover */

@@ -4,6 +4,24 @@
   color: #fff;
   position: relative;
   overflow-x: hidden;
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+/* Aplicar fuente a todos los elementos de texto */
+.App *,
+.App *::before,
+.App *::after {
+  font-family: "Josefin Sans", sans-serif !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+/* Excepciones para código */
+.App code,
+.App pre {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace !important;
 }
 
 .page-container {

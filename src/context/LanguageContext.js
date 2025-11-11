@@ -47,17 +47,17 @@ export const LanguageProvider = ({ children }) => {
       missionText: 'Nuestra misión es dar forma a las ideas y convertirlas en arte, creando proyectos que combinen estética, concepto y emoción. Desde campañas y piezas audiovisuales hasta dirección creativa o fotografía, buscamos que cada obra cuente sin palabras, transmitiendo aquello que solo puede sentirse.',
       missionQuote: 'L-SINN3R existe para crear desde la pasión, conectar desde la autenticidad y dejar una parte de sí en cada historia visual.',
       valuesTitle: 'VALORES L-SINN3R',
-      value1Title: '1. Autenticidad',
+      value1Title: 'Autenticidad',
       value1Text: 'Crear desde la verdad. Cada obra nace de experiencias reales, emociones honestas y una mirada que no teme mostrar lo que otros esconden.',
-      value2Title: '2. Imperfección',
+      value2Title: 'Imperfección',
       value2Text: 'Creemos en la belleza de lo imperfecto. En los errores, en lo humano y en la espontaneidad que convierte una idea en arte.',
-      value3Title: '3. Rebelión Creativa',
+      value3Title: 'Rebelión Creativa',
       value3Text: 'Romper moldes, cuestionar lo establecido y transformar lo común en algo único. Ser un sinner es atreverse a crear sin pedir permiso.',
-      value4Title: '4. Conexión Emocional',
+      value4Title: 'Conexión Emocional',
       value4Text: 'Cada proyecto busca tocar, no solo gustar. Lo importante no es lo que se ve, sino lo que se siente.',
-      value5Title: '5. Estética con Propósito',
+      value5Title: 'Estética con Propósito',
       value5Text: 'No buscamos solo lo visualmente atractivo, sino aquello que transmite significado y deja una huella.',
-      value6Title: '6. Dualidad',
+      value6Title: 'Dualidad',
       value6Text: 'Vivimos entre la luz y la sombra, entre lo correcto y lo caótico. De esa tensión nace nuestra visión: sincera, cruda y profundamente humana.',
       // Proyectos Page
       proyectosSubtitle: 'Explora nuestra galería de proyectos y descubre el arte detrás de cada imagen',
@@ -68,7 +68,7 @@ export const LanguageProvider = ({ children }) => {
       searchProjects: 'Buscar proyectos',
       closeSearch: 'Cerrar búsqueda',
       // Quienes Somos Page
-      quienesSomosSubtitle: 'Sobre mí — Álvaro Meza / L SINN3R',
+      quienesSomosSubtitle: 'Sobre L sinn3r',
       sobreMi: 'Sobre mí',
       alvaroMeza: 'Álvaro Meza',
       alvaroText1: 'Soy Álvaro Meza, estudiante de Publicidad y creador detrás de L SINN3R. Mi propósito es transformar ideas en experiencias visuales, desarrollando cada proyecto desde un enfoque conceptual que une mi formación publicitaria con mis pasiones: el arte, la música, lo audiovisual y la fotografía.',
@@ -82,7 +82,7 @@ export const LanguageProvider = ({ children }) => {
       contactTitle: 'Hablemos de tu proyecto',
       contactDescription: '¿Tienes preguntas? ¿Necesitas una demo? ¿Quieres integrar L-SINN3R en tu organización? Estamos aquí para ayudarte.',
       contactEmail: 'Email',
-      contactEmailValue: 'contact@l-sinn3r.com',
+      contactEmailValue: 'artsinn3r@gmail.com',
       contactSchedule: 'Horario',
       contactScheduleValue: '24/7 Soporte',
       contactNameLabel: 'Nombre completo',
@@ -123,6 +123,10 @@ export const LanguageProvider = ({ children }) => {
       // Staggered Menu
       menuOpen: 'Abrir menú',
       menuClose: 'Cerrar menú',
+      // Flip Card
+      flipCardText: 'Click para voltear',
+      // No Image
+      noImage: 'Sin imagen',
     },
     en: {
       home: 'Home',
@@ -153,17 +157,17 @@ export const LanguageProvider = ({ children }) => {
       missionText: 'Our mission is to shape ideas and turn them into art, creating projects that combine aesthetics, concept and emotion. From campaigns and audiovisual pieces to creative direction or photography, we seek that each work tells without words, transmitting what can only be felt.',
       missionQuote: 'L-SINN3R exists to create from passion, connect from authenticity and leave a part of itself in each visual story.',
       valuesTitle: 'L-SINN3R VALUES',
-      value1Title: '1. Authenticity',
+      value1Title: 'Authenticity',
       value1Text: 'Create from truth. Each work is born from real experiences, honest emotions and a look that is not afraid to show what others hide.',
-      value2Title: '2. Imperfection',
+      value2Title: 'Imperfection',
       value2Text: 'We believe in the beauty of imperfection. In mistakes, in the human and in the spontaneity that turns an idea into art.',
-      value3Title: '3. Creative Rebellion',
+      value3Title: 'Creative Rebellion',
       value3Text: 'Break molds, question the established and transform the common into something unique. Being a sinner is daring to create without asking permission.',
-      value4Title: '4. Emotional Connection',
+      value4Title: 'Emotional Connection',
       value4Text: 'Each project seeks to touch, not just please. What matters is not what is seen, but what is felt.',
-      value5Title: '5. Aesthetic with Purpose',
+      value5Title: 'Aesthetic with Purpose',
       value5Text: 'We don\'t just seek what is visually attractive, but what transmits meaning and leaves a mark.',
-      value6Title: '6. Duality',
+      value6Title: 'Duality',
       value6Text: 'We live between light and shadow, between what is correct and what is chaotic. From that tension our vision is born: sincere, raw and deeply human.',
       // Proyectos Page
       proyectosSubtitle: 'Explore our project gallery and discover the art behind each image',
@@ -174,7 +178,7 @@ export const LanguageProvider = ({ children }) => {
       searchProjects: 'Search projects',
       closeSearch: 'Close search',
       // Quienes Somos Page
-      quienesSomosSubtitle: 'About me — Álvaro Meza / L SINN3R',
+      quienesSomosSubtitle: 'About L sinn3r',
       sobreMi: 'About me',
       alvaroMeza: 'Álvaro Meza',
       alvaroText1: 'I am Álvaro Meza, Advertising student and creator behind L SINN3R. My purpose is to transform ideas into visual experiences, developing each project from a conceptual approach that unites my advertising background with my passions: art, music, audiovisual and photography.',
@@ -188,7 +192,7 @@ export const LanguageProvider = ({ children }) => {
       contactTitle: 'Let\'s talk about your project',
       contactDescription: 'Do you have questions? Do you need a demo? Do you want to integrate L-SINN3R into your organization? We are here to help you.',
       contactEmail: 'Email',
-      contactEmailValue: 'contact@l-sinn3r.com',
+      contactEmailValue: 'artsinn3r@gmail.com',
       contactSchedule: 'Schedule',
       contactScheduleValue: '24/7 Support',
       contactNameLabel: 'Full name',
@@ -229,6 +233,10 @@ export const LanguageProvider = ({ children }) => {
       // Staggered Menu
       menuOpen: 'Open menu',
       menuClose: 'Close menu',
+      // Flip Card
+      flipCardText: 'Click to flip',
+      // No Image
+      noImage: 'No image',
     }
   };
 

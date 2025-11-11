@@ -28,7 +28,7 @@ const InstagramFeed = ({ username = 'l_sinn3r' }) => {
           allowTransparency="true"
           frameBorder="0"
           scrolling="no"
-          style={{ border: 'none', overflow: 'hidden', width: '100%', height: '600px' }}
+          style={{ border: 'none', overflow: 'hidden', width: '100%' }}
         />
       </div>
       <div className="instagram-feed-footer">
