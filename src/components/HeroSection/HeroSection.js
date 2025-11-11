@@ -1,5 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import Slider from 'react-slick';
+import Particles from '../BackgroundAnimations/Particles';
+import Prism from '../BackgroundAnimations/Prism';
+import Beams from '../BackgroundAnimations/Beams';
+import Silk from '../BackgroundAnimations/Silk';
+import Lightning from '../BackgroundAnimations/Lightning';
 import './HeroSection.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -63,33 +68,97 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
     };
   }, [hasImages, images]);
 
-  // Si no hay imágenes, no mostrar nada
-  if (!hasImages) {
+  // Función para renderizar animaciones de fondo
+  const renderBackgroundAnimation = () => {
+    if (hasImages) return null; // Si hay imágenes, no mostrar animación
+
+    switch (animationType) {
+      case 'particles':
+        return (
+          <div className="hero-particles-wrapper" style={{ pointerEvents: 'none' }}>
+            <Particles 
+              particleCount={50}
+              speed={0.5}
+              particleColors={['#ffffff', '#ffffff', '#ffffff']}
+              moveParticlesOnHover={false}
+            />
+          </div>
+        );
+      case 'prism':
+        return (
+          <div style={{ pointerEvents: 'none' }}>
+            <Prism />
+          </div>
+        );
+      case 'beams':
+        return (
+          <div style={{ pointerEvents: 'none' }}>
+            <Beams />
+          </div>
+        );
+      case 'silk':
+        return (
+          <div style={{ pointerEvents: 'none' }}>
+            <Silk />
+          </div>
+        );
+      case 'lightning':
+        return (
+          <div style={{ pointerEvents: 'none' }}>
+            <Lightning />
+          </div>
+        );
+      default:
+        return (
+          <div className="hero-particles-wrapper" style={{ pointerEvents: 'none' }}>
+            <Particles 
+              particleCount={50}
+              speed={0.5}
+              particleColors={['#ffffff', '#ffffff', '#ffffff']}
+              moveParticlesOnHover={false}
+            />
+          </div>
+        );
+    }
+  };
+
+  // Si no hay imágenes ni animación, no mostrar nada
+  if (!hasImages && !animationType) {
     return null;
   }
 
-
   return (
     <section className="hero-section">
-      {/* Carrusel de imágenes de fondo */}
-      <div className="hero-carousel-wrapper">
-        <Slider {...carouselSettings} className="hero-carousel">
-          {images.map((image, index) => (
-            <div key={index} className="hero-carousel-slide">
-              <div 
-                className="hero-carousel-image" 
-                ref={(el) => {
-                  if (el) {
-                    heroImageRefs.current[`hero-${index}`] = el;
-                  }
-                }}
-                style={{ backgroundImage: `url(${image})` }}
-              >
-                <div className="hero-carousel-overlay"></div>
+      {/* Animaciones de fondo (solo si no hay imágenes) */}
+      {renderBackgroundAnimation()}
+      
+      {/* Carrusel de imágenes de fondo (solo si hay imágenes) */}
+      {hasImages && (
+        <div className="hero-carousel-wrapper">
+          <Slider {...carouselSettings} className="hero-carousel">
+            {images.map((image, index) => (
+              <div key={index} className="hero-carousel-slide">
+                <div 
+                  className="hero-carousel-image" 
+                  ref={(el) => {
+                    if (el) {
+                      heroImageRefs.current[`hero-${index}`] = el;
+                    }
+                  }}
+                  style={{ backgroundImage: `url(${image})` }}
+                >
+                  <div className="hero-carousel-overlay"></div>
+                </div>
               </div>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </Slider>
+        </div>
+      )}
+
+      {/* Contenido del hero (título y subtítulo) */}
+      <div className="hero-content">
+        {title && <h1 className="hero-title">{title}</h1>}
+        {subtitle && <p className="hero-subtitle">{subtitle}</p>}
       </div>
     </section>
   );
