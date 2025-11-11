@@ -31,7 +31,13 @@
 }
 
 .project-modal .modal-header {
+  background: #000000 !important;
   border-bottom: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  padding: 0 !important;
 }
 
 .project-modal .modal-body {
@@ -52,9 +58,9 @@
 .project-modal-header {
   border-bottom: none !important;
   border: none !important;
-  padding: 1.5rem 2rem;
-  background: transparent;
-  display: flex;
+  padding: 1.5rem 2rem !important;
+  background: transparent !important;
+  display: flex !important;
   align-items: center;
   justify-content: flex-end;
   position: absolute;
@@ -62,6 +68,7 @@
   right: 0;
   z-index: 1000;
   gap: 1.5rem;
+  border-radius: 0 !important;
 }
 
 .project-modal-title {
@@ -76,36 +83,48 @@
 }
 
 .project-modal-close {
-  background: transparent;
-  border: 2px solid #ffffff;
+  background: #000000;
+  border: 1px solid #1a1a1a;
   border-radius: 0;
   padding: 0;
   cursor: pointer;
-  color: #ffffff;
+  color: #666666;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
+  opacity: 0.9;
 }
 
 .project-modal-close:hover {
-  background: #ffffff;
-  color: #000000;
-  transform: rotate(90deg) scale(1.1);
+  background: #1a1a1a;
+  border-color: #333333;
+  color: #999999;
+  opacity: 1;
+  transform: rotate(90deg);
 }
 
 .project-modal-close:active {
-  transform: rotate(90deg) scale(1.0);
+  transform: rotate(90deg) scale(0.95);
+  background: #0a0a0a;
+  border-color: #2a2a2a;
+  color: #888888;
 }
 
 .project-modal-close svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+  color: #666666;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-modal-close:hover svg {
   stroke-width: 2.5;
-  color: inherit;
+  color: #999999;
 }
 
 .project-modal-body {

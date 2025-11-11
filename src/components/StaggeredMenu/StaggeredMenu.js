@@ -85,6 +85,12 @@ export const StaggeredMenu = ({
         const offscreen = position === 'left' ? -100 : 100;
         // Inicializar panel y prelayers fuera de la pantalla
         // Asegurar que pointer-events esté deshabilitado desde el inicio
+        // Forzar que el panel siempre ocupe toda la pantalla
+        panel.style.left = '0';
+        panel.style.right = '0';
+        panel.style.width = '100vw';
+        panel.style.minWidth = '100vw';
+        panel.style.maxWidth = '100vw';
         panel.style.pointerEvents = 'none';
         panel.setAttribute('aria-hidden', 'true');
         gsap.set(panel, { 
@@ -110,6 +116,12 @@ export const StaggeredMenu = ({
       if (panel) {
         const offscreen = position === 'left' ? -100 : 100;
         // Asegurar que pointer-events esté deshabilitado cuando está cerrado
+        // Forzar que el panel siempre ocupe toda la pantalla
+        panel.style.left = '0';
+        panel.style.right = '0';
+        panel.style.width = '100vw';
+        panel.style.minWidth = '100vw';
+        panel.style.maxWidth = '100vw';
         panel.style.pointerEvents = 'none';
         panel.setAttribute('aria-hidden', 'true');
         gsap.set(panel, { 
@@ -148,15 +160,26 @@ export const StaggeredMenu = ({
     }
     itemEntranceTweenRef.current?.kill();
 
-    const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel'));
-    const numberEls = Array.from(panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item'));
-    const socialTitle = panel.querySelector('.sm-socials-title');
-    const socialLinks = Array.from(panel.querySelectorAll('.sm-socials-link'));
+    // Detectar si hay children personalizados (como FlowingMenu)
+    const hasChildren = !!panel.querySelector('.menu-wrap, .menu');
+    
+    // Solo buscar elementos del menú por defecto si no hay children personalizados
+    const itemEls = hasChildren ? [] : Array.from(panel.querySelectorAll('.sm-panel-itemLabel'));
+    const numberEls = hasChildren ? [] : Array.from(panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item'));
+    const socialTitle = hasChildren ? null : panel.querySelector('.sm-socials-title');
+    const socialLinks = hasChildren ? [] : Array.from(panel.querySelectorAll('.sm-socials-link'));
 
     const offscreen = position === 'left' ? -100 : 100;
 
     // Asegurar que el panel y los prelayers estén en el estado inicial correcto
     // Deshabilitar pointer-events cuando está cerrado
+    // Forzar que el panel siempre ocupe toda la pantalla
+    panel.style.left = '0';
+    panel.style.right = '0';
+    panel.style.width = '100vw';
+    panel.style.minWidth = '100vw';
+    panel.style.maxWidth = '100vw';
+    
     gsap.set(panel, {
       xPercent: offscreen,
       autoAlpha: 0,
@@ -171,17 +194,26 @@ export const StaggeredMenu = ({
     });
 
     // Configurar estados iniciales de los elementos internos
-    if (itemEls.length) {
+    // Solo animar elementos del menú por defecto, no los children personalizados (como FlowingMenu)
+    if (itemEls.length && !hasChildren) {
       gsap.set(itemEls, { yPercent: 140, rotate: 10, opacity: 0 });
     }
-    if (numberEls.length) {
+    if (numberEls.length && !hasChildren) {
       gsap.set(numberEls, { '--sm-num-opacity': 0 });
     }
-    if (socialTitle) {
+    if (socialTitle && !hasChildren) {
       gsap.set(socialTitle, { opacity: 0 });
     }
-    if (socialLinks.length) {
+    if (socialLinks.length && !hasChildren) {
       gsap.set(socialLinks, { y: 25, opacity: 0 });
+    }
+    
+    // Si hay children personalizados (como FlowingMenu), asegurar que sean visibles
+    if (hasChildren) {
+      const childrenElements = panel.querySelectorAll('.menu-wrap, .menu, .menu__item, .menu__item-link');
+      childrenElements.forEach(el => {
+        gsap.set(el, { opacity: 1, visibility: 'visible', yPercent: 0, rotate: 0 });
+      });
     }
 
     const tl = gsap.timeline({ paused: true });
@@ -209,8 +241,38 @@ export const StaggeredMenu = ({
     // Animar panel
     // Primero asegurar que pointer-events esté habilitado
     if (panel) {
+      // Forzar que el panel siempre ocupe toda la pantalla
+      panel.style.left = '0';
+      panel.style.right = '0';
+      panel.style.width = '100vw';
+      panel.style.minWidth = '100vw';
+      panel.style.maxWidth = '100vw';
+      
       panel.style.pointerEvents = 'auto';
       panel.setAttribute('aria-hidden', 'false');
+      // Forzar visibilidad del panel y su contenido
+      panel.style.visibility = 'visible';
+      panel.style.opacity = '1';
+      
+      // Asegurar que el botón de cerrar sea visible
+      const closeButton = panel.querySelector('.sm-close-button');
+      if (closeButton) {
+        closeButton.style.display = 'flex';
+        closeButton.style.visibility = 'visible';
+        closeButton.style.opacity = '1';
+        closeButton.style.pointerEvents = 'auto';
+        closeButton.style.zIndex = '1001';
+      }
+      
+      // Si hay children personalizados, asegurar que sean visibles inmediatamente
+      if (hasChildren) {
+        const childrenElements = panel.querySelectorAll('.menu-wrap, .menu, .menu__item, .menu__item-link');
+        childrenElements.forEach(el => {
+          el.style.visibility = 'visible';
+          el.style.opacity = '1';
+          el.style.display = '';
+        });
+      }
     }
     
     tl.to(
@@ -219,12 +281,58 @@ export const StaggeredMenu = ({
         xPercent: 0, 
         autoAlpha: 1,
         duration: panelDuration, 
-        ease: 'power4.out' 
+        ease: 'power4.out',
+        onUpdate: () => {
+          // Forzar que el panel siempre ocupe toda la pantalla durante la animación
+          if (panel) {
+            panel.style.left = '0';
+            panel.style.right = '0';
+            panel.style.width = '100vw';
+            panel.style.minWidth = '100vw';
+            panel.style.maxWidth = '100vw';
+          }
+        },
+        onComplete: () => {
+          // Asegurar que el contenido sea visible después de la animación
+          if (panel) {
+            // Asegurar que el panel siempre ocupe toda la pantalla
+            panel.style.left = '0';
+            panel.style.right = '0';
+            panel.style.width = '100vw';
+            panel.style.minWidth = '100vw';
+            panel.style.maxWidth = '100vw';
+            
+            panel.style.visibility = 'visible';
+            panel.style.opacity = '1';
+            
+            // Asegurar que el botón de cerrar sea visible
+            const closeButton = panel.querySelector('.sm-close-button');
+            if (closeButton) {
+              closeButton.style.display = 'flex';
+              closeButton.style.visibility = 'visible';
+              closeButton.style.opacity = '1';
+              closeButton.style.pointerEvents = 'auto';
+              closeButton.style.zIndex = '1001';
+            }
+            
+            // Asegurar que los children personalizados sean visibles
+            if (hasChildren) {
+              const childrenElements = panel.querySelectorAll('.menu-wrap, .menu, .menu__item, .menu__item-link');
+              childrenElements.forEach(el => {
+                el.style.visibility = 'visible';
+                el.style.opacity = '1';
+                el.style.display = '';
+                el.style.color = '#ffffff';
+              });
+            }
+          }
+        }
       },
       panelInsertTime
     );
 
-    if (itemEls.length) {
+    // Solo animar elementos del menú por defecto si no hay children personalizados
+    if (itemEls.length && !hasChildren) {
       const itemsStartRatio = 0.15;
       const itemsStart = panelInsertTime + panelDuration * itemsStartRatio;
       tl.to(
@@ -250,6 +358,24 @@ export const StaggeredMenu = ({
             stagger: { each: 0.08, from: 'start' }
           },
           itemsStart + 0.1
+        );
+      }
+    } else if (hasChildren) {
+      // Si hay children personalizados, hacerlos visibles inmediatamente después de que el panel se abra
+      const childrenElements = panel.querySelectorAll('.menu-wrap, .menu, .menu__item, .menu__item-link');
+      if (childrenElements.length > 0) {
+        tl.to(
+          childrenElements,
+          {
+            opacity: 1,
+            visibility: 'visible',
+            yPercent: 0,
+            rotate: 0,
+            duration: 0.5,
+            ease: 'power2.out',
+            stagger: { each: 0.05, from: 'start' }
+          },
+          panelInsertTime + panelDuration * 0.2
         );
       }
     }
@@ -339,6 +465,12 @@ export const StaggeredMenu = ({
       onComplete: () => {
         // Deshabilitar pointer-events cuando está cerrado
         if (panel) {
+          // Asegurar que el panel siempre ocupe toda la pantalla
+          panel.style.left = '0';
+          panel.style.right = '0';
+          panel.style.width = '100vw';
+          panel.style.minWidth = '100vw';
+          panel.style.maxWidth = '100vw';
           panel.style.pointerEvents = 'none';
           panel.setAttribute('aria-hidden', 'true');
         }
@@ -573,9 +705,25 @@ export const StaggeredMenu = ({
         aria-hidden={!open}
         style={{ 
           display: 'flex',
-          pointerEvents: open ? 'auto' : 'none'
+          pointerEvents: open ? 'auto' : 'none',
+          left: '0',
+          right: '0',
+          width: '100vw',
+          minWidth: '100vw',
+          maxWidth: '100vw'
         }}
       >
+        <button 
+          className="sm-close-button" 
+          onClick={toggleMenu}
+          aria-label={t.modalClose || 'Cerrar menú'}
+          type="button"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
         <div className="sm-panel-inner">
           {children || (
             <>

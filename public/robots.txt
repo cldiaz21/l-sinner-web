@@ -13,7 +13,7 @@ User-agent: Slurp
 Allow: /
 
 # Sitemap
-Sitemap: https://l-sinn3r.com/sitemap.xml
+Sitemap: https://l-sinn3r.cl/sitemap.xml
 
 # No indexar el admin
 Disallow: /admin

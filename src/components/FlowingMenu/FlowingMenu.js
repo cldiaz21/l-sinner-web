@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './FlowingMenu.css';
 
 function FlowingMenu({ items = [] }) {
@@ -7,16 +7,15 @@ function FlowingMenu({ items = [] }) {
     <div className="menu-wrap">
       <nav className="menu">
         {items.map((item, idx) => (
-          <MenuItem key={idx} {...item} index={idx + 1} />
+          <MenuItem key={idx} {...item} />
         ))}
       </nav>
     </div>
   );
 }
 
-function MenuItem({ link, text, gradient, index }) {
+function MenuItem({ link, text }) {
   const navigate = useNavigate();
-  const itemRef = React.useRef(null);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -30,25 +29,14 @@ function MenuItem({ link, text, gradient, index }) {
     }
   };
 
-  const formatNumber = (num) => {
-    return num < 10 ? `0${num}` : `${num}`;
-  };
-
   return (
-    <div 
-      className="menu__item" 
-      ref={itemRef}
-      style={{ 
-        background: gradient || 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(20, 20, 20, 0.5) 100%)'
-      }}
-    >
+    <div className="menu__item">
       <a 
         className="menu__item-link" 
         href={link || '#'} 
         onClick={handleClick}
       >
-        <span className="menu__item-text">{text}</span>
-        <span className="menu__item-number">{formatNumber(index)}</span>
+        {text}
       </a>
     </div>
   );

@@ -1,50 +1,40 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { ProjectContext } from '../../context/ProjectContext';
+import React, { useContext, useEffect, useState } from 'react';
 import { LanguageContext } from '../../context/LanguageContext';
 import StaggeredMenu from '../StaggeredMenu/StaggeredMenu';
 import FlowingMenu from '../FlowingMenu/FlowingMenu';
 import './Header.css';
 
 const Header = () => {
-  const { getFeaturedProjects } = useContext(ProjectContext);
   const { t, language, changeLanguage } = useContext(LanguageContext);
-  const menuItemsRef = useRef([]);
+  const [menuItems, setMenuItems] = useState([]);
 
-  // Obtener proyectos destacados para usar sus imágenes en el menú
-  const featuredProjects = getFeaturedProjects();
-
-  // Crear items del menú con gradientes en escala de grises
+  // Crear items del menú
   useEffect(() => {
     const items = [
       { 
         link: '/', 
-        text: t.home,
-        gradient: 'linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%)'
+        text: t.home || 'Home'
       },
       { 
         link: '/identidad-sinners', 
-        text: t.identidad,
-        gradient: 'linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(10, 10, 10, 0.9) 100%)'
+        text: t.identidad || 'Identidad'
       },
       { 
         link: '/proyectos', 
-        text: t.proyectos,
-        gradient: 'linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(40, 40, 40, 0.8) 100%)'
+        text: t.proyectos || 'Proyectos'
       },
       { 
         link: '/quienes-somos', 
-        text: t.quienesSomos,
-        gradient: 'linear-gradient(135deg, rgba(20, 20, 20, 0.9) 0%, rgba(0, 0, 0, 0.8) 100%)'
+        text: t.quienesSomos || 'Quienes Somos'
       },
       { 
         link: '/contacto', 
-        text: t.contacto,
-        gradient: 'linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(30, 30, 30, 0.8) 100%)'
+        text: t.contacto || 'Contacto'
       }
     ];
 
-    menuItemsRef.current = items;
-  }, [t, featuredProjects]);
+    setMenuItems(items);
+  }, [t]);
 
 
   return (
@@ -62,7 +52,7 @@ const Header = () => {
       onChangeLanguage={changeLanguage}
       logoUrl="/images/hero/logo.png"
     >
-      <FlowingMenu items={menuItemsRef.current} />
+      <FlowingMenu items={menuItems} />
     </StaggeredMenu>
   );
 };
