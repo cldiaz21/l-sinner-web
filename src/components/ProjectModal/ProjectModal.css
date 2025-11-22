@@ -368,12 +368,12 @@
 }
 
 .project-modal-carousel .carousel-control-prev {
-  left: 2rem !important;
+  left: -80px !important;
   right: auto !important;
 }
 
 .project-modal-carousel .carousel-control-next {
-  right: 2rem !important;
+  right: -80px !important;
   left: auto !important;
 }
 
@@ -535,11 +535,11 @@
   }
 
   .project-modal-carousel .carousel-control-prev {
-    left: 1.5rem !important;
+    left: -70px !important;
   }
 
   .project-modal-carousel .carousel-control-next {
-    right: 1.5rem !important;
+    right: -70px !important;
   }
 
   .project-modal-carousel .carousel-control-prev-icon,
@@ -602,11 +602,11 @@
   }
 
   .project-modal-carousel .carousel-control-prev {
-    left: 1rem !important;
+    left: 0.5rem !important;
   }
 
   .project-modal-carousel .carousel-control-next {
-    right: 1rem !important;
+    right: 0.5rem !important;
   }
 
   .project-modal-carousel .carousel-control-prev-icon,
