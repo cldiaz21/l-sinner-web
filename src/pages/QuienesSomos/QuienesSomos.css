@@ -9,23 +9,16 @@
 
 /* Sección de Álvaro Meza - Full Width */
 .alvaro-meza-section {
-  width: 100%;
-  max-width: 100%;
+  width: 100vw;
   position: relative;
-  padding: 4rem 0;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding: 5rem 0;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-}
-
-@media (min-width: 993px) {
-  .alvaro-meza-section {
-    width: 100vw;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-  }
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .alvaro-meza-row {
