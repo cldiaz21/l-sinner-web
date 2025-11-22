@@ -10,10 +10,10 @@ const QuienesSomos = () => {
   const { t } = useContext(LanguageContext);
   return (
     <div className="page-container">
-      <HeroSection 
-        title={t.quienesSomos || "Quienes Somos"} 
+      <HeroSection
+        title={t.quienesSomos || "Quienes Somos"}
         subtitle={t.quienesSomosSubtitle || "Sobre L sinn3r"}
-        animationType="particles"
+        animationType="silk"
       />
       <section className="quienes-somos-section">
         <Container>

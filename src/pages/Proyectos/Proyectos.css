@@ -5,9 +5,10 @@
 
 /* Banner de Búsqueda */
 .banner-articles {
-  padding: 3rem 0;
+  padding: 5rem 0 3rem 0;
   background: #000;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 80px;
 }
 
 .search-banner-articles {

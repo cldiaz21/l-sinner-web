@@ -347,30 +347,29 @@
   border-radius: 0;
 }
 
-/* Carousel custom styles - Flechas más chicas y una al lado de la otra */
+/* Carousel custom styles - Flechas a los lados con glassmorphism */
 .project-modal-carousel .carousel-control-prev,
 .project-modal-carousel .carousel-control-next {
-  width: 40px !important;
-  height: 40px !important;
-  top: auto !important;
-  bottom: 2rem !important;
-  left: auto !important;
-  right: auto !important;
-  transform: none !important;
-  background: rgba(0, 0, 0, 0.7) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-radius: 0 !important;
-  opacity: 0.9 !important;
+  width: 50px !important;
+  height: 50px !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  opacity: 0.8 !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(15px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
   z-index: 10 !important;
   position: absolute !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
 }
 
 .project-modal-carousel .carousel-control-prev {
-  right: calc(2rem + 50px) !important;
-  left: auto !important;
+  left: 2rem !important;
+  right: auto !important;
 }
 
 .project-modal-carousel .carousel-control-next {
@@ -381,15 +380,15 @@
 .project-modal-carousel .carousel-control-prev:hover,
 .project-modal-carousel .carousel-control-next:hover {
   opacity: 1 !important;
-  background: rgba(0, 0, 0, 0.8) !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  transform: scale(1.1) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  transform: translateY(-50%) scale(1.1) !important;
 }
 
 .project-modal-carousel .carousel-control-prev-icon,
 .project-modal-carousel .carousel-control-next-icon {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   filter: brightness(0) invert(1);
 }
 
@@ -531,19 +530,16 @@
 
   .project-modal-carousel .carousel-control-prev,
   .project-modal-carousel .carousel-control-next {
-    width: 36px !important;
-    height: 36px !important;
-    bottom: 1.5rem !important;
+    width: 45px !important;
+    height: 45px !important;
   }
 
   .project-modal-carousel .carousel-control-prev {
-    right: calc(1rem + 46px) !important;
-    left: auto !important;
+    left: 1.5rem !important;
   }
 
   .project-modal-carousel .carousel-control-next {
-    right: 1rem !important;
-    left: auto !important;
+    right: 1.5rem !important;
   }
 
   .project-modal-carousel .carousel-control-prev-icon,
@@ -601,19 +597,16 @@
 
   .project-modal-carousel .carousel-control-prev,
   .project-modal-carousel .carousel-control-next {
-    width: 32px !important;
-    height: 32px !important;
-    bottom: 1rem !important;
+    width: 40px !important;
+    height: 40px !important;
   }
 
   .project-modal-carousel .carousel-control-prev {
-    right: calc(0.75rem + 42px) !important;
-    left: auto !important;
+    left: 1rem !important;
   }
 
   .project-modal-carousel .carousel-control-next {
-    right: 0.75rem !important;
-    left: auto !important;
+    right: 1rem !important;
   }
 
   .project-modal-carousel .carousel-control-prev-icon,
