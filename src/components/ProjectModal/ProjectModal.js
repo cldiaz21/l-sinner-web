@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Modal, Carousel } from 'react-bootstrap';
 import { X } from 'lucide-react';
 import { LanguageContext } from '../../context/LanguageContext';
@@ -7,10 +7,26 @@ import './ProjectModal.css';
 
 const ProjectModal = ({ project, show, onHide }) => {
   const { t, language } = useContext(LanguageContext);
-  
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [loadedImages, setLoadedImages] = useState(new Set());
+
   if (!project) return null;
 
   const hasMultipleImages = project.images && project.images.length > 1;
+
+  const handleImageClick = () => {
+    setIsZoomed(!isZoomed);
+  };
+
+  const handleSelect = (selectedIndex) => {
+    setActiveIndex(selectedIndex);
+    setIsZoomed(false); // Reset zoom cuando cambia la imagen
+  };
+
+  const handleImageLoad = (index) => {
+    setLoadedImages(prev => new Set(prev).add(index));
+  };
 
   return (
     <Modal 
@@ -39,15 +55,30 @@ const ProjectModal = ({ project, show, onHide }) => {
         {/* Carrusel de imágenes - Visualizador principal */}
         {project.images && project.images.length > 0 && (
           <div className="project-modal-image-viewer">
-            <div className={`project-modal-carousel ${!hasMultipleImages ? 'single-image' : ''}`}>
-              <Carousel controls={hasMultipleImages} indicators={hasMultipleImages} interval={null}>
+            <div className={`project-modal-carousel ${!hasMultipleImages ? 'single-image' : ''} ${isZoomed ? 'zoomed' : ''}`}>
+              <Carousel
+                controls={hasMultipleImages}
+                indicators={hasMultipleImages}
+                interval={null}
+                activeIndex={activeIndex}
+                onSelect={handleSelect}
+              >
                 {project.images.map((image, index) => (
                   <Carousel.Item key={index}>
                     <div className="project-modal-image-container">
+                      {!loadedImages.has(index) && (
+                        <div className="image-loading-placeholder">
+                          <div className="loading-spinner"></div>
+                        </div>
+                      )}
                       <img
                         src={image}
                         alt={`${project.title} - Imagen ${index + 1}`}
-                        className="project-modal-image"
+                        className={`project-modal-image ${isZoomed ? 'zoomed' : ''} ${loadedImages.has(index) ? 'loaded' : 'loading'}`}
+                        onClick={handleImageClick}
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        decoding="async"
+                        onLoad={() => handleImageLoad(index)}
                         onError={(e) => {
                           console.error('Error loading image:', image);
                           e.target.style.display = 'none';
