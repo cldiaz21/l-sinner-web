@@ -112,6 +112,7 @@
   overflow: hidden;
   position: relative;
   min-height: 0;
+  background: transparent !important;
 }
 
 .project-modal-carousel {
@@ -122,9 +123,19 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  background: transparent !important;
 }
 
-.project-modal-carousel .carousel {
+/* Sobrescribir fondos blancos de Bootstrap específicamente para carousel y items */
+.project-modal-carousel .carousel,
+.project-modal-carousel .carousel-inner,
+.project-modal-carousel .carousel-item {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.project-modal-carousel .carousel,
+.project-modal-carousel .carousel.slide {
   width: 100%;
   height: 100%;
   max-height: 100%;
@@ -133,43 +144,38 @@
   justify-content: center;
   position: relative;
   background: transparent !important;
+  background-color: transparent !important;
 }
 
 .project-modal-carousel .carousel-inner {
   width: 100%;
   height: 100%;
   max-height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   background: transparent !important;
+  background-color: transparent !important;
 }
 
-/* Eliminar transiciones de fade que causan problemas */
-.project-modal-carousel .carousel-item.active,
-.project-modal-carousel .carousel-item-next,
-.project-modal-carousel .carousel-item-prev {
-  display: flex !important;
-}
-
-.project-modal-carousel .carousel-fade .carousel-item {
-  opacity: 1 !important;
-  transition: none !important;
-}
-
+/* Carousel items - posicionamiento absoluto para superposición */
 .project-modal-carousel .carousel-item {
   width: 100%;
   height: 100%;
   max-height: 100%;
-  display: flex !important;
+  display: none !important;
+  position: absolute;
+  top: 0;
+  left: 0;
   align-items: center;
   justify-content: center;
   background: transparent !important;
+  background-color: transparent !important;
 }
 
 .project-modal-carousel .carousel-item.active {
   display: flex !important;
+  position: relative;
   background: transparent !important;
+  background-color: transparent !important;
 }
 
 .project-modal-image-container {
@@ -189,13 +195,13 @@
   max-height: 100%;
   width: auto;
   height: auto;
-  min-height: 300px;
   object-fit: contain;
   display: block !important;
   margin: 0 auto;
   opacity: 1 !important;
   visibility: visible !important;
   background: transparent !important;
+  background-color: transparent !important;
 }
 
 /* Carousel custom styles - Flechas a los lados con glassmorphism */
