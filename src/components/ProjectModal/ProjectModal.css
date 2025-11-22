@@ -108,11 +108,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 0;
   overflow: hidden;
   position: relative;
   min-height: 0;
-  background: transparent !important;
+  background: #000 !important;
 }
 
 .project-modal-carousel {
@@ -123,15 +123,17 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background: transparent !important;
+  background: #000 !important;
 }
 
-/* Sobrescribir fondos blancos de Bootstrap específicamente para carousel y items */
-.project-modal-carousel .carousel,
-.project-modal-carousel .carousel-inner,
-.project-modal-carousel .carousel-item {
-  background-color: transparent !important;
-  background-image: none !important;
+/* Prevenir fondos blancos de Bootstrap en elementos no especificados */
+.project-modal-carousel .carousel-fade .carousel-item {
+  opacity: 1 !important;
+}
+
+.project-modal-carousel .carousel-item-next,
+.project-modal-carousel .carousel-item-prev {
+  background: #000 !important;
 }
 
 .project-modal-carousel .carousel,
@@ -143,8 +145,8 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #000 !important;
+  background-color: #000 !important;
 }
 
 .project-modal-carousel .carousel-inner {
@@ -152,8 +154,8 @@
   height: 100%;
   max-height: 100%;
   position: relative;
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #000 !important;
+  background-color: #000 !important;
 }
 
 /* Carousel items - posicionamiento absoluto para superposición */
@@ -167,15 +169,15 @@
   left: 0;
   align-items: center;
   justify-content: center;
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #000 !important;
+  background-color: #000 !important;
 }
 
 .project-modal-carousel .carousel-item.active {
   display: flex !important;
   position: relative;
-  background: transparent !important;
-  background-color: transparent !important;
+  background: #000 !important;
+  background-color: #000 !important;
 }
 
 .project-modal-image-container {
@@ -185,19 +187,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  background: transparent !important;
+  padding: 0;
+  background: #000 !important;
   position: relative;
 }
 
 .project-modal-image {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   display: block !important;
-  margin: 0 auto;
   opacity: 1 !important;
   visibility: visible !important;
   background: transparent !important;
