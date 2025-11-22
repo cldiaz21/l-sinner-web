@@ -350,36 +350,40 @@
 /* Carousel custom styles - Flechas más chicas y una al lado de la otra */
 .project-modal-carousel .carousel-control-prev,
 .project-modal-carousel .carousel-control-next {
-  width: 40px;
-  height: 40px;
-  top: auto;
-  bottom: 2rem;
-  transform: none;
-  background: rgba(0, 0, 0, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 0;
-  opacity: 0.9;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 10;
+  width: 40px !important;
+  height: 40px !important;
+  top: auto !important;
+  bottom: 2rem !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 0 !important;
+  opacity: 0.9 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  z-index: 10 !important;
+  position: absolute !important;
 }
 
 .project-modal-carousel .carousel-control-prev {
-  left: auto;
-  right: calc(2rem + 50px);
+  right: calc(2rem + 50px) !important;
+  left: auto !important;
 }
 
 .project-modal-carousel .carousel-control-next {
-  right: 2rem;
+  right: 2rem !important;
+  left: auto !important;
 }
 
 .project-modal-carousel .carousel-control-prev:hover,
 .project-modal-carousel .carousel-control-next:hover {
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.8);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: scale(1.1);
+  opacity: 1 !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: scale(1.1) !important;
 }
 
 .project-modal-carousel .carousel-control-prev-icon,
@@ -527,17 +531,19 @@
 
   .project-modal-carousel .carousel-control-prev,
   .project-modal-carousel .carousel-control-next {
-    width: 36px;
-    height: 36px;
-    bottom: 1.5rem;
+    width: 36px !important;
+    height: 36px !important;
+    bottom: 1.5rem !important;
   }
 
   .project-modal-carousel .carousel-control-prev {
-    right: calc(1rem + 46px);
+    right: calc(1rem + 46px) !important;
+    left: auto !important;
   }
 
   .project-modal-carousel .carousel-control-next {
-    right: 1rem;
+    right: 1rem !important;
+    left: auto !important;
   }
 
   .project-modal-carousel .carousel-control-prev-icon,
@@ -595,17 +601,19 @@
 
   .project-modal-carousel .carousel-control-prev,
   .project-modal-carousel .carousel-control-next {
-    width: 32px;
-    height: 32px;
-    bottom: 1rem;
+    width: 32px !important;
+    height: 32px !important;
+    bottom: 1rem !important;
   }
 
   .project-modal-carousel .carousel-control-prev {
-    right: calc(0.75rem + 42px);
+    right: calc(0.75rem + 42px) !important;
+    left: auto !important;
   }
 
   .project-modal-carousel .carousel-control-next {
-    right: 0.75rem;
+    right: 0.75rem !important;
+    left: auto !important;
   }
 
   .project-modal-carousel .carousel-control-prev-icon,
