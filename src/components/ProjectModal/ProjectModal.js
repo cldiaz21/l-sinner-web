@@ -10,22 +10,87 @@ const ProjectModal = ({ project, show, onHide }) => {
   const [isZoomed, setIsZoomed] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [loadedImages, setLoadedImages] = useState(new Set());
+  const [dragState, setDragState] = useState({
+    isDragging: false,
+    startX: 0,
+    startY: 0,
+    translateX: 0,
+    translateY: 0
+  });
 
   if (!project) return null;
 
   const hasMultipleImages = project.images && project.images.length > 1;
 
-  const handleImageClick = () => {
+  const handleImageClick = (e) => {
+    // No hacer zoom si está arrastrando
+    if (dragState.isDragging) return;
     setIsZoomed(!isZoomed);
+    // Reset posición al salir del zoom
+    if (isZoomed) {
+      setDragState({
+        isDragging: false,
+        startX: 0,
+        startY: 0,
+        translateX: 0,
+        translateY: 0
+      });
+    }
   };
 
   const handleSelect = (selectedIndex) => {
     setActiveIndex(selectedIndex);
     setIsZoomed(false); // Reset zoom cuando cambia la imagen
+    setDragState({
+      isDragging: false,
+      startX: 0,
+      startY: 0,
+      translateX: 0,
+      translateY: 0
+    });
   };
 
   const handleImageLoad = (index) => {
     setLoadedImages(prev => new Set(prev).add(index));
+  };
+
+  const handleMouseDown = (e) => {
+    if (!isZoomed) return;
+    e.preventDefault();
+    setDragState({
+      ...dragState,
+      isDragging: true,
+      startX: e.clientX - dragState.translateX,
+      startY: e.clientY - dragState.translateY
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isZoomed || !dragState.isDragging) return;
+    e.preventDefault();
+    const newTranslateX = e.clientX - dragState.startX;
+    const newTranslateY = e.clientY - dragState.startY;
+    setDragState({
+      ...dragState,
+      translateX: newTranslateX,
+      translateY: newTranslateY
+    });
+  };
+
+  const handleMouseUp = () => {
+    if (!isZoomed) return;
+    setDragState({
+      ...dragState,
+      isDragging: false
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (!isZoomed || !dragState.isDragging) return;
+    setDragState({
+      ...dragState,
+      isDragging: false
+    });
   };
 
   return (
@@ -65,7 +130,13 @@ const ProjectModal = ({ project, show, onHide }) => {
               >
                 {project.images.map((image, index) => (
                   <Carousel.Item key={index}>
-                    <div className="project-modal-image-container">
+                    <div
+                      className="project-modal-image-container"
+                      onMouseDown={handleMouseDown}
+                      onMouseMove={handleMouseMove}
+                      onMouseUp={handleMouseUp}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       {!loadedImages.has(index) && (
                         <div className="image-loading-placeholder">
                           <div className="loading-spinner"></div>
@@ -74,7 +145,7 @@ const ProjectModal = ({ project, show, onHide }) => {
                       <img
                         src={image}
                         alt={`${project.title} - Imagen ${index + 1}`}
-                        className={`project-modal-image ${isZoomed ? 'zoomed' : ''} ${loadedImages.has(index) ? 'loaded' : 'loading'}`}
+                        className={`project-modal-image ${isZoomed ? 'zoomed' : ''} ${loadedImages.has(index) ? 'loaded' : 'loading'} ${dragState.isDragging ? 'dragging' : ''}`}
                         onClick={handleImageClick}
                         loading={index === 0 ? 'eager' : 'lazy'}
                         decoding="async"
@@ -83,6 +154,11 @@ const ProjectModal = ({ project, show, onHide }) => {
                           console.error('Error loading image:', image);
                           e.target.style.display = 'none';
                         }}
+                        style={isZoomed ? {
+                          transform: `scale(1.5) translate(${dragState.translateX / 1.5}px, ${dragState.translateY / 1.5}px)`,
+                          transition: dragState.isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), object-fit 0.3s ease, opacity 0.4s ease'
+                        } : {}}
+                        draggable={false}
                       />
                     </div>
                   </Carousel.Item>

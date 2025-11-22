@@ -195,8 +195,9 @@
 
 /* Permitir scroll cuando está en zoom */
 .project-modal-carousel.zoomed .project-modal-image-container {
-  overflow: auto;
+  overflow: hidden;
   cursor: grab;
+  user-select: none;
 }
 
 .project-modal-carousel.zoomed .project-modal-image-container:active {
@@ -214,6 +215,10 @@
   background-color: transparent !important;
   cursor: zoom-in;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), object-fit 0.3s ease, opacity 0.4s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .project-modal-image.loading {
@@ -225,9 +230,12 @@
 }
 
 .project-modal-image.zoomed {
-  object-fit: cover;
-  cursor: zoom-out;
-  transform: scale(1.5);
+  object-fit: contain;
+  cursor: grab;
+}
+
+.project-modal-image.zoomed.dragging {
+  cursor: grabbing !important;
 }
 
 .project-modal-image:active {
