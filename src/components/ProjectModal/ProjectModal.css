@@ -112,46 +112,82 @@
   overflow: hidden;
   position: relative;
   min-height: 0;
+  background: transparent !important;
 }
 
 .project-modal-carousel {
   width: 100%;
   height: 100%;
+  max-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  background: transparent !important;
 }
 
-.project-modal-carousel .carousel {
+/* Sobrescribir fondos blancos de Bootstrap específicamente para carousel y items */
+.project-modal-carousel .carousel,
+.project-modal-carousel .carousel-inner,
+.project-modal-carousel .carousel-item {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.project-modal-carousel .carousel,
+.project-modal-carousel .carousel.slide {
   width: 100%;
   height: 100%;
+  max-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 .project-modal-carousel .carousel-inner {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  max-height: 100%;
+  position: relative;
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
+/* Carousel items - posicionamiento absoluto para superposición */
 .project-modal-carousel .carousel-item {
   width: 100%;
   height: 100%;
-  display: flex;
+  max-height: 100%;
+  display: none !important;
+  position: absolute;
+  top: 0;
+  left: 0;
   align-items: center;
   justify-content: center;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.project-modal-carousel .carousel-item.active {
+  display: flex !important;
+  position: relative;
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 .project-modal-image-container {
   width: 100%;
   height: 100%;
+  max-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
+  background: transparent !important;
+  position: relative;
 }
 
 .project-modal-image {
@@ -160,8 +196,12 @@
   width: auto;
   height: auto;
   object-fit: contain;
-  display: block;
+  display: block !important;
   margin: 0 auto;
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 /* Carousel custom styles - Flechas a los lados con glassmorphism */
@@ -185,12 +225,12 @@
 }
 
 .project-modal-carousel .carousel-control-prev {
-  left: -80px !important;
+  left: 2rem !important;
   right: auto !important;
 }
 
 .project-modal-carousel .carousel-control-next {
-  right: -80px !important;
+  right: 2rem !important;
   left: auto !important;
 }
 
@@ -374,11 +414,11 @@
   }
 
   .project-modal-carousel .carousel-control-prev {
-    left: -70px !important;
+    left: 1.5rem !important;
   }
 
   .project-modal-carousel .carousel-control-next {
-    right: -70px !important;
+    right: 1.5rem !important;
   }
 
   .project-modal-carousel .carousel-control-prev-icon,

@@ -40,7 +40,7 @@ const ProjectModal = ({ project, show, onHide }) => {
         {project.images && project.images.length > 0 && (
           <div className="project-modal-image-viewer">
             <div className={`project-modal-carousel ${!hasMultipleImages ? 'single-image' : ''}`}>
-              <Carousel fade controls={hasMultipleImages} indicators={hasMultipleImages}>
+              <Carousel controls={hasMultipleImages} indicators={hasMultipleImages} interval={null}>
                 {project.images.map((image, index) => (
                   <Carousel.Item key={index}>
                     <div className="project-modal-image-container">
@@ -48,6 +48,10 @@ const ProjectModal = ({ project, show, onHide }) => {
                         src={image}
                         alt={`${project.title} - Imagen ${index + 1}`}
                         className="project-modal-image"
+                        onError={(e) => {
+                          console.error('Error loading image:', image);
+                          e.target.style.display = 'none';
+                        }}
                       />
                     </div>
                   </Carousel.Item>
