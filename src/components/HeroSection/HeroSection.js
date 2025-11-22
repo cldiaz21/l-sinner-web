@@ -155,8 +155,8 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
         </div>
       )}
 
-      {/* Contenido del hero (título y subtítulo) - Solo cuando no hay imágenes */}
-      {!hasImages && (
+      {/* Contenido del hero (título y subtítulo) - Siempre visible */}
+      {(title || subtitle) && (
         <div className="hero-content">
           {title && <h1 className="hero-title">{title}</h1>}
           {subtitle && <p className="hero-subtitle">{subtitle}</p>}

@@ -350,15 +350,15 @@
 /* Carousel custom styles - Flechas más chicas y una al lado de la otra */
 .project-modal-carousel .carousel-control-prev,
 .project-modal-carousel .carousel-control-next {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   top: auto;
   bottom: 2rem;
   transform: none;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 0;
-  opacity: 0.8;
+  opacity: 0.9;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -367,7 +367,7 @@
 
 .project-modal-carousel .carousel-control-prev {
   left: auto;
-  right: 5rem;
+  right: calc(2rem + 50px);
 }
 
 .project-modal-carousel .carousel-control-next {
@@ -527,13 +527,13 @@
 
   .project-modal-carousel .carousel-control-prev,
   .project-modal-carousel .carousel-control-next {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     bottom: 1.5rem;
   }
 
   .project-modal-carousel .carousel-control-prev {
-    right: 4rem;
+    right: calc(1rem + 46px);
   }
 
   .project-modal-carousel .carousel-control-next {
@@ -595,13 +595,13 @@
 
   .project-modal-carousel .carousel-control-prev,
   .project-modal-carousel .carousel-control-next {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     bottom: 1rem;
   }
 
   .project-modal-carousel .carousel-control-prev {
-    right: 3.5rem;
+    right: calc(0.75rem + 42px);
   }
 
   .project-modal-carousel .carousel-control-next {
