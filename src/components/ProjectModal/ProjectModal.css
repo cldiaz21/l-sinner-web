@@ -132,6 +132,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  background: transparent !important;
 }
 
 .project-modal-carousel .carousel-inner {
@@ -141,6 +142,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: transparent !important;
+}
+
+/* Eliminar transiciones de fade que causan problemas */
+.project-modal-carousel .carousel-item.active,
+.project-modal-carousel .carousel-item-next,
+.project-modal-carousel .carousel-item-prev {
+  display: flex !important;
+}
+
+.project-modal-carousel .carousel-fade .carousel-item {
+  opacity: 1 !important;
+  transition: none !important;
 }
 
 .project-modal-carousel .carousel-item {
@@ -150,6 +164,12 @@
   display: flex !important;
   align-items: center;
   justify-content: center;
+  background: transparent !important;
+}
+
+.project-modal-carousel .carousel-item.active {
+  display: flex !important;
+  background: transparent !important;
 }
 
 .project-modal-image-container {
@@ -160,6 +180,8 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  background: transparent !important;
+  position: relative;
 }
 
 .project-modal-image {
@@ -167,9 +189,13 @@
   max-height: 100%;
   width: auto;
   height: auto;
+  min-height: 300px;
   object-fit: contain;
-  display: block;
+  display: block !important;
   margin: 0 auto;
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: transparent !important;
 }
 
 /* Carousel custom styles - Flechas a los lados con glassmorphism */
