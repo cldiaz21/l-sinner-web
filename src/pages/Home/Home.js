@@ -32,10 +32,10 @@ const Home = () => {
 
   return (
     <div className="page-container">
-      {/* Hero Section con carrusel de imágenes */}
-      <HeroSection 
-        title="L SINN3R" 
-        subtitle={t.heroSubtitleHome || "Solo quien ha caído en la sombras puede retratar la luz"}
+      {/* Hero Section con carrusel de imágenes - sin texto */}
+      <HeroSection
+        title=""
+        subtitle=""
         images={heroImages}
       />
 

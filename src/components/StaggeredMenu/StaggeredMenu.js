@@ -1,4 +1,5 @@
 import React, { useCallback, useLayoutEffect, useRef, useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { LanguageContext } from '../../context/LanguageContext';
 import './StaggeredMenu.css';
@@ -634,7 +635,7 @@ export const StaggeredMenu = ({
       </div>
 
       <header className="staggered-menu-header" aria-label="Main navigation header">
-        <div className="sm-logo" aria-label="Logo">
+        <Link to="/" className="sm-logo" aria-label="Ir al inicio">
           {logoUrl ? (
             <img
               src={logoUrl}
@@ -647,7 +648,7 @@ export const StaggeredMenu = ({
           ) : (
             <span className="sm-logo-text">L SINN3R</span>
           )}
-        </div>
+        </Link>
         <div className="sm-header-right">
           {(onChangeLanguage || languageContext?.changeLanguage) && (
             <ul className="links-language">
