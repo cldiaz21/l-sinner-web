@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   height: 0;
-  z-index: 40;
+  z-index: 100000;
   pointer-events: none;
 }
 
@@ -12,7 +12,7 @@
   left: 0;
   width: 100vw;
   height: 0;
-  z-index: 40;
+  z-index: 100000;
   overflow: visible;
   pointer-events: none;
 }
@@ -188,7 +188,7 @@
   padding: 0 !important;
   margin: 0 !important;
   overflow: hidden;
-  z-index: 1000;
+  z-index: 100000 !important;
   will-change: transform, opacity;
   pointer-events: none;
   box-sizing: border-box !important;
@@ -211,7 +211,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1001 !important;
+  z-index: 100001 !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   opacity: 1 !important;
@@ -275,7 +275,7 @@
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
-  z-index: 1001 !important;
+  z-index: 100001 !important;
 }
 
 /* Asegurar que el contenido del menú sea visible cuando está abierto */

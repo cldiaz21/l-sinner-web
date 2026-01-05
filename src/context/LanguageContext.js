@@ -29,9 +29,9 @@ export const LanguageProvider = ({ children }) => {
       // Home Page
       heroSubtitleHome: 'Solo quien ha caído en la sombras puede retratar la luz',
       descriptionTitle: 'L SINN3R',
-      descriptionText1: 'L-SINN3R representa la dualidad entre la perfección y lo imperfecto, entre las luces y las sombras que habitan en cada proceso creativo.',
-      descriptionText2: 'Nace desde la idea de que el arte no busca ser correcto, sino real, humano y emocional. Creemos en la creación visual como medio de expresión y conexión emocional, capaz de transformar ideas en experiencias estéticas con propósito.',
-      descriptionText3: 'En L-SINN3R construimos un lenguaje donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto, identidad y emoción. Detrás de cada proyecto hay una historia que no se cuenta, pero que se transmite a través de la obra final.',
+      descriptionText1: 'L-SINN3R representa la dualidad entre la perfección y lo imperfecto. Creemos en el arte como expresión real y emocional, donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto e identidad. Detrás de cada proyecto hay una historia que se transmite a través de la obra final.',
+      descriptionText2: '',
+      descriptionText3: '',
       featuredProjectsTitle: 'Proyectos Destacados',
       quoteText: 'El mundo no me hará una mala persona',
       // Identidad Sinners Page
@@ -127,6 +127,13 @@ export const LanguageProvider = ({ children }) => {
       flipCardText: 'Click para voltear',
       // No Image
       noImage: 'Sin imagen',
+      // Loading
+      loading: 'Cargando...',
+      // Videos Section
+      videosTitle: 'Videos',
+      noVideosAvailable: 'No hay videos disponibles.',
+      videoNotAvailable: 'Video no disponible',
+      watchOnPlatform: 'Ver en plataforma',
     },
     en: {
       home: 'Home',
@@ -139,9 +146,9 @@ export const LanguageProvider = ({ children }) => {
       // Home Page
       heroSubtitleHome: 'Only those who have fallen into shadows can capture the light',
       descriptionTitle: 'L SINN3R',
-      descriptionText1: 'L-SINN3R represents the duality between perfection and imperfection, between lights and shadows that inhabit every creative process.',
-      descriptionText2: 'It is born from the idea that art does not seek to be correct, but real, human and emotional. We believe in visual creation as a means of expression and emotional connection, capable of transforming ideas into aesthetic experiences with purpose.',
-      descriptionText3: 'In L-SINN3R we build a language where advertising, art, music and audiovisual converge to generate impact, identity and emotion. Behind each project there is a story that is not told, but that is transmitted through the final work.',
+      descriptionText1: 'L-SINN3R represents the duality between perfection and imperfection. We believe in art as real and emotional expression, where advertising, art, music and audiovisual converge to generate impact and identity. Behind each project there is a story that is transmitted through the final work.',
+      descriptionText2: '',
+      descriptionText3: '',
       featuredProjectsTitle: 'Featured Projects',
       quoteText: 'The world will not make me a bad person',
       // Identidad Sinners Page
@@ -237,6 +244,13 @@ export const LanguageProvider = ({ children }) => {
       flipCardText: 'Click to flip',
       // No Image
       noImage: 'No image',
+      // Loading
+      loading: 'Loading...',
+      // Videos Section
+      videosTitle: 'Videos',
+      noVideosAvailable: 'No videos available.',
+      videoNotAvailable: 'Video not available',
+      watchOnPlatform: 'Watch on platform',
     }
   };
 

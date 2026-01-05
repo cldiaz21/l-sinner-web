@@ -30,6 +30,13 @@
   position: relative;
 }
 
+/* Asegurar que el hero section no sea afectado por el page-container */
+.page-container > .hero-section {
+  min-height: 100vh !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+}
+
 /* Asegurar que las partículas no se vean fuera del hero */
 section:not(.hero-section) {
   position: relative;

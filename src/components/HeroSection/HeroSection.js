@@ -104,7 +104,19 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
         );
       case 'lightning':
         return (
-          <div style={{ pointerEvents: 'none' }}>
+          <div style={{ 
+            pointerEvents: 'none',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            minWidth: '100%',
+            minHeight: '100%',
+            maxWidth: '100%',
+            maxHeight: '100%',
+            zIndex: 1
+          }}>
             <Lightning />
           </div>
         );

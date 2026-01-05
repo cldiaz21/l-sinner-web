@@ -3,17 +3,28 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { ProjectContext } from '../../context/ProjectContext';
 import { LanguageContext } from '../../context/LanguageContext';
 import HeroSection from '../../components/HeroSection/HeroSection';
-import ProjectsCarousel from '../../components/ProjectsCarousel/ProjectsCarousel';
+import ProjectsGallery from '../../components/ProjectsGallery/ProjectsGallery';
+import VideosSection from '../../components/VideosSection/VideosSection';
 import SocialMedia from '../../components/SocialMedia/SocialMedia';
 import ContactForm from '../../components/ContactForm/ContactForm';
 import VariableProximity from '../../components/VariableProximity/VariableProximity';
 import './Home.css';
 
 const Home = () => {
-  const { getFeaturedProjects, carouselImages } = useContext(ProjectContext);
+  const { projects, carouselImages, loading } = useContext(ProjectContext);
   const { t } = useContext(LanguageContext);
-  const featuredProjects = getFeaturedProjects();
   const quoteContainerRef = useRef(null);
+
+  // Obtener los últimos 3 proyectos agregados (ordenados por fecha de creación o ID descendente)
+  const latestProjects = projects
+    .sort((a, b) => {
+      // Ordenar por created_at si existe, sino por id (más reciente primero)
+      if (a.created_at && b.created_at) {
+        return new Date(b.created_at) - new Date(a.created_at);
+      }
+      return (b.id || 0) - (a.id || 0);
+    })
+    .slice(0, 3);
 
   // Imágenes del hero desde el contexto (gestionadas desde el admin)
   // Solo usar imágenes del contexto, sin fallback a imágenes por defecto
@@ -60,6 +71,7 @@ const Home = () => {
                 src="/images/hero/logo.png" 
                 alt="L SINN3R" 
                 className="description-image"
+                loading="lazy"
                 onError={(e) => {
                   e.target.src = 'https://via.placeholder.com/600x800/1a1a1a/ffffff?text=L+SINN3R';
                 }}
@@ -68,13 +80,7 @@ const Home = () => {
             <Col lg={6} md={6} className="description-content-col">
               <div className="description-content">
                 <p className="description-text">
-                  {t.descriptionText1 || "L-SINN3R representa la dualidad entre la perfección y lo imperfecto, entre las luces y las sombras que habitan en cada proceso creativo."}
-                </p>
-                <p className="description-text">
-                  {t.descriptionText2 || "Nace desde la idea de que el arte no busca ser correcto, sino real, humano y emocional. Creemos en la creación visual como medio de expresión y conexión emocional, capaz de transformar ideas en experiencias estéticas con propósito."}
-                </p>
-                <p className="description-text">
-                  {t.descriptionText3 || "En L-SINN3R construimos un lenguaje donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto, identidad y emoción. Detrás de cada proyecto hay una historia que no se cuenta, pero que se transmite a través de la obra final."}
+                  {t.descriptionText1 || "L-SINN3R representa la dualidad entre la perfección y lo imperfecto. Creemos en el arte como expresión real y emocional, donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto e identidad. Detrás de cada proyecto hay una historia que se transmite a través de la obra final."}
                 </p>
               </div>
             </Col>
@@ -82,13 +88,16 @@ const Home = () => {
         </Container>
       </section>
 
-      {/* Proyectos Destacados - Carrusel */}
+      {/* Últimos Proyectos - Galería */}
       <section className="projects-section">
-        <Container>
+        <Container fluid className="projects-gallery-container">
           <h2 className="section-title">{t.featuredProjectsTitle || "Proyectos Destacados"}</h2>
-          <ProjectsCarousel projects={featuredProjects} />
+          <ProjectsGallery projects={latestProjects} />
         </Container>
       </section>
+
+      {/* Videos con Estadísticas */}
+      <VideosSection projects={projects || []} />
 
       {/* Redes Sociales */}
       <section className="social-section">

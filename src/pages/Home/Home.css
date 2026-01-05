@@ -89,6 +89,17 @@
   font-size: clamp(2rem, 4vw, 2.5rem);
 }
 
+.projects-gallery-container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  max-width: 100% !important;
+}
+
+.projects-gallery-container .section-title {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 .social-section {
   position: relative;
   z-index: 10;
