@@ -26,17 +26,18 @@ const Home = () => {
     })
     .slice(0, 3);
 
-  // Imágenes del hero desde el contexto (gestionadas desde el admin)
-  // Solo usar imágenes del contexto, sin fallback a imágenes por defecto
-  const heroImages = carouselImages && carouselImages.length > 0 ? carouselImages : [];
+  // Imagen del hero desde el contexto (gestionadas desde el admin)
+  // Solo usar la primera imagen para diseño tipo portafolio
+  const heroImage = carouselImages && carouselImages.length > 0 ? carouselImages[0] : null;
 
   return (
     <div className="page-container">
-      {/* Hero Section con carrusel de imágenes - sin texto */}
+      {/* Hero Section tipo portafolio con imagen de fondo y nombre superpuesto */}
       <HeroSection
-        title=""
+        title="L SINN3R"
         subtitle=""
-        images={heroImages}
+        images={heroImage ? [heroImage] : []}
+        portfolioMode={true}
       />
 
       {/* Cita Principal */}

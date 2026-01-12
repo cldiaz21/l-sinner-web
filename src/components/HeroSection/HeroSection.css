@@ -141,6 +141,122 @@
   line-height: 1.4;
 }
 
+/* Modo Portafolio */
+.hero-portfolio-mode {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2.2vw;
+  overflow: hidden;
+}
+
+.hero-portfolio-image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-portfolio-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150%;
+  min-height: 150%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #000;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+.hero-portfolio-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-portfolio-content {
+  position: relative;
+  z-index: 2;
+  width: auto;
+  padding: 0;
+  pointer-events: none;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.hero-portfolio-title {
+  font-size: clamp(4rem, 8vw, 10rem);
+  font-weight: 700;
+  letter-spacing: -2px;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 0;
+  line-height: 0.95;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  white-space: pre-wrap;
+}
+
+.hero-portfolio-links {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 0;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.hero-portfolio-links-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.hero-portfolio-link {
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+  pointer-events: auto;
+  position: relative;
+}
+
+.hero-portfolio-link:hover {
+  opacity: 0.7;
+}
+
+.hero-portfolio-separator {
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  padding: 0;
+}
+
+/* Efecto parallax para imagen de portafolio */
+.hero-portfolio-mode .hero-portfolio-image {
+  transition: transform 0.1s ease-out;
+}
+
 @media (max-width: 768px) {
   .hero-section {
     height: 100vh;
@@ -154,6 +270,28 @@
   
   .hero-subtitle {
     font-size: clamp(0.9rem, 3vw, 1.3rem);
+  }
+
+  .hero-portfolio-mode {
+    padding: 6vw;
+  }
+
+  .hero-portfolio-title {
+    font-size: clamp(3rem, 15vw, 6rem);
+    letter-spacing: -1px;
+  }
+
+  .hero-portfolio-links {
+    margin-bottom: 6vw;
+  }
+
+  .hero-portfolio-links-row {
+    gap: 0.75rem;
+  }
+
+  .hero-portfolio-link,
+  .hero-portfolio-separator {
+    font-size: clamp(0.65rem, 2.5vw, 0.85rem);
   }
 }
 

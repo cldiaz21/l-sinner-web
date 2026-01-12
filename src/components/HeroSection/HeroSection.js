@@ -9,7 +9,7 @@ import './HeroSection.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const HeroSection = ({ title, subtitle, images = [], animationType = 'particles' }) => {
+const HeroSection = ({ title, subtitle, images = [], animationType = 'particles', portfolioMode = false }) => {
   const heroImageRefs = useRef({});
 
   const carouselSettings = {
@@ -27,10 +27,11 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
   };
 
   const hasImages = images && images.length > 0;
+  const portfolioImage = portfolioMode && hasImages ? images[0] : null;
 
   // Efecto de scroll parallax para las imágenes del hero
   useEffect(() => {
-    if (!hasImages) return;
+    if (!hasImages && !portfolioMode) return;
 
     const handleScroll = () => {
       Object.keys(heroImageRefs.current).forEach((key) => {
@@ -66,7 +67,7 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [hasImages, images]);
+  }, [hasImages, images, portfolioMode]);
 
   // Función para renderizar animaciones de fondo
   const renderBackgroundAnimation = () => {
@@ -137,6 +138,69 @@ const HeroSection = ({ title, subtitle, images = [], animationType = 'particles'
   // Si no hay imágenes ni animación, no mostrar nada
   if (!hasImages && !animationType) {
     return null;
+  }
+
+  // Renderizar modo portafolio (una imagen fija con nombre y enlaces)
+  if (portfolioMode) {
+    return (
+      <section className={`hero-section ${portfolioMode ? 'hero-portfolio-mode' : ''}`}>
+        {/* Imagen de fondo fija */}
+        {portfolioImage && (
+          <div className="hero-portfolio-image-wrapper">
+            <div 
+              className="hero-portfolio-image" 
+              ref={(el) => {
+                if (el) {
+                  heroImageRefs.current['portfolio-hero'] = el;
+                }
+              }}
+              style={{ backgroundImage: `url(${portfolioImage})` }}
+            >
+              <div className="hero-portfolio-overlay"></div>
+            </div>
+          </div>
+        )}
+
+        {/* Nombre superpuesto */}
+        {title && (
+          <div className="hero-portfolio-content">
+            <h1 className="hero-portfolio-title">{title}</h1>
+          </div>
+        )}
+
+        {/* Enlaces en la parte inferior */}
+        <div className="hero-portfolio-links">
+          <div className="hero-portfolio-links-row">
+            <a 
+              href="https://instagram.com/l_sinn3r" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hero-portfolio-link"
+              aria-label="Instagram"
+            >
+              INSTAGRAM
+            </a>
+            <span className="hero-portfolio-separator">/</span>
+            <a 
+              href="https://tiktok.com/@art_sinn3er" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hero-portfolio-link"
+              aria-label="TikTok"
+            >
+              TIKTOK
+            </a>
+            <span className="hero-portfolio-separator">/</span>
+            <a 
+              href="/proyectos" 
+              className="hero-portfolio-link"
+            >
+              PROYECTOS
+            </a>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
