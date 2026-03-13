@@ -1,12 +1,14 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { projectService } from '../services/projectService';
 import { carouselService } from '../services/carouselService';
+import { homeVideosService } from '../services/homeVideosService';
 
 export const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
-  const [carouselImages, setCarouselImages] = useState([]);
+  const [carouselItems, setCarouselItems] = useState([]);
+  const [homeVideos, setHomeVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -30,19 +32,32 @@ export const ProjectProvider = ({ children }) => {
     }
   }, []);
 
-  // Cargar imágenes del carrusel desde Supabase
+// Cargar imágenes del carrusel desde Supabase
   const loadCarouselImages = useCallback(async () => {
     try {
       const { data, error: carouselError } = await carouselService.getCarouselImages();
-      
+
       if (carouselError) {
         setError(carouselError.message);
         return;
       }
 
-      // Extraer las URLs de las imágenes
-      const imageUrls = (data || []).map(item => item.image_url);
-      setCarouselImages(imageUrls);
+      setCarouselItems(data || []);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    }
+  }, []);
+
+  // Cargar videos de la home (YouTube) desde Supabase
+  const loadHomeVideos = useCallback(async () => {
+    try {
+      const { data, error: videosError } = await homeVideosService.getHomeVideos();
+      if (videosError) {
+        setError(videosError.message);
+        return;
+      }
+      setHomeVideos(data || []);
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -53,7 +68,8 @@ export const ProjectProvider = ({ children }) => {
   useEffect(() => {
     loadProjects();
     loadCarouselImages();
-  }, [loadProjects, loadCarouselImages]);
+    loadHomeVideos();
+  }, [loadProjects, loadCarouselImages, loadHomeVideos]);
 
   const addProject = async (project) => {
     try {
@@ -113,7 +129,7 @@ export const ProjectProvider = ({ children }) => {
       }
 
       if (data) {
-        setCarouselImages([...carouselImages, data.image_url]);
+        setCarouselItems(prev => [...prev, data].sort((a, b) => (a.position ?? 0) - (b.position ?? 0)));
       }
       return { success: true, error: null };
     } catch (err) {
@@ -121,29 +137,22 @@ export const ProjectProvider = ({ children }) => {
     }
   };
 
-  const removeCarouselImage = async (index) => {
+  const removeCarouselImage = async (id) => {
     try {
-      // Obtener todas las imágenes con sus IDs desde Supabase
-      const { data: carouselData, error: fetchError } = await carouselService.getCarouselImages();
-      
-      if (fetchError) {
-        throw new Error(fetchError.message);
-      }
+      const { error: carouselError } = await carouselService.deleteCarouselImage(id);
+      if (carouselError) throw new Error(carouselError.message);
+      setCarouselItems(prev => prev.filter(i => i.id !== id));
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  };
 
-      const imageToDelete = carouselData[index];
-      
-      if (!imageToDelete) {
-        throw new Error('Imagen no encontrada');
-      }
-
-      const { error: carouselError } = await carouselService.deleteCarouselImage(imageToDelete.id);
-      
-      if (carouselError) {
-        throw new Error(carouselError.message);
-      }
-
-      // Recargar las imágenes del carrusel después de eliminar
-      await loadCarouselImages();
+  const updateCarouselOrder = async (orderedIds) => {
+    try {
+      const { error: carouselError } = await carouselService.updateOrder(orderedIds);
+      if (carouselError) throw new Error(carouselError.message);
+      setCarouselItems(prev => orderedIds.map(id => prev.find(i => i.id === id)).filter(Boolean));
       return { success: true, error: null };
     } catch (err) {
       return { success: false, error: err.message };
@@ -154,10 +163,46 @@ export const ProjectProvider = ({ children }) => {
     return projects.filter(p => p.featured).slice(0, 6);
   };
 
+  const addHomeVideo = async (url) => {
+    try {
+      const { data, error: videoError } = await homeVideosService.addHomeVideo(url);
+      if (videoError) throw new Error(videoError.message);
+      if (data) setHomeVideos(prev => [...prev, data].sort((a, b) => a.position - b.position));
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  };
+
+  const removeHomeVideo = async (id) => {
+    try {
+      const { error: videoError } = await homeVideosService.deleteHomeVideo(id);
+      if (videoError) throw new Error(videoError.message);
+      setHomeVideos(prev => prev.filter(v => v.id !== id));
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  };
+
+  const updateHomeVideosOrder = async (orderedIds) => {
+    try {
+      const { error: videoError } = await homeVideosService.updateOrder(orderedIds);
+      if (videoError) throw new Error(videoError.message);
+      const reordered = orderedIds.map(id => homeVideos.find(v => v.id === id)).filter(Boolean);
+      setHomeVideos(reordered);
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  };
+
   return (
     <ProjectContext.Provider value={{
       projects,
-      carouselImages,
+      carouselItems,
+      carouselImages: carouselItems.map(i => i.image_url),
+      homeVideos,
       loading,
       error,
       addProject,
@@ -165,9 +210,14 @@ export const ProjectProvider = ({ children }) => {
       deleteProject,
       addCarouselImage,
       removeCarouselImage,
+      updateCarouselOrder,
+      addHomeVideo,
+      removeHomeVideo,
+      updateHomeVideosOrder,
       getFeaturedProjects,
       refreshProjects: loadProjects,
       refreshCarousel: loadCarouselImages,
+      refreshHomeVideos: loadHomeVideos,
     }}>
       {children}
     </ProjectContext.Provider>

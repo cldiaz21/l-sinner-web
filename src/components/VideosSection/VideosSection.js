@@ -1,120 +1,158 @@
-import React, { useContext } from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import React, { useContext, useState, useRef, useCallback } from 'react';
+import { Container, Card } from 'react-bootstrap';
+import Slider from 'react-slick';
 import { LanguageContext } from '../../context/LanguageContext';
+import { ProjectContext } from '../../context/ProjectContext';
 import { getEmbedUrl } from '../../utils/videoUtils';
-import { useYouTubeVideo } from '../../hooks/useYouTubeVideo';
-import { Eye, ThumbsUp, Calendar, ExternalLink } from 'lucide-react';
+import { getYouTubeVideoId } from '../../utils/youtubeUtils';
+import { Play } from 'lucide-react';
 import './VideosSection.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-const VideoCard = ({ video, t, language }) => {
-  const { videoInfo, loading, error } = useYouTubeVideo(video.url);
+const DRAG_THRESHOLD_PX = 10;
+
+const VideoCard = ({ video, t }) => {
+  const [playing, setPlaying] = useState(false);
+  const dragRef = useRef({ startX: 0, startY: 0, isDrag: false });
+
   const embedUrl = getEmbedUrl(video.url);
-  const isYouTube = video.url.includes('youtube.com') || video.url.includes('youtu.be');
+  const videoId = getYouTubeVideoId(video.url);
+  const thumbnailUrl = videoId
+    ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+    : null;
+  const thumbnailUrlFallback = videoId
+    ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+    : null;
+  const embedUrlAutoplay = embedUrl
+    ? `${embedUrl}${embedUrl.includes('?') ? '&' : '?'}autoplay=1`
+    : '';
 
-  // Usar título del video de YouTube si está disponible, sino usar el título del proyecto
-  const displayTitle = isYouTube && videoInfo?.title ? videoInfo.title : video.projectTitle;
-  const displayViews = isYouTube && videoInfo?.views ? videoInfo.views : video.views;
+  const handlePointerDown = useCallback(
+    (e) => {
+      if (playing) return;
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+      const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
+      dragRef.current = { startX: clientX, startY: clientY, isDrag: false };
+      const onMove = (moveE) => {
+        const x = moveE.clientX ?? moveE.touches?.[0]?.clientX ?? dragRef.current.startX;
+        const y = moveE.clientY ?? moveE.touches?.[0]?.clientY ?? dragRef.current.startY;
+        if (Math.hypot(x - dragRef.current.startX, y - dragRef.current.startY) > DRAG_THRESHOLD_PX) {
+          dragRef.current.isDrag = true;
+        }
+      };
+      const onUp = () => {
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', onUp);
+        window.removeEventListener('touchmove', onMove);
+        window.removeEventListener('touchend', onUp);
+        if (!dragRef.current.isDrag) setPlaying(true);
+      };
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+      window.addEventListener('touchmove', onMove, { passive: true });
+      window.addEventListener('touchend', onUp);
+    },
+    [playing]
+  );
+
+  if (!embedUrl && !thumbnailUrl) {
+    return (
+      <Card className="video-card video-card-no-text">
+        <div className="video-embed-wrapper">
+          <div className="video-placeholder">
+            <p>{t.videoNotAvailable || 'Video no disponible'}</p>
+          </div>
+        </div>
+        <div className="video-card-drag-hint" aria-hidden="true" />
+      </Card>
+    );
+  }
 
   return (
-    <Col xs={12} md={6} lg={4} className="video-col">
-      <Card className="video-card">
-        <div className="video-embed-wrapper">
-          {embedUrl ? (
-            <iframe
-              src={embedUrl}
-              title={displayTitle}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="video-embed"
-              loading="lazy"
-              aria-label={`Video: ${displayTitle}`}
-            />
-          ) : (
-            <div className="video-placeholder">
-              <p>{t.videoNotAvailable || 'Video no disponible'}</p>
+    <Card className="video-card video-card-no-text">
+      <div
+        className="video-embed-wrapper"
+        onMouseDown={handlePointerDown}
+        onTouchStart={handlePointerDown}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!playing) setPlaying(true); } }}
+        aria-label={playing ? undefined : 'Reproducir video'}
+      >
+        {playing ? (
+          <iframe
+            src={embedUrlAutoplay}
+            title="Video de YouTube"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="video-embed"
+            aria-label="Reproductor de video"
+          />
+        ) : (
+          <div className="video-card-poster video-card-poster-youtube">
+            {thumbnailUrl && (
+              <img
+                src={thumbnailUrl}
+                alt=""
+                className="video-card-thumbnail"
+                draggable={false}
+                onError={(e) => {
+                  if (thumbnailUrlFallback && e.target.src !== thumbnailUrlFallback) {
+                    e.target.src = thumbnailUrlFallback;
+                  }
+                }}
+              />
+            )}
+            <div className="video-card-play-btn video-card-play-btn-youtube" aria-hidden="true">
+              <Play size={28} strokeWidth={3} fill="currentColor" />
             </div>
-          )}
-        </div>
-        <Card.Body className="video-card-body">
-          {loading && isYouTube ? (
-            <div className="video-loading">
-              <span>{t.loading || 'Cargando...'}</span>
-            </div>
-          ) : (
-            <h4 className="video-title">{displayTitle}</h4>
-          )}
-          {video.projectCategory && (
-            <p className="video-category">{video.projectCategory}</p>
-          )}
-          <div className="video-stats">
-            {displayViews > 0 && (
-              <div className="video-stat-item">
-                <Eye size={16} />
-                <span>{displayViews.toLocaleString()}</span>
-              </div>
-            )}
-            {video.likes > 0 && (
-              <div className="video-stat-item">
-                <ThumbsUp size={16} />
-                <span>{video.likes.toLocaleString()}</span>
-              </div>
-            )}
-            {video.date && (
-              <div className="video-stat-item">
-                <Calendar size={16} />
-                <span>
-                  {new Date(video.date).toLocaleDateString(
-                    language === 'es' ? 'es-ES' : 'en-US',
-                    { year: 'numeric', month: 'short', day: 'numeric' }
-                  )}
-                </span>
-              </div>
-            )}
           </div>
-          <a
-            href={video.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="video-link"
-          >
-            <ExternalLink size={16} />
-            {t.watchOnPlatform || 'Ver en plataforma'}
-          </a>
-        </Card.Body>
-      </Card>
-    </Col>
+        )}
+      </div>
+      <div className="video-card-drag-hint" aria-hidden="true" />
+    </Card>
   );
 };
 
-const VideosSection = ({ projects }) => {
-  const { t, language } = useContext(LanguageContext);
+const VideosSection = () => {
+  const { t } = useContext(LanguageContext);
+  const { homeVideos } = useContext(ProjectContext);
 
-  // Filtrar proyectos que tengan videos
-  const projectsWithVideos = projects.filter(
-    project => project.videos && project.videos.length > 0
-  );
+  const videos = homeVideos || [];
 
-  // Extraer todos los videos con información del proyecto
-  const allVideos = [];
-  projectsWithVideos.forEach(project => {
-    project.videos.forEach((videoUrl, index) => {
-      allVideos.push({
-        id: `${project.id}-${index}`,
-        url: videoUrl,
-        projectTitle: project.title,
-        projectId: project.id,
-        projectDate: project.date,
-        projectCategory: project.category,
-        // Estadísticas (por ahora vacías, se pueden agregar desde el admin)
-        views: project.videoStats?.[index]?.views || 0,
-        likes: project.videoStats?.[index]?.likes || 0,
-        date: project.videoStats?.[index]?.date || project.date
-      });
-    });
-  });
+  const carouselSettings = {
+    dots: true,
+    infinite: videos.length > 1,
+    speed: 500,
+    slidesToShow: Math.min(3, videos.length) || 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    pauseOnHover: true,
+    arrows: false,
+    draggable: true,
+    swipeToSlide: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: Math.min(2, videos.length) || 1,
+          slidesToScroll: 1,
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        }
+      }
+    ]
+  };
 
-  if (allVideos.length === 0) {
+  if (videos.length === 0) {
     return (
       <section className="videos-section">
         <Container>
@@ -131,11 +169,15 @@ const VideosSection = ({ projects }) => {
     <section className="videos-section">
       <Container>
         <h2 className="section-title">{t.videosTitle || 'Videos'}</h2>
-        <Row className="videos-row">
-          {allVideos.map((video) => (
-            <VideoCard key={video.id} video={video} t={t} language={language} />
-          ))}
-        </Row>
+        <div className="videos-carousel-container">
+          <Slider {...carouselSettings} className="videos-carousel">
+            {videos.map((video) => (
+              <div key={video.id} className="videos-carousel-slide">
+                <VideoCard video={video} t={t} />
+              </div>
+            ))}
+          </Slider>
+        </div>
       </Container>
     </section>
   );

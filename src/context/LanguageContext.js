@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect } from 'react';
 export const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('es');
+  const [language, setLanguage] = useState('en');
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('lSinnerLanguage');
@@ -28,8 +28,8 @@ export const LanguageProvider = ({ children }) => {
       close: 'Cerrar',
       // Home Page
       heroSubtitleHome: 'Solo quien ha caído en la sombras puede retratar la luz',
-      descriptionTitle: 'L SINN3R',
-      descriptionText1: 'L-SINN3R representa la dualidad entre la perfección y lo imperfecto. Creemos en el arte como expresión real y emocional, donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto e identidad. Detrás de cada proyecto hay una historia que se transmite a través de la obra final.',
+      descriptionTitle: 'SINN3RS',
+      descriptionText1: 'SINN3RS representa la dualidad entre la perfección y lo imperfecto. Creemos en el arte como expresión real y emocional, donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto e identidad. Detrás de cada proyecto hay una historia que se transmite a través de la obra final.',
       descriptionText2: '',
       descriptionText3: '',
       featuredProjectsTitle: 'Proyectos Destacados',
@@ -38,15 +38,15 @@ export const LanguageProvider = ({ children }) => {
       identidadTitle: 'Identidad Sinners',
       identidadSubtitle: 'La dualidad entre la perfección y lo imperfecto',
       visionTitle: 'NUESTRA VISIÓN',
-      visionText: 'Creemos en la creación visual como medio de expresión y conexión emocional, capaz de transformar ideas en experiencias estéticas con propósito. En L-SINN3R construimos un lenguaje donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto, identidad y emoción.',
+      visionText: 'Creemos en la creación visual como medio de expresión y conexión emocional, capaz de transformar ideas en experiencias estéticas con propósito. En SINN3RS construimos un lenguaje donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto, identidad y emoción.',
       visionQuote: 'Detrás de cada proyecto hay una historia que no se cuenta, pero que se transmite a través de la obra final.',
       styleTitle: 'NUESTRO ESTILO',
       styleText: 'Nuestro estilo se define por la autenticidad, la sensibilidad artística y la búsqueda constante de nuevas perspectivas. No seguimos fórmulas: reinterpretamos lo visual desde lo conceptual, fusionando distintas disciplinas para crear piezas únicas que hablan por sí mismas.',
       styleQuote: 'Cada trabajo es un espacio donde la estética y la emoción se encuentran para dejar una huella real.',
       missionTitle: 'NUESTRA MISIÓN',
       missionText: 'Nuestra misión es dar forma a las ideas y convertirlas en arte, creando proyectos que combinen estética, concepto y emoción. Desde campañas y piezas audiovisuales hasta dirección creativa o fotografía, buscamos que cada obra cuente sin palabras, transmitiendo aquello que solo puede sentirse.',
-      missionQuote: 'L-SINN3R existe para crear desde la pasión, conectar desde la autenticidad y dejar una parte de sí en cada historia visual.',
-      valuesTitle: 'VALORES L-SINN3R',
+      missionQuote: 'SINN3RS existe para crear desde la pasión, conectar desde la autenticidad y dejar una parte de sí en cada historia visual.',
+      valuesTitle: 'VALORES SINN3RS',
       value1Title: 'Autenticidad',
       value1Text: 'Crear desde la verdad. Cada obra nace de experiencias reales, emociones honestas y una mirada que no teme mostrar lo que otros esconden.',
       value2Title: 'Imperfección',
@@ -68,10 +68,10 @@ export const LanguageProvider = ({ children }) => {
       searchProjects: 'Buscar proyectos',
       closeSearch: 'Cerrar búsqueda',
       // Quienes Somos Page
-      quienesSomosSubtitle: 'Sobre L sinn3r',
+      quienesSomosSubtitle: 'Sobre SINN3RS',
       sobreMi: 'Sobre mí',
       alvaroMeza: 'Álvaro Meza',
-      alvaroText1: 'Soy Álvaro Meza, estudiante de Publicidad y creador detrás de L SINN3R. Mi propósito es transformar ideas en experiencias visuales, desarrollando cada proyecto desde un enfoque conceptual que une mi formación publicitaria con mis pasiones: el arte, la música, lo audiovisual y la fotografía.',
+      alvaroText1: 'Soy Álvaro Meza, estudiante de Publicidad y creador detrás de SINN3RS. Mi propósito es transformar ideas en experiencias visuales, desarrollando cada proyecto desde un enfoque conceptual que une mi formación publicitaria con mis pasiones: el arte, la música, lo audiovisual y la fotografía.',
       alvaroText2: 'En cada trabajo busco transmitir una historia, una emoción y una estética propia, dejando siempre una parte de mí en lo que hago. Para mí, la creatividad es un puente entre lo que imaginamos y lo que podemos hacer sentir a los demás.',
       // Contacto Page
       contactoSubtitle: 'Trabajemos Juntos',
@@ -80,7 +80,7 @@ export const LanguageProvider = ({ children }) => {
       // Contact Form
       contactSectionLabel: 'CONTACTO',
       contactTitle: 'Hablemos de tu proyecto',
-      contactDescription: '¿Tienes preguntas? ¿Necesitas una demo? ¿Quieres integrar L-SINN3R en tu organización? Estamos aquí para ayudarte.',
+      contactDescription: '¿Tienes preguntas? ¿Necesitas una demo? ¿Quieres integrar SINN3RS en tu organización? Estamos aquí para ayudarte.',
       contactEmail: 'Email',
       contactEmailValue: 'artsinn3r@gmail.com',
       contactSchedule: 'Horario',
@@ -107,7 +107,7 @@ export const LanguageProvider = ({ children }) => {
       // Footer
       footerDescription: 'Fotografía profesional que captura momentos únicos',
       footerFollow: 'Síguenos',
-      footerCopyright: 'L SINN3R. Todos los derechos reservados.',
+      footerCopyright: 'SINN3RS. Todos los derechos reservados.',
       footerAdmin: 'Admin',
       // Instagram Feed
       instagramTitle: 'Síguenos en Instagram',
@@ -145,8 +145,8 @@ export const LanguageProvider = ({ children }) => {
       close: 'Close',
       // Home Page
       heroSubtitleHome: 'Only those who have fallen into shadows can capture the light',
-      descriptionTitle: 'L SINN3R',
-      descriptionText1: 'L-SINN3R represents the duality between perfection and imperfection. We believe in art as real and emotional expression, where advertising, art, music and audiovisual converge to generate impact and identity. Behind each project there is a story that is transmitted through the final work.',
+      descriptionTitle: 'SINN3RS',
+      descriptionText1: 'SINN3RS represents the duality between perfection and imperfection. We believe in art as real and emotional expression, where advertising, art, music and audiovisual converge to generate impact and identity. Behind each project there is a story that is transmitted through the final work.',
       descriptionText2: '',
       descriptionText3: '',
       featuredProjectsTitle: 'Featured Projects',
@@ -155,15 +155,15 @@ export const LanguageProvider = ({ children }) => {
       identidadTitle: 'Sinners Identity',
       identidadSubtitle: 'The duality between perfection and imperfection',
       visionTitle: 'OUR VISION',
-      visionText: 'We believe in visual creation as a means of expression and emotional connection, capable of transforming ideas into aesthetic experiences with purpose. In L-SINN3R we build a language where advertising, art, music and audiovisual converge to generate impact, identity and emotion.',
+      visionText: 'We believe in visual creation as a means of expression and emotional connection, capable of transforming ideas into aesthetic experiences with purpose. In SINN3RS we build a language where advertising, art, music and audiovisual converge to generate impact, identity and emotion.',
       visionQuote: 'Behind each project there is a story that is not told, but that is transmitted through the final work.',
       styleTitle: 'OUR STYLE',
       styleText: 'Our style is defined by authenticity, artistic sensibility and the constant search for new perspectives. We don\'t follow formulas: we reinterpret the visual from the conceptual, merging different disciplines to create unique pieces that speak for themselves.',
       styleQuote: 'Each work is a space where aesthetics and emotion meet to leave a real mark.',
       missionTitle: 'OUR MISSION',
       missionText: 'Our mission is to shape ideas and turn them into art, creating projects that combine aesthetics, concept and emotion. From campaigns and audiovisual pieces to creative direction or photography, we seek that each work tells without words, transmitting what can only be felt.',
-      missionQuote: 'L-SINN3R exists to create from passion, connect from authenticity and leave a part of itself in each visual story.',
-      valuesTitle: 'L-SINN3R VALUES',
+      missionQuote: 'SINN3RS exists to create from passion, connect from authenticity and leave a part of itself in each visual story.',
+      valuesTitle: 'SINN3RS VALUES',
       value1Title: 'Authenticity',
       value1Text: 'Create from truth. Each work is born from real experiences, honest emotions and a look that is not afraid to show what others hide.',
       value2Title: 'Imperfection',
@@ -185,10 +185,10 @@ export const LanguageProvider = ({ children }) => {
       searchProjects: 'Search projects',
       closeSearch: 'Close search',
       // Quienes Somos Page
-      quienesSomosSubtitle: 'About L sinn3r',
+      quienesSomosSubtitle: 'About SINN3RS',
       sobreMi: 'About me',
       alvaroMeza: 'Álvaro Meza',
-      alvaroText1: 'I am Álvaro Meza, Advertising student and creator behind L SINN3R. My purpose is to transform ideas into visual experiences, developing each project from a conceptual approach that unites my advertising background with my passions: art, music, audiovisual and photography.',
+      alvaroText1: 'I am Álvaro Meza, Advertising student and creator behind SINN3RS. My purpose is to transform ideas into visual experiences, developing each project from a conceptual approach that unites my advertising background with my passions: art, music, audiovisual and photography.',
       alvaroText2: 'In each work I seek to transmit a story, an emotion and my own aesthetics, always leaving a part of me in what I do. For me, creativity is a bridge between what we imagine and what we can make others feel.',
       // Contacto Page
       contactoSubtitle: 'Let\'s Work Together',
@@ -197,7 +197,7 @@ export const LanguageProvider = ({ children }) => {
       // Contact Form
       contactSectionLabel: 'CONTACT',
       contactTitle: 'Let\'s talk about your project',
-      contactDescription: 'Do you have questions? Do you need a demo? Do you want to integrate L-SINN3R into your organization? We are here to help you.',
+      contactDescription: 'Do you have questions? Do you need a demo? Do you want to integrate SINN3RS into your organization? We are here to help you.',
       contactEmail: 'Email',
       contactEmailValue: 'artsinn3r@gmail.com',
       contactSchedule: 'Schedule',
@@ -224,7 +224,7 @@ export const LanguageProvider = ({ children }) => {
       // Footer
       footerDescription: 'Professional photography that captures unique moments',
       footerFollow: 'Follow us',
-      footerCopyright: 'L SINN3R. All rights reserved.',
+      footerCopyright: 'SINN3RS. All rights reserved.',
       footerAdmin: 'Admin',
       // Instagram Feed
       instagramTitle: 'Follow us on Instagram',

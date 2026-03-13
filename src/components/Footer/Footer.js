@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaInstagram, FaTiktok } from 'react-icons/fa';
 import { LanguageContext } from '../../context/LanguageContext';
-import ContactForm from '../ContactForm/ContactForm';
 import './Footer.css';
 
 const Footer = () => {
@@ -25,7 +24,7 @@ const Footer = () => {
             <div className="footer-logo-wrapper">
               <img 
                 src="/images/hero/logo.png" 
-                alt="L SINN3R" 
+                alt="SINN3RS" 
                 className="footer-logo"
               />
             </div>
@@ -55,7 +54,7 @@ const Footer = () => {
         </Row>
         <Row>
           <Col className="text-center footer-copyright" style={{ position: 'relative', zIndex: 10000, pointerEvents: 'auto' }}>
-            <p>&copy; {currentYear} {t.footerCopyright || 'L SINN3R. Todos los derechos reservados.'}</p>
+            <p>&copy; {currentYear} {t.footerCopyright || 'SINN3RS. Todos los derechos reservados.'}</p>
             <button
               onClick={handleAdminClick}
               className="admin-link-footer"

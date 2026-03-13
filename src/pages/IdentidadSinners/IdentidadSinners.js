@@ -63,7 +63,7 @@ const IdentidadSinners = () => {
                 {/* Valores - Movidos arriba */}
                 <div className="identidad-values values-block">
                   <h2 className="section-title">
-                    {t.valuesTitle || 'VALORES L-SINN3R'}
+                    {t.valuesTitle || 'VALORES SINN3RS'}
                   </h2>
                   <Row>
                     <Col md={6} lg={4}>
@@ -123,7 +123,7 @@ const IdentidadSinners = () => {
                       {t.visionTitle || 'NUESTRA VISIÓN'}
                     </h2>
                     <p className="section-text">
-                      {t.visionText || 'Creemos en la creación visual como medio de expresión y conexión emocional, capaz de transformar ideas en experiencias estéticas con propósito. En L-SINN3R construimos un lenguaje donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto, identidad y emoción.'}
+                      {t.visionText || 'Creemos en la creación visual como medio de expresión y conexión emocional, capaz de transformar ideas en experiencias estéticas con propósito. En SINN3RS construimos un lenguaje donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto, identidad y emoción.'}
                     </p>
                     <p className="section-quote">
                       {t.visionQuote || 'Detrás de cada proyecto hay una historia que no se cuenta, pero que se transmite a través de la obra final.'}
@@ -178,7 +178,7 @@ const IdentidadSinners = () => {
                       {t.missionText || 'Nuestra misión es dar forma a las ideas y convertirlas en arte, creando proyectos que combinen estética, concepto y emoción. Desde campañas y piezas audiovisuales hasta dirección creativa o fotografía, buscamos que cada obra cuente sin palabras, transmitiendo aquello que solo puede sentirse.'}
                     </p>
                     <p className="section-quote">
-                      {t.missionQuote || 'L-SINN3R existe para crear desde la pasión, conectar desde la autenticidad y dejar una parte de sí en cada historia visual.'}
+                      {t.missionQuote || 'SINN3RS existe para crear desde la pasión, conectar desde la autenticidad y dejar una parte de sí en cada historia visual.'}
                     </p>
                   </div>
                 </MagicBento>

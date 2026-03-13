@@ -1,8 +1,8 @@
-# Configuración SEO para L SINN3R
+# Configuración SEO para SINN3RS
 
 ## ✅ Configuración Completada
 
-Se ha configurado el SEO completo para el sitio web L SINN3R. Aquí está lo que se ha implementado:
+Se ha configurado el SEO completo para el sitio web SINN3RS. Aquí está lo que se ha implementado:
 
 ### 1. Meta Tags en `index.html`
 - ✅ Título optimizado con keywords
@@ -15,7 +15,7 @@ Se ha configurado el SEO completo para el sitio web L SINN3R. Aquí está lo que
 - ✅ Alternate languages (es/en)
 - ✅ Structured Data (JSON-LD) para:
   - Person (Álvaro Meza)
-  - Organization (L SINN3R)
+  - Organization (SINN3RS)
   - WebSite con SearchAction
 
 ### 2. Componente SEO Dinámico (`src/components/SEO/SEO.js`)
@@ -123,7 +123,7 @@ Las palabras clave configuradas incluyen:
 - publicidad
 - portfolio fotográfico
 - Álvaro Meza
-- L SINN3R
+- SINN3RS
 - fotógrafo
 - diseñador
 - creativo

@@ -1,4 +1,4 @@
-# .htaccess para L SINN3R - Configuración SEO y redirecciones
+# .htaccess para SINN3RS - Configuración SEO y redirecciones
 
 # Habilitar compresión
 <IfModule mod_deflate.c>

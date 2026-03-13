@@ -47,16 +47,91 @@
   border-radius: 0.35rem;
   box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
   transition: transform 0.2s ease;
+  position: relative;
 }
 
 .carousel-image-card:hover {
   transform: translateY(-2px);
 }
 
+.carousel-image-card-draggable {
+  cursor: grab;
+  user-select: none;
+  transition: opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carousel-image-card-draggable:active {
+  cursor: grabbing;
+}
+
+.carousel-image-card-draggable.carousel-dragging {
+  opacity: 0.6;
+  cursor: grabbing;
+}
+
+.carousel-image-card-draggable.carousel-drag-over {
+  box-shadow: 0 0 0 2px var(--bs-primary);
+}
+
+.carousel-drag-handle {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2;
+  cursor: grab;
+  font-size: 1rem;
+  color: rgba(0,0,0,0.4);
+  background: rgba(255,255,255,0.9);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+.carousel-drag-handle:active {
+  cursor: grabbing;
+}
+
 .carousel-image-preview {
   height: 200px;
   object-fit: cover;
   border-radius: 0.35rem 0.35rem 0 0;
+}
+
+.home-video-thumb {
+  width: 120px;
+  height: 68px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.home-video-row {
+  cursor: grab;
+  user-select: none;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.home-video-row:active {
+  cursor: grabbing;
+}
+
+.home-video-row.home-video-dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.home-video-row.home-video-drag-over {
+  background-color: rgba(13, 110, 253, 0.12);
+  border-left: 3px solid var(--bs-primary);
+}
+
+.home-video-drag-handle {
+  cursor: grab;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.home-video-drag-handle:active {
+  cursor: grabbing;
 }
 
 .images-list {

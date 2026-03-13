@@ -4,7 +4,7 @@
   color: #fff;
   position: relative;
   overflow-x: hidden;
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Marcellus", serif;
   font-optical-sizing: auto;
   font-style: normal;
 }
@@ -13,7 +13,7 @@
 .App *,
 .App *::before,
 .App *::after {
-  font-family: "Josefin Sans", sans-serif !important;
+  font-family: "Marcellus", serif !important;
   font-optical-sizing: auto;
   font-style: normal;
 }

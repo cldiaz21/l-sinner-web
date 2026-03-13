@@ -16,58 +16,58 @@ const SEO = () => {
     const pageData = {
       '/': {
         title: language === 'es' 
-          ? 'L SINN3R - Fotografía, Arte Visual y Dirección Creativa | Portfolio Profesional'
-          : 'L SINN3R - Photography, Visual Art and Creative Direction | Professional Portfolio',
+          ? 'SINN3RS - Fotografía, Arte Visual y Dirección Creativa | Marca Creativa'
+          : 'SINN3RS - Photography, Visual Art and Creative Direction | Creative Brand',
         description: language === 'es'
-          ? 'L SINN3R es un estudio creativo que fusiona fotografía, arte visual, publicidad y dirección creativa. Transformamos ideas en experiencias estéticas con propósito. Portfolio de Álvaro Meza.'
-          : 'L SINN3R is a creative studio that merges photography, visual art, advertising and creative direction. We transform ideas into aesthetic experiences with purpose. Portfolio by Álvaro Meza.',
+          ? 'SINN3RS es un estudio creativo que fusiona fotografía, arte visual, publicidad y dirección creativa. Transformamos ideas en experiencias estéticas con propósito. Marca creativa.'
+          : 'SINN3RS is a creative studio that merges photography, visual art, advertising and creative direction. We transform ideas into aesthetic experiences with purpose. Creative brand.',
         keywords: language === 'es'
-          ? 'fotografía profesional, arte visual, dirección creativa, publicidad, portfolio fotográfico, Álvaro Meza, L SINN3R, fotógrafo, diseñador, creativo'
-          : 'professional photography, visual art, creative direction, advertising, photography portfolio, Álvaro Meza, L SINN3R, photographer, designer, creative'
+          ? 'fotografía profesional, arte visual, dirección creativa, publicidad, portfolio fotográfico, Álvaro Meza, SINN3RS, fotógrafo, diseñador, creativo'
+          : 'professional photography, visual art, creative direction, advertising, photography portfolio, Álvaro Meza, SINN3RS, photographer, designer, creative'
       },
       '/identidad-sinners': {
         title: language === 'es'
-          ? 'Identidad Sinners - Visión, Estilo y Valores | L SINN3R'
-          : 'Sinners Identity - Vision, Style and Values | L SINN3R',
+          ? 'Identidad Sinners - Visión, Estilo y Valores | SINN3RS'
+          : 'Sinners Identity - Vision, Style and Values | SINN3RS',
         description: language === 'es'
-          ? 'La identidad de L SINN3R: visión, estilo, misión y valores. La dualidad entre la perfección y lo imperfecto en cada proceso creativo.'
-          : 'L SINN3R identity: vision, style, mission and values. The duality between perfection and imperfection in every creative process.',
+          ? 'La identidad de SINN3RS: visión, estilo, misión y valores. La dualidad entre la perfección y lo imperfecto en cada proceso creativo.'
+          : 'SINN3RS identity: vision, style, mission and values. The duality between perfection and imperfection in every creative process.',
         keywords: language === 'es'
-          ? 'identidad creativa, valores, visión, estilo artístico, filosofía creativa, L SINN3R'
-          : 'creative identity, values, vision, artistic style, creative philosophy, L SINN3R'
+          ? 'identidad creativa, valores, visión, estilo artístico, filosofía creativa, SINN3RS'
+          : 'creative identity, values, vision, artistic style, creative philosophy, SINN3RS'
       },
       '/proyectos': {
         title: language === 'es'
-          ? 'Proyectos - Portfolio de Fotografía y Arte Visual | L SINN3R'
-          : 'Projects - Photography and Visual Art Portfolio | L SINN3R',
+          ? 'Proyectos - Portfolio de Fotografía y Arte Visual | SINN3RS'
+          : 'Projects - Photography and Visual Art Portfolio | SINN3RS',
         description: language === 'es'
-          ? 'Explora el portfolio de proyectos de L SINN3R. Fotografía profesional, arte visual, dirección creativa y campañas publicitarias.'
-          : 'Explore L SINN3R project portfolio. Professional photography, visual art, creative direction and advertising campaigns.',
+          ? 'Explora el portfolio de proyectos de SINN3RS. Fotografía profesional, arte visual, dirección creativa y campañas publicitarias.'
+          : 'Explore SINN3RS project portfolio. Professional photography, visual art, creative direction and advertising campaigns.',
         keywords: language === 'es'
-          ? 'proyectos fotográficos, portfolio, galería, trabajos realizados, fotografía artística, L SINN3R'
-          : 'photography projects, portfolio, gallery, completed work, artistic photography, L SINN3R'
+          ? 'proyectos fotográficos, portfolio, galería, trabajos realizados, fotografía artística, SINN3RS'
+          : 'photography projects, portfolio, gallery, completed work, artistic photography, SINN3RS'
       },
       '/quienes-somos': {
         title: language === 'es'
-          ? 'Quienes Somos - Sobre Álvaro Meza / L SINN3R'
-          : 'About Us - About Álvaro Meza / L SINN3R',
+          ? 'Quienes Somos - Sobre nosotros / SINN3RS'
+          : 'About Us - About Us / SINN3RS',
         description: language === 'es'
-          ? 'Conoce a Álvaro Meza, creador detrás de L SINN3R. Estudiante de Publicidad y artista visual que transforma ideas en experiencias estéticas.'
-          : 'Meet Álvaro Meza, creator behind L SINN3R. Advertising student and visual artist who transforms ideas into aesthetic experiences.',
+          ? 'Conoce al equipo detrás de SINN3RS. Estudiante de Publicidad y artista visual que transforma ideas en experiencias estéticas.'
+          : 'Meet the team behind SINN3RS. Advertising student and visual artist who transforms ideas into aesthetic experiences.',
         keywords: language === 'es'
-          ? 'Álvaro Meza, sobre mí, biografía, creador, artista visual, publicidad, L SINN3R'
-          : 'Álvaro Meza, about me, biography, creator, visual artist, advertising, L SINN3R'
+          ? 'Álvaro Meza, sobre mí, biografía, creador, artista visual, publicidad, SINN3RS'
+          : 'Álvaro Meza, about me, biography, creator, visual artist, advertising, SINN3RS'
       },
       '/contacto': {
         title: language === 'es'
-          ? 'Contacto - Trabajemos Juntos | L SINN3R'
-          : 'Contact - Let\'s Work Together | L SINN3R',
+          ? 'Contacto - Trabajemos Juntos | SINN3RS'
+          : 'Contact - Let\'s Work Together | SINN3RS',
         description: language === 'es'
-          ? 'Contacta con L SINN3R para tu proyecto. Formulario de contacto para consultas sobre fotografía, arte visual y dirección creativa.'
-          : 'Contact L SINN3R for your project. Contact form for inquiries about photography, visual art and creative direction.',
+          ? 'Contacta con SINN3RS para tu proyecto. Formulario de contacto para consultas sobre fotografía, arte visual y dirección creativa.'
+          : 'Contact SINN3RS for your project. Contact form for inquiries about photography, visual art and creative direction.',
         keywords: language === 'es'
-          ? 'contacto, formulario, consulta, presupuesto, trabajo, L SINN3R'
-          : 'contact, form, inquiry, quote, work, L SINN3R'
+          ? 'contacto, formulario, consulta, presupuesto, trabajo, SINN3RS'
+          : 'contact, form, inquiry, quote, work, SINN3RS'
       }
     };
 

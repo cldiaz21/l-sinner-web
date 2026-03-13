@@ -1,4 +1,4 @@
-# robots.txt para L SINN3R
+# robots.txt para SINN3RS
 User-agent: *
 Allow: /
 

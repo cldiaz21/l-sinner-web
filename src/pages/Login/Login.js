@@ -58,9 +58,9 @@ const Login = () => {
         {/* Logo */}
         <div className="login-logo">
           <div className="logo-circle">
-            <img src="/images/hero/logo.png" alt="L SINN3R" className="logo-image" />
+            <img src="/images/hero/logo.png" alt="SINN3RS" className="logo-image" />
           </div>
-          <h1 className="company-name">L SINN3R</h1>
+          <h1 className="company-name">SINN3RS</h1>
           <p className="company-subtitle">Panel de Administración</p>
         </div>
 

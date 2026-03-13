@@ -119,7 +119,7 @@ const ContactForm = () => {
             <span className="section-label">{t.contactSectionLabel || 'CONTACTO'}</span>
             <h2 className="section-title">{t.contactTitle || 'Hablemos de tu proyecto'}</h2>
             <p className="contact-description">
-              {t.contactDescription || '¿Tienes preguntas? ¿Necesitas una demo? ¿Quieres integrar L-SINN3R en tu organización? Estamos aquí para ayudarte.'}
+              {t.contactDescription || '¿Tienes preguntas? ¿Necesitas una demo? ¿Quieres integrar SINN3RS en tu organización? Estamos aquí para ayudarte.'}
             </p>
             <div className="contact-methods">
               <div className="contact-method">

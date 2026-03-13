@@ -12,7 +12,7 @@ const QuienesSomos = () => {
     <div className="page-container">
       <HeroSection
         title={t.quienesSomos || "Quienes Somos"}
-        subtitle={t.quienesSomosSubtitle || "Sobre L sinn3r"}
+        subtitle={t.quienesSomosSubtitle || "Sobre SINN3RS"}
         animationType="silk"
       />
       {/* Sección de Álvaro Meza - Full Width */}
@@ -23,7 +23,7 @@ const QuienesSomos = () => {
               <div className="alvaro-photo-wrapper">
                 <img
                   src="/images/alvaromeza.jpg"
-                  alt="Álvaro Meza - Fundador de L SINN3R"
+                  alt="Álvaro Meza - Fundador de SINN3RS"
                   className="alvaro-photo"
                   onError={(e) => {
                     e.target.src = 'https://via.placeholder.com/600x800/1a1a1a/ffffff?text=Álvaro+Meza';
@@ -37,7 +37,7 @@ const QuienesSomos = () => {
                 <h3 className="alvaro-name">{t.alvaroMeza || 'Álvaro Meza'}</h3>
                 <div className="alvaro-text">
                   <p>
-                    {t.alvaroText1 || 'Soy Álvaro Meza, estudiante de Publicidad y creador detrás de L SINN3R. Mi propósito es transformar ideas en experiencias visuales, desarrollando cada proyecto desde un enfoque conceptual que une mi formación publicitaria con mis pasiones: el arte, la música, lo audiovisual y la fotografía.'}
+                    {t.alvaroText1 || 'Soy Álvaro Meza, estudiante de Publicidad y creador detrás de SINN3RS. Mi propósito es transformar ideas en experiencias visuales, desarrollando cada proyecto desde un enfoque conceptual que une mi formación publicitaria con mis pasiones: el arte, la música, lo audiovisual y la fotografía.'}
                   </p>
                   <p>
                     {t.alvaroText2 || 'En cada trabajo busco transmitir una historia, una emoción y una estética propia, dejando siempre una parte de mí en lo que hago. Para mí, la creatividad es un puente entre lo que imaginamos y lo que podemos hacer sentir a los demás.'}

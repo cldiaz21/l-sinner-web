@@ -1,6 +1,6 @@
-# L SINN3R - Portfolio Website
+# SINN3RS - Portfolio Website
 
-Portfolio website for L SINN3R, a professional photographer. Built with React and Bootstrap.
+Portfolio website for SINN3RS, creative brand. Built with React and Bootstrap.
 
 ## 🚀 Features
 
@@ -168,7 +168,7 @@ This project is private and proprietary.
 
 ## 👤 Author
 
-**Álvaro Meza** - Founder of L SINN3R
+**Álvaro Meza** - Founder of SINN3RS
 
 ## 🙏 Acknowledgments
 

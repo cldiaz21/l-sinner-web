@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
-import { LayoutDashboard, Folder, Image as ImageIcon, LogOut, Menu, X, Home } from 'lucide-react';
+import { LayoutDashboard, Folder, Image as ImageIcon, Video, LogOut, Menu, X, Home } from 'lucide-react';
 import './AdminLayout.css';
 
 const AdminLayout = ({ children, activeTab, onTabChange }) => {
@@ -16,7 +16,8 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/admin' },
     { id: 'projects', label: 'Proyectos', icon: Folder, href: '/admin' },
-    { id: 'carousel', label: 'Carrusel', icon: ImageIcon, href: '/admin' },
+    { id: 'carousel', label: 'Header Home', icon: ImageIcon, href: '/admin' },
+    { id: 'homeVideos', label: 'Videos Home', icon: Video, href: '/admin' },
   ];
 
   return (
@@ -25,8 +26,8 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
       <nav className={`admin-sidebar ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo">
-            <img src="/images/hero/logo.png" alt="L SINN3R" className="sidebar-logo-img" />
-            <span className="sidebar-logo-text">L SINN3R</span>
+            <img src="/images/hero/logo.png" alt="SINN3RS" className="sidebar-logo-img" />
+            <span className="sidebar-logo-text">SINN3RS</span>
           </div>
           <button 
             className="sidebar-toggle-mobile"

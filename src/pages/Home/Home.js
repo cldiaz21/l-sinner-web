@@ -11,7 +11,7 @@ import VariableProximity from '../../components/VariableProximity/VariableProxim
 import './Home.css';
 
 const Home = () => {
-  const { projects, carouselImages, loading } = useContext(ProjectContext);
+  const { projects, carouselImages } = useContext(ProjectContext);
   const { t } = useContext(LanguageContext);
   const quoteContainerRef = useRef(null);
 
@@ -34,7 +34,7 @@ const Home = () => {
     <div className="page-container">
       {/* Hero Section tipo portafolio con imagen de fondo y nombre superpuesto */}
       <HeroSection
-        title="L SINN3R"
+        title="SINN3RS"
         subtitle=""
         images={heroImage ? [heroImage] : []}
         portfolioMode={true}
@@ -63,31 +63,34 @@ const Home = () => {
         </Container>
       </section>
 
-      {/* Descripción de L SINN3R */}
+      {/* Descripción de SINN3RS */}
       <section className="description-section">
         <Container>
           <Row className="description-row">
             <Col lg={6} md={6} className="description-image-col">
               <img 
                 src="/images/hero/logo.png" 
-                alt="L SINN3R" 
+                alt="SINN3RS" 
                 className="description-image"
                 loading="lazy"
                 onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/600x800/1a1a1a/ffffff?text=L+SINN3R';
+                  e.target.src = 'https://via.placeholder.com/600x800/1a1a1a/ffffff?text=SINN3RS';
                 }}
               />
             </Col>
             <Col lg={6} md={6} className="description-content-col">
               <div className="description-content">
                 <p className="description-text">
-                  {t.descriptionText1 || "L-SINN3R representa la dualidad entre la perfección y lo imperfecto. Creemos en el arte como expresión real y emocional, donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto e identidad. Detrás de cada proyecto hay una historia que se transmite a través de la obra final."}
+                  {t.descriptionText1 || "SINN3RS representa la dualidad entre la perfección y lo imperfecto. Creemos en el arte como expresión real y emocional, donde la publicidad, el arte, la música y lo audiovisual convergen para generar impacto e identidad. Detrás de cada proyecto hay una historia que se transmite a través de la obra final."}
                 </p>
               </div>
             </Col>
           </Row>
         </Container>
       </section>
+
+      {/* Videos de YouTube (orden desde el admin) */}
+      <VideosSection />
 
       {/* Últimos Proyectos - Galería */}
       <section className="projects-section">
@@ -96,9 +99,6 @@ const Home = () => {
           <ProjectsGallery projects={latestProjects} />
         </Container>
       </section>
-
-      {/* Videos con Estadísticas */}
-      <VideosSection projects={projects || []} />
 
       {/* Redes Sociales */}
       <section className="social-section">

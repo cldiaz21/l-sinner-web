@@ -1,22 +1,28 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Row, Col, Card, Button, Modal, Form, Alert } from 'react-bootstrap';
 import { ProjectContext } from '../../context/ProjectContext';
 import AdminLayout from '../../components/AdminLayout/AdminLayout';
-import { Plus, Edit, Trash2, Image as ImageIcon, Video, Calendar, Tag, Star, Folder, Upload, X as XIcon } from 'lucide-react';
+import { Plus, Edit, Trash2, Image as ImageIcon, Video, Calendar, Tag, Star, Folder, Upload, X as XIcon, ChevronUp, ChevronDown } from 'lucide-react';
 import { uploadService } from '../../services/uploadService';
+import { getYouTubeVideoInfo } from '../../utils/youtubeUtils';
 import './Admin.css';
 
 const Admin = () => {
   const { 
     projects, 
-    carouselImages, 
+    carouselItems,
+    homeVideos,
     loading,
     error,
     addProject, 
     updateProject, 
     deleteProject, 
     addCarouselImage, 
-    removeCarouselImage 
+    removeCarouselImage,
+    updateCarouselOrder,
+    addHomeVideo,
+    removeHomeVideo,
+    updateHomeVideosOrder,
   } = useContext(ProjectContext);
 
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -25,7 +31,9 @@ const Admin = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteProjectId, setDeleteProjectId] = useState(null);
   const [showDeleteCarouselConfirm, setShowDeleteCarouselConfirm] = useState(false);
-  const [deleteCarouselIndex, setDeleteCarouselIndex] = useState(null);
+  const [deleteCarouselId, setDeleteCarouselId] = useState(null);
+  const [draggedCarouselIndex, setDraggedCarouselIndex] = useState(null);
+  const [dragOverCarouselIndex, setDragOverCarouselIndex] = useState(null);
   const [showImageInput, setShowImageInput] = useState(false);
   const [imageInputUrl, setImageInputUrl] = useState('');
   const [imageUploadMode, setImageUploadMode] = useState('upload'); // 'upload' or 'url'
@@ -49,6 +57,34 @@ const Admin = () => {
   const [uploadingCarousel, setUploadingCarousel] = useState(false);
   const [alert, setAlert] = useState({ show: false, message: '', type: 'success' });
   const [submitting, setSubmitting] = useState(false);
+  const [homeVideoUrl, setHomeVideoUrl] = useState('');
+  const [showDeleteHomeVideoConfirm, setShowDeleteHomeVideoConfirm] = useState(false);
+  const [deleteHomeVideoId, setDeleteHomeVideoId] = useState(null);
+  const [homeVideoInfos, setHomeVideoInfos] = useState({});
+  const [draggedVideoIndex, setDraggedVideoIndex] = useState(null);
+  const [dragOverVideoIndex, setDragOverVideoIndex] = useState(null);
+
+  useEffect(() => {
+    if (!homeVideos?.length) {
+      setHomeVideoInfos({});
+      return;
+    }
+    let cancelled = false;
+    const load = async () => {
+      const infos = {};
+      for (const video of homeVideos) {
+        try {
+          const info = await getYouTubeVideoInfo(video.url);
+          if (!cancelled && info) infos[video.id] = { title: info.title, thumbnail: info.thumbnail };
+        } catch {
+          if (!cancelled) infos[video.id] = null;
+        }
+      }
+      if (!cancelled) setHomeVideoInfos(infos);
+    };
+    load();
+    return () => { cancelled = true; };
+  }, [homeVideos]);
 
   const handleProjectSubmit = async (e) => {
     e.preventDefault();
@@ -124,12 +160,6 @@ const Admin = () => {
     }
     setShowDeleteConfirm(false);
     setDeleteProjectId(null);
-  };
-
-  const handleAddImage = () => {
-    setShowImageInput(true);
-    setImageUploadMode('upload');
-    setImageInputUrl('');
   };
 
   const handleImageFileSelect = async (e) => {
@@ -222,7 +252,7 @@ const Admin = () => {
     if (files.length === 0) return;
 
     setUploadingCarousel(true);
-    setUploadProgress(`Subiendo ${files.length} imagen(es) al carrusel...`);
+    setUploadProgress(`Subiendo ${files.length} imagen(es) al header...`);
 
     try {
       for (const file of files) {
@@ -248,7 +278,7 @@ const Admin = () => {
       if (files.length > 0) {
         setAlert({ 
           show: true, 
-          message: `${files.length} imagen(es) agregada(s) al carrusel`, 
+          message: `${files.length} imagen(es) agregada(s) al header del home`, 
           type: 'success' 
         });
         setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
@@ -275,7 +305,7 @@ const Admin = () => {
       const result = await addCarouselImage(carouselImageUrl.trim());
       if (result.success) {
         setCarouselImageUrl('');
-        setAlert({ show: true, message: 'Imagen agregada al carrusel', type: 'success' });
+        setAlert({ show: true, message: 'Imagen agregada al header del home', type: 'success' });
       } else {
         setAlert({ show: true, message: result.error || 'Error al agregar imagen', type: 'danger' });
       }
@@ -283,34 +313,281 @@ const Admin = () => {
     }
   };
 
-  const handleRemoveCarouselImage = (index) => {
-    setDeleteCarouselIndex(index);
+  const handleRemoveCarouselImage = (id) => {
+    setDeleteCarouselId(id);
     setShowDeleteCarouselConfirm(true);
   };
 
   const confirmDeleteCarouselImage = async () => {
-    if (deleteCarouselIndex !== null) {
-      const result = await removeCarouselImage(deleteCarouselIndex);
+    if (deleteCarouselId) {
+      const result = await removeCarouselImage(deleteCarouselId);
       if (result.success) {
-        setAlert({ show: true, message: 'Imagen eliminada del carrusel', type: 'success' });
+        setAlert({ show: true, message: 'Imagen eliminada del header', type: 'success' });
       } else {
         setAlert({ show: true, message: result.error || 'Error al eliminar imagen', type: 'danger' });
       }
       setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
     }
     setShowDeleteCarouselConfirm(false);
-    setDeleteCarouselIndex(null);
+    setDeleteCarouselId(null);
+  };
+
+  const handleCarouselDragStart = (e, index) => {
+    setDraggedCarouselIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(index));
+  };
+
+  const handleCarouselDragEnd = () => {
+    setDraggedCarouselIndex(null);
+    setDragOverCarouselIndex(null);
+  };
+
+  const handleCarouselDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (draggedCarouselIndex !== null && draggedCarouselIndex !== index) {
+      setDragOverCarouselIndex(index);
+    }
+  };
+
+  const handleCarouselDragLeave = (e) => {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverCarouselIndex(null);
+    }
+  };
+
+  const handleCarouselDrop = async (e, dropIndex) => {
+    e.preventDefault();
+    setDragOverCarouselIndex(null);
+    const fromIndex = draggedCarouselIndex;
+    if (fromIndex === null || fromIndex === dropIndex) {
+      setDraggedCarouselIndex(null);
+      return;
+    }
+    const newOrder = [...carouselItems];
+    const [moved] = newOrder.splice(fromIndex, 1);
+    newOrder.splice(dropIndex, 0, moved);
+    const orderedIds = newOrder.map(item => item.id);
+    const result = await updateCarouselOrder(orderedIds);
+    if (result.success) setAlert({ show: true, message: 'Orden del header actualizado', type: 'success' });
+    else setAlert({ show: true, message: result.error || 'Error al reordenar', type: 'danger' });
+    setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
+    setDraggedCarouselIndex(null);
+  };
+
+  const handleAddHomeVideo = async () => {
+    if (!homeVideoUrl.trim()) return;
+    const result = await addHomeVideo(homeVideoUrl.trim());
+    if (result.success) {
+      setHomeVideoUrl('');
+      setAlert({ show: true, message: 'Video agregado a la home', type: 'success' });
+    } else {
+      setAlert({ show: true, message: result.error || 'Error al agregar video', type: 'danger' });
+    }
+    setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
+  };
+
+  const handleRemoveHomeVideo = (id) => {
+    setDeleteHomeVideoId(id);
+    setShowDeleteHomeVideoConfirm(true);
+  };
+
+  const confirmDeleteHomeVideo = async () => {
+    if (deleteHomeVideoId) {
+      const result = await removeHomeVideo(deleteHomeVideoId);
+      if (result.success) setAlert({ show: true, message: 'Video eliminado', type: 'success' });
+      else setAlert({ show: true, message: result.error || 'Error al eliminar', type: 'danger' });
+      setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
+    }
+    setShowDeleteHomeVideoConfirm(false);
+    setDeleteHomeVideoId(null);
+  };
+
+  const handleMoveHomeVideo = async (index, direction) => {
+    const newOrder = [...homeVideos];
+    const other = direction === 'up' ? index - 1 : index + 1;
+    if (other < 0 || other >= newOrder.length) return;
+    [newOrder[index], newOrder[other]] = [newOrder[other], newOrder[index]];
+    const orderedIds = newOrder.map(v => v.id);
+    const result = await updateHomeVideosOrder(orderedIds);
+    if (result.success) setAlert({ show: true, message: 'Orden actualizado', type: 'success' });
+    else setAlert({ show: true, message: result.error || 'Error al reordenar', type: 'danger' });
+    setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
+  };
+
+  const handleVideoDragStart = (e, index) => {
+    setDraggedVideoIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(index));
+  };
+
+  const handleVideoDragEnd = () => {
+    setDraggedVideoIndex(null);
+    setDragOverVideoIndex(null);
+  };
+
+  const handleVideoDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (draggedVideoIndex !== null && draggedVideoIndex !== index) {
+      setDragOverVideoIndex(index);
+    }
+  };
+
+  const handleVideoDragLeave = (e) => {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverVideoIndex(null);
+    }
+  };
+
+  const handleVideoDrop = async (e, dropIndex) => {
+    e.preventDefault();
+    setDragOverVideoIndex(null);
+    const fromIndex = draggedVideoIndex;
+    if (fromIndex === null || fromIndex === dropIndex) {
+      setDraggedVideoIndex(null);
+      return;
+    }
+    const newOrder = [...homeVideos];
+    const [moved] = newOrder.splice(fromIndex, 1);
+    newOrder.splice(dropIndex, 0, moved);
+    const orderedIds = newOrder.map(v => v.id);
+    const result = await updateHomeVideosOrder(orderedIds);
+    if (result.success) setAlert({ show: true, message: 'Orden actualizado', type: 'success' });
+    else setAlert({ show: true, message: result.error || 'Error al reordenar', type: 'danger' });
+    setTimeout(() => setAlert({ show: false, message: '', type: 'success' }), 3000);
+    setDraggedVideoIndex(null);
+  };
+
+  const renderHomeVideos = () => {
+    return (
+      <div>
+        <Card className="admin-card mb-4">
+          <Card.Header className="admin-card-header">
+            <h5 className="admin-card-title mb-0">Agregar video de YouTube</h5>
+          </Card.Header>
+          <Card.Body>
+            <p className="text-muted small mb-3">
+              Los videos se muestran en la sección &quot;Videos&quot; de la home. Solo enlaces de YouTube (ej: https://www.youtube.com/watch?v=... o https://youtu.be/...).
+            </p>
+            <div className="d-flex gap-2 flex-wrap">
+              <Form.Control
+                type="url"
+                value={homeVideoUrl}
+                onChange={(e) => setHomeVideoUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+                className="admin-form-control flex-grow-1"
+                style={{ minWidth: '200px' }}
+              />
+              <Button
+                className="admin-btn admin-btn-primary"
+                onClick={handleAddHomeVideo}
+                disabled={!homeVideoUrl.trim()}
+              >
+                <Plus size={18} className="me-1" />
+                Agregar video
+              </Button>
+            </div>
+          </Card.Body>
+        </Card>
+
+        <Card className="admin-card">
+          <Card.Header className="admin-card-header">
+            <h5 className="admin-card-title mb-0">Videos de la Home (arrastra para reordenar)</h5>
+          </Card.Header>
+          <Card.Body>
+            {homeVideos.length === 0 ? (
+              <p className="text-muted">No hay videos. Agrega enlaces de YouTube arriba.</p>
+            ) : (
+              <div className="list-group list-group-flush">
+                {homeVideos.map((video, index) => {
+                  const info = homeVideoInfos[video.id];
+                  const isDragging = draggedVideoIndex === index;
+                  const isDragOver = dragOverVideoIndex === index;
+                  return (
+                    <div
+                      key={video.id}
+                      className={`list-group-item d-flex align-items-center gap-3 flex-wrap py-3 home-video-row ${isDragging ? 'home-video-dragging' : ''} ${isDragOver ? 'home-video-drag-over' : ''}`}
+                      draggable
+                      onDragStart={(e) => handleVideoDragStart(e, index)}
+                      onDragEnd={handleVideoDragEnd}
+                      onDragOver={(e) => handleVideoDragOver(e, index)}
+                      onDragLeave={handleVideoDragLeave}
+                      onDrop={(e) => handleVideoDrop(e, index)}
+                    >
+                      <span className="home-video-drag-handle text-muted me-1" title="Arrastra para reordenar">⋮⋮</span>
+                      <span className="text-muted fw-bold" style={{ minWidth: '24px' }}>{index + 1}.</span>
+                      {info?.thumbnail && (
+                        <img
+                          src={info.thumbnail}
+                          alt=""
+                          className="home-video-thumb rounded"
+                        />
+                      )}
+                      <div className="flex-grow-1 min-w-0">
+                        {info?.title ? (
+                          <div className="fw-semibold text-dark mb-1">{info.title}</div>
+                        ) : (
+                          info === null ? (
+                            <div className="text-muted small mb-1">No se pudo cargar la info</div>
+                          ) : (
+                            <div className="text-muted small mb-1">Cargando...</div>
+                          )
+                        )}
+                        <a href={video.url} target="_blank" rel="noopener noreferrer" className="small text-break">
+                          {video.url}
+                        </a>
+                      </div>
+                      <div className="d-flex align-items-center gap-1">
+                        <Button
+                          variant="outline-secondary"
+                          size="sm"
+                          onClick={() => handleMoveHomeVideo(index, 'up')}
+                          disabled={index === 0}
+                          title="Subir"
+                        >
+                          <ChevronUp size={18} />
+                        </Button>
+                        <Button
+                          variant="outline-secondary"
+                          size="sm"
+                          onClick={() => handleMoveHomeVideo(index, 'down')}
+                          disabled={index === homeVideos.length - 1}
+                          title="Bajar"
+                        >
+                          <ChevronDown size={18} />
+                        </Button>
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          onClick={() => handleRemoveHomeVideo(video.id)}
+                          title="Eliminar"
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </Card.Body>
+        </Card>
+      </div>
+    );
   };
 
   const renderDashboard = () => {
     const featuredProjects = projects.filter(p => p.featured).length;
     const totalProjects = projects.length;
-    const totalCarouselImages = carouselImages.length;
+    const totalCarouselImages = carouselItems.length;
+    const totalHomeVideos = homeVideos.length;
 
     return (
       <div>
         <Row className="mb-4">
-          <Col md={4}>
+          <Col md={3}>
             <Card className="admin-card">
               <Card.Body>
                 <div className="d-flex align-items-center">
@@ -325,7 +602,7 @@ const Admin = () => {
               </Card.Body>
             </Card>
           </Col>
-          <Col md={4}>
+          <Col md={3}>
             <Card className="admin-card">
               <Card.Body>
                 <div className="d-flex align-items-center">
@@ -340,16 +617,31 @@ const Admin = () => {
               </Card.Body>
             </Card>
           </Col>
-          <Col md={4}>
+          <Col md={3}>
             <Card className="admin-card">
               <Card.Body>
                 <div className="d-flex align-items-center">
                   <div className="flex-grow-1">
-                    <div className="text-muted small mb-1">Imágenes en Carrusel</div>
+                    <div className="text-muted small mb-1">Imágenes Header</div>
                     <div className="h4 mb-0">{totalCarouselImages}</div>
                   </div>
                   <div className="text-info">
                     <ImageIcon size={32} />
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={3}>
+            <Card className="admin-card">
+              <Card.Body>
+                <div className="d-flex align-items-center">
+                  <div className="flex-grow-1">
+                    <div className="text-muted small mb-1">Videos Home</div>
+                    <div className="h4 mb-0">{totalHomeVideos}</div>
+                  </div>
+                  <div className="text-danger">
+                    <Video size={32} />
                   </div>
                 </div>
               </Card.Body>
@@ -494,9 +786,12 @@ const Admin = () => {
       <div>
         <Card className="admin-card mb-4">
           <Card.Header className="admin-card-header">
-            <h5 className="admin-card-title mb-0">Agregar Imagen al Carrusel</h5>
+            <h5 className="admin-card-title mb-0">Agregar imagen al header del Home</h5>
           </Card.Header>
           <Card.Body>
+            <p className="text-muted small mb-3">
+              Estas imágenes se muestran en el <strong>header (portada)</strong> de la página de inicio. La <strong>primera imagen</strong> de la lista es la que se ve como fondo principal. Puedes reordenar arrastrando.
+            </p>
             <div className="mb-3">
               <div className="btn-group" role="group">
                 <Button
@@ -569,31 +864,44 @@ const Admin = () => {
 
         <Card className="admin-card">
           <Card.Header className="admin-card-header">
-            <h5 className="admin-card-title mb-0">Imágenes del Carrusel</h5>
+            <h5 className="admin-card-title mb-0">Imágenes del header (la primera = portada del home · arrastra para reordenar)</h5>
           </Card.Header>
           <Card.Body>
-            {carouselImages.length === 0 ? (
-              <p className="text-muted">No hay imágenes en el carrusel. Agrega una para comenzar.</p>
+            {carouselItems.length === 0 ? (
+              <p className="text-muted">No hay imágenes para el header. Agrega una arriba para que se vea en la portada del home.</p>
             ) : (
               <Row>
-                {carouselImages.map((image, index) => (
-                  <Col key={index} md={6} lg={4} className="mb-4">
-                    <Card className="carousel-image-card">
-                      <Card.Img variant="top" src={image} className="carousel-image-preview" />
-                      <Card.Body>
-                        <Button
-                          variant="outline-danger"
-                          size="sm"
-                          onClick={() => handleRemoveCarouselImage(index)}
-                          className="w-100"
-                        >
-                          <Trash2 size={16} className="me-1" />
-                          Eliminar
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
+                {carouselItems.map((item, index) => {
+                  const isDragging = draggedCarouselIndex === index;
+                  const isDragOver = dragOverCarouselIndex === index;
+                  return (
+                    <Col key={item.id} md={6} lg={4} className="mb-4">
+                      <Card
+                        className={`carousel-image-card carousel-image-card-draggable ${isDragging ? 'carousel-dragging' : ''} ${isDragOver ? 'carousel-drag-over' : ''}`}
+                        draggable
+                        onDragStart={(e) => handleCarouselDragStart(e, index)}
+                        onDragEnd={handleCarouselDragEnd}
+                        onDragOver={(e) => handleCarouselDragOver(e, index)}
+                        onDragLeave={handleCarouselDragLeave}
+                        onDrop={(e) => handleCarouselDrop(e, index)}
+                      >
+                        <span className="carousel-drag-handle" title="Arrastra para reordenar">⋮⋮</span>
+                        <Card.Img variant="top" src={item.image_url} className="carousel-image-preview" alt="" />
+                        <Card.Body>
+                          <Button
+                            variant="outline-danger"
+                            size="sm"
+                            onClick={() => handleRemoveCarouselImage(item.id)}
+                            className="w-100"
+                          >
+                            <Trash2 size={16} className="me-1" />
+                            Eliminar
+                          </Button>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  );
+                })}
               </Row>
             )}
           </Card.Body>
@@ -636,6 +944,7 @@ const Admin = () => {
       {activeTab === 'dashboard' && renderDashboard()}
       {activeTab === 'projects' && renderProjects()}
       {activeTab === 'carousel' && renderCarousel()}
+      {activeTab === 'homeVideos' && renderHomeVideos()}
 
       {/* Modal para crear/editar proyecto */}
       <Modal 
@@ -856,19 +1165,37 @@ const Admin = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Modal de confirmación para eliminar imagen del carrusel */}
+      {/* Modal de confirmación para eliminar imagen del header */}
       <Modal show={showDeleteCarouselConfirm} onHide={() => setShowDeleteCarouselConfirm(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmar eliminación</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          ¿Estás seguro de que deseas eliminar esta imagen del carrusel?
+          ¿Eliminar esta imagen del header del home?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowDeleteCarouselConfirm(false)}>
             Cancelar
           </Button>
           <Button variant="danger" onClick={confirmDeleteCarouselImage}>
+            Eliminar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal de confirmación para eliminar video de la home */}
+      <Modal show={showDeleteHomeVideoConfirm} onHide={() => setShowDeleteHomeVideoConfirm(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar eliminación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          ¿Eliminar este video de la sección Videos de la home?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteHomeVideoConfirm(false)}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={confirmDeleteHomeVideo}>
             Eliminar
           </Button>
         </Modal.Footer>
