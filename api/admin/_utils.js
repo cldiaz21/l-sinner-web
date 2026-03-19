@@ -109,6 +109,36 @@ function json(res, statusCode, body) {
   res.end(JSON.stringify(body));
 }
 
+function readRawBody(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', (c) => chunks.push(Buffer.isBuffer(c) ? c : Buffer.from(c)));
+    req.on('end', () => resolve(Buffer.concat(chunks)));
+    req.on('error', reject);
+  });
+}
+
+async function readJsonBody(req) {
+  // Vercel/Node serverless no siempre popula req.body de forma consistente.
+  const ct = String(req.headers['content-type'] || '');
+  if (ct.includes('application/json')) {
+    const raw = await readRawBody(req);
+    const text = raw.toString('utf8') || '{}';
+    try {
+      return JSON.parse(text);
+    } catch {
+      const err = new Error('JSON inválido');
+      err.statusCode = 400;
+      throw err;
+    }
+  }
+
+  // Fallback: si runtime ya lo parseó
+  if (req.body && typeof req.body === 'object') return req.body;
+  if (typeof req.body === 'string') return JSON.parse(req.body || '{}');
+  return {};
+}
+
 async function uploadAndGetPublicUrl(supabase, bucket, path, buffer, contentType) {
   const { error: uploadErr } = await supabase.storage.from(bucket).upload(path, buffer, {
     contentType,
@@ -125,6 +155,7 @@ module.exports = {
   getServiceSupabase,
   requireAdmin,
   parseMultipart,
+  readJsonBody,
   uploadAndGetPublicUrl,
   json,
 };

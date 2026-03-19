@@ -1,4 +1,4 @@
-const { getServiceSupabase, requireAdmin, json } = require('./_utils');
+const { getServiceSupabase, requireAdmin, readJsonBody, json } = require('./_utils');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
     const supabase = getServiceSupabase();
     await requireAdmin(req, supabase);
 
-    const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    const body = await readJsonBody(req);
     const kind = String(body.kind || '');
     const publicUrl = body.publicUrl ? String(body.publicUrl) : '';
 

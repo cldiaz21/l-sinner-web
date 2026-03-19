@@ -1,4 +1,4 @@
-const { getServiceSupabase, requireAdmin, json } = require('./_utils');
+const { getServiceSupabase, requireAdmin, readJsonBody, json } = require('./_utils');
 
 function safeFilename(name) {
   return String(name || 'file').replace(/[^\w.\-]+/g, '_');
@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     const supabase = getServiceSupabase();
     await requireAdmin(req, supabase);
 
-    const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    const body = await readJsonBody(req);
     const kind = String(body.kind || '');
     const filename = safeFilename(body.filename);
     const contentType = body.contentType ? String(body.contentType) : 'application/octet-stream';
@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
     }
 
     const { data, error } = await supabase.storage.from(bucket).createSignedUploadUrl(objectPath);
-    if (error) return json(res, 500, { error: error.message });
+    if (error) return json(res, 500, { error: error.message, bucket, objectPath });
 
     const { data: pub } = supabase.storage.from(bucket).getPublicUrl(objectPath);
     const publicUrl = pub?.publicUrl;
