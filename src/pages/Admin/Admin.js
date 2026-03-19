@@ -5,6 +5,7 @@ import AdminLayout from '../../components/AdminLayout/AdminLayout';
 import { Plus, Edit, Trash2, Image as ImageIcon, Video, Calendar, Tag, Star, Folder, Upload, X as XIcon, ChevronUp, ChevronDown } from 'lucide-react';
 import { uploadService } from '../../services/uploadService';
 import { getYouTubeVideoInfo } from '../../utils/youtubeUtils';
+import AdminContent from '../../components/AdminContent/AdminContent';
 import './Admin.css';
 
 const Admin = () => {
@@ -910,6 +911,10 @@ const Admin = () => {
     );
   };
 
+  const renderContent = () => {
+    return <AdminContent />;
+  };
+
   if (loading) {
     return (
       <AdminLayout activeTab={activeTab} onTabChange={setActiveTab}>
@@ -944,6 +949,7 @@ const Admin = () => {
       {activeTab === 'dashboard' && renderDashboard()}
       {activeTab === 'projects' && renderProjects()}
       {activeTab === 'carousel' && renderCarousel()}
+      {activeTab === 'content' && renderContent()}
       {activeTab === 'homeVideos' && renderHomeVideos()}
 
       {/* Modal para crear/editar proyecto */}

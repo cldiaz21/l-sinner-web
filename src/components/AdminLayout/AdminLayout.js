@@ -17,6 +17,7 @@ const AdminLayout = ({ children, activeTab, onTabChange }) => {
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/admin' },
     { id: 'projects', label: 'Proyectos', icon: Folder, href: '/admin' },
     { id: 'carousel', label: 'Header Home', icon: ImageIcon, href: '/admin' },
+    { id: 'content', label: 'Contenido', icon: ImageIcon, href: '/admin' },
     { id: 'homeVideos', label: 'Videos Home', icon: Video, href: '/admin' },
   ];
 
