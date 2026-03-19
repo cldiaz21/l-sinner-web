@@ -41,7 +41,17 @@ module.exports = async (req, res) => {
     }
 
     const { data, error } = await supabase.storage.from(bucket).createSignedUploadUrl(objectPath);
-    if (error) return json(res, 500, { error: error.message, bucket, objectPath });
+    if (error) {
+      const msg = error.message || '';
+      const hint = /bucket|not found|resource|exist/i.test(msg)
+        ? ' Crea en Supabase > Storage los buckets: wallpaper, comic, gallery (públicos).'
+        : '';
+      return json(res, 500, {
+        error: msg + hint,
+        bucket,
+        objectPath,
+      });
+    }
 
     const { data: pub } = supabase.storage.from(bucket).getPublicUrl(objectPath);
     const publicUrl = pub?.publicUrl;
