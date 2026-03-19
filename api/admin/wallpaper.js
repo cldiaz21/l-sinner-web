@@ -1,3 +1,7 @@
+/**
+ * DEPRECADO para archivos grandes: Vercel devuelve 413 (FUNCTION_PAYLOAD_TOO_LARGE).
+ * El Admin debe usar el flujo: POST /api/admin/upload-prepare → upload directo a Supabase → POST /api/admin/upload-commit.
+ */
 const {
   getServiceSupabase,
   requireAdmin,
@@ -8,6 +12,7 @@ const {
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
+  // Archivos grandes no llegan aquí: Vercel corta antes con 413. Usar upload-prepare + upload-commit.
 
   try {
     const supabase = getServiceSupabase();
