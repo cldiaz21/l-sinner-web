@@ -1,24 +1,51 @@
 import React, { useMemo, useState } from 'react';
 import { Card, Button, Form, Alert } from 'react-bootstrap';
 import { authService } from '../../services/authService';
+import { supabase } from '../../lib/supabase';
 import './AdminContent.css';
 
-async function authFetch(url, formData) {
+async function authJson(url, body) {
   const { session, error } = await authService.getSession();
   if (error) throw new Error(error.message || 'No se pudo obtener la sesión');
   if (!session?.access_token) throw new Error('No hay sesión activa');
 
   const res = await fetch(url, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${session.access_token}` },
-    body: formData,
+    headers: {
+      Authorization: `Bearer ${session.access_token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
   });
 
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    throw new Error(data?.error || `Error HTTP ${res.status}`);
-  }
+  if (!res.ok) throw new Error(data?.error || `Error HTTP ${res.status}`);
   return data;
+}
+
+async function signedUploadFlow({ kind, file, extra = {} }) {
+  const prep = await authJson('/api/admin/upload-prepare', {
+    kind,
+    filename: file.name,
+    contentType: file.type || 'application/octet-stream',
+    ...extra,
+  });
+
+  // Upload directo a Supabase (no pasa por Vercel → sin 413)
+  const { error: upErr } = await supabase.storage
+    .from(prep.bucket)
+    .uploadToSignedUrl(prep.objectPath, prep.token, file, {
+      contentType: file.type || 'application/octet-stream',
+    });
+  if (upErr) throw new Error(upErr.message);
+
+  const commit = await authJson('/api/admin/upload-commit', {
+    kind,
+    publicUrl: prep.publicUrl,
+    ...extra,
+  });
+
+  return { prep, commit };
 }
 
 export default function AdminContent() {
@@ -60,10 +87,8 @@ export default function AdminContent() {
     if (!wallpaperFile) return setWallpaperError('Selecciona un archivo');
     setWallpaperLoading(true);
     try {
-      const fd = new FormData();
-      fd.append('file', wallpaperFile);
-      const data = await authFetch('/api/admin/wallpaper', fd);
-      setWallpaperResult(data);
+      const { prep, commit } = await signedUploadFlow({ kind: 'wallpaper', file: wallpaperFile });
+      setWallpaperResult({ url: commit.url, objectPath: prep.objectPath });
     } catch (e) {
       setWallpaperError(e.message);
     } finally {
@@ -77,10 +102,8 @@ export default function AdminContent() {
     if (!iconFile) return setIconError('Selecciona un archivo');
     setIconLoading(true);
     try {
-      const fd = new FormData();
-      fd.append('file', iconFile);
-      const data = await authFetch('/api/admin/comic-icon', fd);
-      setIconResult(data);
+      const { prep, commit } = await signedUploadFlow({ kind: 'comic_icon', file: iconFile });
+      setIconResult({ url: commit.url, objectPath: prep.objectPath });
     } catch (e) {
       setIconError(e.message);
     } finally {
@@ -96,11 +119,12 @@ export default function AdminContent() {
     if (!Number.isFinite(sort_order)) return setPageError('sort_order inválido');
     setPageLoading(true);
     try {
-      const fd = new FormData();
-      fd.append('file', pageFile);
-      fd.append('sort_order', String(sort_order));
-      const data = await authFetch('/api/admin/comic-page', fd);
-      setPageResult(data);
+      const { commit } = await signedUploadFlow({
+        kind: 'comic_page',
+        file: pageFile,
+        extra: { sort_order },
+      });
+      setPageResult(commit);
     } catch (e) {
       setPageError(e.message);
     } finally {
@@ -116,13 +140,12 @@ export default function AdminContent() {
     if (!Number.isFinite(sort_order)) return setGalleryError('sort_order inválido');
     setGalleryLoading(true);
     try {
-      const fd = new FormData();
-      fd.append('file', galleryFile);
-      fd.append('type', galleryType);
-      fd.append('title', galleryTitle);
-      fd.append('sort_order', String(sort_order));
-      const data = await authFetch('/api/admin/gallery-item', fd);
-      setGalleryResult(data);
+      const { commit } = await signedUploadFlow({
+        kind: 'gallery_item',
+        file: galleryFile,
+        extra: { type: galleryType, title: galleryTitle, sort_order },
+      });
+      setGalleryResult(commit);
     } catch (e) {
       setGalleryError(e.message);
     } finally {
